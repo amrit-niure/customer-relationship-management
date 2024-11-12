@@ -8,15 +8,12 @@ if (!process.env.DATABASE_URL) {
     "Database URL not found. Please set DRIZZLE_DATABASE_URL in your environment variables.",
   );
 }
-
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
 await pool.connect();
-const db = drizzle(pool, { schema,  logger: true});
-
-export default db;
+export const database = drizzle(pool, { schema, logger: true });
 
 // export const luciaAdapter = new DrizzlePostgreSQLAdapter(
 //   db,

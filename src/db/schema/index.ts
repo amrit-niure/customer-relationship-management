@@ -6,3 +6,8 @@ export {
   visaApplications,
   visaApplicationsRelations,
 } from "./visa_applications";
+
+
+//types
+export type { Session } from "./sessions";
+export type { User, NewUser } from "./users";

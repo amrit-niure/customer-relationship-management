@@ -36,6 +36,5 @@ export const usersRelations = relations(users, ({ many }) => ({
   resetTokens: many(resetTokens),
 }));
 
-export type User = typeof users.$inferSelect; // return type when queried
-export type ClientUser = Omit<typeof users.$inferSelect, "hashedPassword">; // return type when queried
-export type NewUser = typeof users.$inferInsert; // insert type
+export type User = typeof users.$inferSelect; 
+export type NewUser = typeof users.$inferInsert;
