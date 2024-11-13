@@ -1,11 +1,5 @@
 "use client";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
+import {  Card,  CardHeader,  CardTitle,  CardDescription,  CardContent,} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -14,20 +8,46 @@ import { useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import FormError from "@/components/misc/form-error";
-import LoadingSpinner from "@/components/misc/loading-spinner";
-import { signIn } from "../actions";
-import { ISignIn, loginSchema } from "@/src/entities/models/users";
+import { ISignIn, loginSchema } from "@/schema/user";
 import { useToast } from "@/hooks/use-toast";
+import { signInAction } from "./actions";
+import { useServerAction } from "zsa-react";
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const { toast } = useToast();
+
+const { execute, isPending, error, reset } = useServerAction(signInAction, {
+  onError(result) {
+    if (result.err) {
+      toast({
+        title: "Authentication Failed",
+        description: result.err.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
+    }
+  },
+  onSuccess(result) {
+    if (result.data) {
+      toast({
+        title: "Welcome 🙏",
+        description:
+          "Please go through the help and support section if you need any help.",
+      });
+    }
+  },
+});
+
   const {
     register,
     handleSubmit,
-    reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<ISignIn>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -37,20 +57,8 @@ export default function SignIn() {
   });
 
   async function onSubmitHandler(data: ISignIn) {
-    const res = await signIn(data);
-    if (res?.error) {
-      toast({
-        variant: "destructive",
-        description: res.error,
-      });
-    } else {
-      toast({
-        variant: "default",
-        title: `🙏Welcome, ${data.email.split("@")[0].charAt(0).toUpperCase() + data.email.split("@")[0].slice(1)} Boss`,
-        description: "Signed in successfully",
-      });
-      reset();
-    }
+    execute(data);
+    reset();
   }
   return (
     <div className="flex items-center justify-center h-[100vh]">
@@ -72,7 +80,7 @@ export default function SignIn() {
                   placeholder="m@example.com"
                   {...register("email")}
                 />
-                {errors.email && <FormError error={errors.email.message} />}
+                {errors.email && <p>{errors.email.message}</p>}
               </div>
               <div className="space-y-2">
                 <div className="flex items-center">
@@ -107,17 +115,15 @@ export default function SignIn() {
                       )}
                     </Button>
                   </div>
-                  {errors.password && (
-                    <FormError error={errors.password.message} />
-                  )}
+                  {errors.password && <p>{errors.password.message}</p>}
                 </div>
               </div>
               <Button
                 type="submit"
                 className="w-full flex gap-4"
-                disabled={isSubmitting}
+                disabled={isPending}
               >
-                {isSubmitting && <LoadingSpinner />} Login
+                {isPending ? "..." : "Login"}
               </Button>
             </div>
           </form>
