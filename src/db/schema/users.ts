@@ -37,4 +37,6 @@ export const usersRelations = relations(users, ({ many }) => ({
 }));
 
 export type User = typeof users.$inferSelect; 
-export type NewUser = typeof users.$inferInsert;
+export type NewUser = Omit<typeof users.$inferInsert, 'hashedPassword'> & {
+  password: string;
+};
