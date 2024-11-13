@@ -29,6 +29,7 @@ export async function hashPassword(plainTextPassword: string): Promise<string> {
         const hash = await argon.hash(plainTextPassword);
         return hash;
     } catch (err) {
+        console.log(err);
         throw new Error("Error hashing password");
     }
 }

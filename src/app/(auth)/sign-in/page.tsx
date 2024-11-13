@@ -17,7 +17,7 @@ export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const { toast } = useToast();
 
-const { execute, isPending, error, reset } = useServerAction(signInAction, {
+const { execute, isPending, reset } = useServerAction(signInAction, {
   onError(result) {
     if (result.err) {
       toast({

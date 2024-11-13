@@ -9,7 +9,7 @@ export default function SignedOutPage() {
   const router = useRouter();
   useEffect(() => {
     router.refresh();
-  }, []);
+  }, [router]);
 
   return (
     <div className="py-24 mx-auto max-w-[400px] space-y-6">

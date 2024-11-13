@@ -28,6 +28,7 @@ export async function verifyPassword(email: string, plainTextPassword: string) {
         const isMatch = await argon.verify(user.hashedPassword, plainTextPassword);
         return isMatch;
     } catch (err) {
+        console.log(err);
         throw new Error("Error verifying password");
     }
 
