@@ -1,6 +1,4 @@
-"use client"
-import { useState } from "react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+"use client";import { useState } from "react";import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
@@ -26,41 +24,39 @@ interface TeamTableProps {
 }
 
 export default function TeamTable({ teamMembers }: TeamTableProps) {
- const [isOpen, setIsOpen] = useState(false);
- const [editingMember, setEditingMember] = useState<User | null>(null);
-   const { toast } = useToast();
+  const [isOpen, setIsOpen] = useState(false);
+  const [editingMember, setEditingMember] = useState<User | null>(null);
+  const { toast } = useToast();
 
-const {
-  execute: deleteExecute,
-} = useServerAction(deleteUserAction, {
-  onError(error) {
-    toast({
-      title: "Delete Failed",
-      description:
-        error.err.message || "An unexpected error occurred during deletion",
-      variant: "destructive",
-    });
-  },
-  onSuccess() {
-    toast({
-      title: "User Deleted",
-      description: "The user has been successfully deleted.",
-    });
-    // Optionally, trigger a refresh of the data here or handle optimistic updates
-  },
-});
+  const { execute: deleteExecute } = useServerAction(deleteUserAction, {
+    onError(error) {
+      toast({
+        title: "Delete Failed",
+        description:
+          error.err.message || "An unexpected error occurred during deletion",
+        variant: "destructive",
+      });
+    },
+    onSuccess() {
+      toast({
+        title: "User Deleted",
+        description: "The user has been successfully deleted.",
+      });
+      // Optionally, trigger a refresh of the data here or handle optimistic updates
+    },
+  });
 
-const handleDelete = async (id: string) => {
-  try {
-    await deleteExecute({ id });
-  } catch (error) {
-    console.error("Failed to delete user:", error);
-  }
-};
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteExecute({ id });
+    } catch (error) {
+      console.error("Failed to delete user:", error);
+    }
+  };
 
- const getInitials = (firstName: string, lastName: string) => {
-   return `${firstName?.charAt(0)}${lastName?.charAt(0)}`;
- };
+  const getInitials = (firstName: string, lastName: string) => {
+    return `${firstName?.charAt(0)}${lastName?.charAt(0)}`;
+  };
   return (
     <>
       <Tabs defaultValue="grid" className="space-y-4">
@@ -108,14 +104,35 @@ const handleDelete = async (id: string) => {
                       <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
                       <span className="line-clamp-2">{member.address}</span>
                     </div>
-                    <div className="pt-2">
-                      <Badge
-                        variant={
-                          member.status === "ACTIVE" ? "default" : "secondary"
-                        }
-                      >
-                        {member.status}
-                      </Badge>
+                    <div className="flex gap-4 items-center">
+                      <div className=" flex  items-center ">
+                        <Badge
+                          variant={
+                            member.status === "ACTIVE" ? "default" : "secondary"
+                          }
+                        >
+                          {member.status.toLowerCase()}
+                        </Badge>
+                      </div>
+                        <div className="flex items-center justify-center  space-x-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => {
+                              setEditingMember(member);
+                              setIsOpen(true);
+                            }}
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDelete(member.id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                     </div>
                   </div>
                 </CardContent>
