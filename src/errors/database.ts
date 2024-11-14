@@ -1,74 +1,70 @@
-class DatabaseError extends Error {
-    constructor(
-        message: string,
-        public details: Record<string, any>,
-        public originalError: Error,
-    ) {
-        super(message);
+import { AppError } from "./common";
+
+// General ValidationError for request validation issues
+export class ValidationError extends AppError {
+    constructor(message: string, details?: Record<string, any>) {
+        super(message, 400, details);
+        this.name = "ValidationError";
+    }
+}
+
+// NotFoundError for missing resources
+export class NotFoundError extends AppError {
+    constructor(resource: string, details?: Record<string, any>) {
+        super(`${resource} not found`, 404, details);
+        this.name = "NotFoundError";
+    }
+}
+
+// Database errors with sub-classes for specific constraint issues
+export class DatabaseError extends AppError {
+    constructor(message: string, details: Record<string, any>, originalError: Error) {
+        super(message, 500, details);
         this.name = "DatabaseError";
     }
 }
 
-class InvalidInputError extends DatabaseError {
-    constructor(
-        message: string,
-        details: Record<string, any>,
-        originalError: Error,
-    ) {
+export class InvalidInputError extends DatabaseError {
+    constructor(message: string, details: Record<string, any>, originalError: Error) {
         super(message, details, originalError);
         this.name = "InvalidInputError";
     }
 }
 
-class UniqueConstraintViolationError extends DatabaseError {
-    constructor(
-        message: string,
-        details: Record<string, any>,
-        originalError: Error,
-    ) {
+export class UniqueConstraintViolationError extends DatabaseError {
+    constructor(message: string, details: Record<string, any>, originalError: Error) {
         super(message, details, originalError);
         this.name = "UniqueConstraintViolationError";
     }
 }
 
-class ForeignKeyConstraintViolationError extends DatabaseError {
-    constructor(
-        message: string,
-        details: Record<string, any>,
-        originalError: Error,
-    ) {
+export class ForeignKeyConstraintViolationError extends DatabaseError {
+    constructor(message: string, details: Record<string, any>, originalError: Error) {
         super(message, details, originalError);
         this.name = "ForeignKeyConstraintViolationError";
     }
 }
 
-class NotNullConstraintViolationError extends DatabaseError {
-    constructor(
-        message: string,
-        details: Record<string, any>,
-        originalError: Error,
-    ) {
+export class NotNullConstraintViolationError extends DatabaseError {
+    constructor(message: string, details: Record<string, any>, originalError: Error) {
         super(message, details, originalError);
         this.name = "NotNullConstraintViolationError";
     }
 }
 
-class CheckConstraintViolationError extends DatabaseError {
-    constructor(
-        message: string,
-        details: Record<string, any>,
-        originalError: Error,
-    ) {
+export class CheckConstraintViolationError extends DatabaseError {
+    constructor(message: string, details: Record<string, any>, originalError: Error) {
         super(message, details, originalError);
         this.name = "CheckConstraintViolationError";
     }
 }
 
+// Function to handle and map database errors
 export function handleDatabaseError(
     error: unknown,
     operation: string,
     data?: any,
-): Error {
+): AppError {
     if (error instanceof Error) {
         const errorMessage = error.message.toLowerCase();
         const details = { operation, data };
@@ -124,7 +120,7 @@ export function handleDatabaseError(
             );
         }
 
-        // Default case: unknown database error
+        // Default case for unknown database error
         return new DatabaseError(
             `Database operation failed: ${operation}`,
             details,
@@ -132,7 +128,7 @@ export function handleDatabaseError(
         );
     }
 
-    // If it's not an Error instance, wrap it in a DatabaseError
+    // Wrap non-Error instances in a DatabaseError
     return new DatabaseError(
         `Unknown error during ${operation}`,
         { operation, data },

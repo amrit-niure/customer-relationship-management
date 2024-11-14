@@ -27,17 +27,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-// import { assertAuthenticated } from "@/lib/session";
+import { useSession } from "./providers/session-provider";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  // const user = await assertAuthenticated();
-
+  const user =  useSession();
   const data = {
     user: {
-      // name: user?.firstName ?? "" + user?.lastName,
-      // email: user?.email ?? "",
-      name:"Amrit Niure",
-      email:"amrit@gmail.com"
+      name: user?.firstName ?? "" + user?.lastName,
+      email: user?.email ?? "",
     },
     navMain: [
       {
@@ -119,6 +116,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     ],
   };
   return (
+    <div>
+
     <Sidebar variant="inset" {...props} >
       <SidebarHeader>
         <SidebarMenu>
@@ -145,5 +144,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavUser user={data.user} />
       </SidebarFooter>
     </Sidebar>
+    </div>
   );
 }

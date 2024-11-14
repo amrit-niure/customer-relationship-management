@@ -1,37 +1,39 @@
-export const AUTHENTICATION_ERROR_MESSAGE =
-    "You must be logged in to view this content";
-    
-export class UnauthenticatedError extends Error {
-    constructor(message: string, options?: ErrorOptions) {
-        super(message, options);
-    }
-}
 
-export class UnauthorizedError extends Error {
-    constructor(message: string, options?: ErrorOptions) {
-        super(message, options);
-    }
-}
-
-
-export const AuthenticationError = class AuthenticationError extends Error {
-    constructor() {
-        super(AUTHENTICATION_ERROR_MESSAGE);
-        this.name = "AuthenticationError";
-    }
-};
-
-export const NotFoundError = class NotFoundError extends Error {
-    constructor(message: string) {
-        super(message);
-        this.name = "NotFoundError";
-    }
-};
-
+// Base AppError class with HTTP status properties
 export class AppError extends Error {
-    constructor(public message: string, public statusCode: number) {
+    public statusCode: number;
+    public status: string;
+    public isOperational: boolean;
+    public details?: Record<string, any>;
+    
+    constructor(message: string, statusCode: number, details?: Record<string, any>) {
         super(message);
-        this.name = this.constructor.name;
+        this.statusCode = statusCode;
+        this.status = `${statusCode}`.startsWith('4') ? 'fail' : 'error';
+        this.isOperational = true;
+        this.details = details;
         Error.captureStackTrace(this, this.constructor);
+    }
+}
+// Authentication errors
+export const AUTHENTICATION_ERROR_MESSAGE = "You must be logged in to view this content";
+export class UnauthenticatedError extends AppError {
+    constructor(message: string = AUTHENTICATION_ERROR_MESSAGE, details?: Record<string, any>) {
+        super(message, 401, details);
+        this.name = "UnauthenticatedError";
+    }
+}
+
+export class UnauthorizedError extends AppError {
+    constructor(message: string = "You are not authorized to perform this action", details?: Record<string, any>) {
+        super(message, 403, details);
+        this.name = "UnauthorizedError";
+    }
+}
+
+export class AuthenticationError extends AppError {
+    constructor(details?: Record<string, any>) {
+        super(AUTHENTICATION_ERROR_MESSAGE, 401, details);
+        this.name = "AuthenticationError";
     }
 }

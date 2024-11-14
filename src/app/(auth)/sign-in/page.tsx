@@ -8,9 +8,9 @@ import { useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ISignIn, loginSchema } from "@/schema/user";
+import { ISignIn, loginSchema } from "@/app/validation/user";
 import { useToast } from "@/hooks/use-toast";
-import { signInAction } from "./actions";
+import { signInAction } from "../actions";
 import { useServerAction } from "zsa-react";
 
 export default function SignIn() {

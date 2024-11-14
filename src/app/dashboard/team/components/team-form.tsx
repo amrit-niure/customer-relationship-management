@@ -2,7 +2,7 @@
 import { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ISignUp, userSchema } from "@/schema/user";
+import { ISignUp, userSchema } from "@/app/validation/user";
 import {
   Form,
   FormControl,
@@ -28,6 +28,7 @@ import {
 import { CirclePlus, PenSquare } from "lucide-react";
 // import { signUp, updateMember } from "../actions";
 import { useToast } from "@/hooks/use-toast";
+import { signUpAction } from "@/app/(auth)/actions";
 
 interface TeamFormProps {
   onClose: () => void;
@@ -79,7 +80,7 @@ const TeamForm: FC<TeamFormProps> = ({
         // Update existing member
         res = await updateMember(memberId, values);
       } else {
-        res = await signUp(values);
+        res = await signUpAction(values);
       }
 
       if (res.error) {

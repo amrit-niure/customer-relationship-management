@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className="h-[100vh] flex items-center justify-center gap-8 flex-col">
       <div className="flex gap-8">
-        <Link href={"/signin"}>
+        <Link href={"/sign-in"}>
           <Button>Sign In</Button>
         </Link>
         <Link href={"/signup"}>

@@ -1,4 +1,3 @@
-import { User } from '@/db/schema';
 import { z } from 'zod';
 
 export const sessionSchema = z.object({
@@ -24,8 +23,3 @@ export type Cookie = {
 };
 
 export type Session = z.infer<typeof sessionSchema>;
-
-export interface SessionProviderProps {
-    user: User | null,
-    session: Session | null,
-}
