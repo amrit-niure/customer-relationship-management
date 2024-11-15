@@ -9,11 +9,13 @@ export const env = createEnv({
     JWT_SECRET: z.string().min(32), 
     EMAIL_ID: z.string().email().min(1),
     EMAIL_SECRET: z.string().min(1),
+    NODE_ENV: z.enum(["development", "production", "test"]),
   },
   client: {
     NEXT_PUBLIC_BASE_URL: z.string().url().min(1),
   },
   runtimeEnv: {
+    NODE_ENV: process.env.NODE_ENV,
     DATABASE_URL: process.env.DATABASE_URL,
     ADMIN_EMAIL: process.env.ADMIN_EMAIL,
     ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
