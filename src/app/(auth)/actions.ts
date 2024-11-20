@@ -9,7 +9,7 @@ import { signInUseCase } from "@/use-cases/users/sign-in.use-case";
 import { redirect } from "next/navigation";
 import { signUpUseCase } from "@/use-cases/users/sign-up.use-case";
 import { revalidatePath } from "next/cache";
-import { ValidationError } from "@/errors/database";
+import { handleDatabaseError, UniqueConstraintViolationError, ValidationError } from "@/errors/database";
 
 export const signInAction = unauthenticatedAction
     .createServerAction()
@@ -54,6 +54,6 @@ export const signUpAction = unauthenticatedAction
             if (error instanceof ValidationError) {
                 throw new ValidationError('Too many sign-up attempts. Please try again later.');
             }
-            throw error;
+                throw handleDatabaseError(error,"Sign Up | Create User ");
         }
     });

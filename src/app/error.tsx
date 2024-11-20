@@ -1,6 +1,6 @@
 "use client";
 
-import { AppError } from "@/errors/common";
+import { AppError, AuthenticationError } from "@/errors/common";
 import { useEffect } from "react";
 
 export default function ErrorBoundary({
@@ -19,7 +19,7 @@ export default function ErrorBoundary({
     <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
       <h2 className="text-xl font-semibold">Something went wrong!</h2>
       <p className="text-muted-foreground">
-        {error instanceof AppError
+        {error instanceof Error
           ? error.message
           : "An unexpected error occurred"}
       </p>

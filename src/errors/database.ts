@@ -84,7 +84,7 @@ export function handleDatabaseError(
             const match = errorMessage.match(/unique constraint "(\w+)"/);
             const constraint = match ? match[1] : "unknown";
             return new UniqueConstraintViolationError(
-                `Unique constraint violation: ${constraint}`,
+                `Unique constraint violation. Please specify unique ${constraint.replace("_unique", "").replace(/_/g, " ")}`, 
                 { ...details, constraint },
                 error,
             );
@@ -120,12 +120,12 @@ export function handleDatabaseError(
             );
         }
 
-        // Default case for unknown database error
-        return new DatabaseError(
-            `Database operation failed: ${operation}`,
-            details,
-            error,
-        );
+        // // Default case for unknown database error
+        // return new DatabaseError(
+        //     `Database operation failed: ${operation}`,
+        //     details,
+        //     error,
+        // );
     }
 
     // Wrap non-Error instances in a DatabaseError

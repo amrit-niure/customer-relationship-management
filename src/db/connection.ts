@@ -1,7 +1,6 @@
 import { Pool } from "pg";
 import { drizzle } from "drizzle-orm/node-postgres";
 import * as schema from "./schema";
-// import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
 
 if (!process.env.DATABASE_URL) {
   throw new Error(
@@ -13,10 +12,4 @@ const pool = new Pool({
 });
 
 await pool.connect();
-export const database = drizzle(pool, { schema, logger: true });
-
-// export const luciaAdapter = new DrizzlePostgreSQLAdapter(
-//   db,
-//   schema.sessions,
-//   schema.users,
-// );
+export const database = drizzle(pool, { schema});

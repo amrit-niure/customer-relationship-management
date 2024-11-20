@@ -24,6 +24,12 @@ export async function getUserByEmail(email: string) {
 
     return user;
 }
+export async function getUserByPhone(phone: string) {
+    const user = await database.query.users.findFirst({
+        where: eq(users.phoneNumber, phone),
+    });
+    return user;
+}
 
 export async function verifyPassword(email: string, plainTextPassword: string) {
     const user = await getUserByEmail(email);
@@ -71,6 +77,26 @@ export const deleteUser = async (id: string): Promise<Response<User>> => {
         return err(handleDatabaseError(
             error,
             'delete',
+            'user'
+        ));
+    }
+};
+export const updateUser = async (values: Partial<User> , id: string): Promise<Response<User>> => {
+    try {
+        const updatedUser =  await database
+        .update(users)
+        .set({
+            ...values,
+            updatedAt: new Date()
+        })
+        .where(eq(users.id,id))
+        .returning();
+
+        return ok(updatedUser[0]);
+    } catch (error) {
+        return err(handleDatabaseError(
+            error,
+            'Update',
             'user'
         ));
     }

@@ -26,9 +26,11 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet";
 import { CirclePlus, PenSquare } from "lucide-react";
-// import { signUp, updateMember } from "../actions";
 import { useToast } from "@/hooks/use-toast";
 import { signUpAction } from "@/app/(auth)/actions";
+import { useServerAction } from "zsa-react";
+import { PhoneInput } from "@/components/ui/phone-input";
+import { updateuserAction } from "../actions";
 
 interface TeamFormProps {
   onClose: () => void;
@@ -36,14 +38,6 @@ interface TeamFormProps {
   mode?: "create" | "edit";
   memberId?: string;
 }
-
-const countryCodeMap = {
-  AUSTRALIA: "+61",
-  NEPAL: "+977",
-  DUBAI: "+971",
-  PHILIPPINES: "+63",
-};
-
 const TeamForm: FC<TeamFormProps> = ({
   onClose,
   initialValues,
@@ -51,9 +45,6 @@ const TeamForm: FC<TeamFormProps> = ({
   memberId,
 }) => {
   const { toast } = useToast();
-  const [countryCode, setCountryCode] = useState("+61");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const form = useForm<ISignUp>({
     resolver: zodResolver(userSchema),
     defaultValues: initialValues || {
@@ -71,52 +62,47 @@ const TeamForm: FC<TeamFormProps> = ({
     },
   });
 
-  async function onSubmit(values: ISignUp) {
-    setIsSubmitting(true);
-    try {
-      let res;
-
-      if (mode === "edit" && memberId) {
-        // Update existing member
-        res = await updateMember(memberId, values);
-      } else {
-        res = await signUpAction(values);
-      }
-
-      if (res.error) {
-        toast({
-          variant: "destructive",
-          description: res.error,
-        });
-      } else {
-        toast({
-          variant: "default",
-          title: "Action Successful",
-          description:
-            mode === "edit" ? "Team Member Updated" : "New Team Member Created",
-        });
-        form.reset();
-        onClose();
-      }
-    } catch (err) {
-      console.error(err);
-      toast({
-        variant: "destructive",
-        description: "An unexpected error occurred. Please try again later.",
-      });
-    } finally {
-      setIsSubmitting(false);
+const { execute, isPending } = useServerAction(
+    mode === "edit" ? updateuserAction : signUpAction,
+    {
+      onSuccess() {
+          toast({
+            variant: "default",
+            title: "Action Successful",
+            description:
+              mode === "edit" ? "Team Member Updated" : "New Team Member Created",
+          });
+          form.reset();
+          onClose();
+      },
+      onError(result) {
+        if (result.err) {
+          toast({
+            variant: "destructive",
+            description: result.err.message,
+          });
+        } else {
+          toast({
+            variant: "destructive",
+            description: "An unexpected error occurred. Please try again later.",
+          });
+        }
+      },
     }
-  }
+  );
 
-  useEffect(() => {
-    const subscription = form.watch((value, { name }) => {
-      if (name === "branch" && value.branch) {
-        setCountryCode(countryCodeMap[value.branch] || "+61");
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [form.watch]);
+  const onSubmit = async (values: ISignUp) => {
+    if (mode === "edit") {
+      const updateData = {
+        ...values,
+        id: memberId, 
+        ...(values.password ? { password: values.password } : {}) // Only include password if provided
+      };
+      await execute(updateData);
+    } else {
+      await execute(values);
+    }
+  };
 
   return (
     <>
@@ -279,63 +265,13 @@ const TeamForm: FC<TeamFormProps> = ({
               <FormItem>
                 <FormLabel>Phone Number</FormLabel>
                 <FormControl>
-                  <div className="flex">
-                    <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md">
-                      {countryCode}
-                    </span>
-                    <Input type="tel" className="rounded-l-none" {...field} />
-                  </div>
+                   <PhoneInput {...field} defaultCountry="AU"/>
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          {/* <FormItem className="w-full">
-            <FormLabel>Phone Number</FormLabel>
-            <Controller
-              name="phoneNumber"
-              control={form.control}
-              defaultValue=""
-              render={({ field: { onChange, value } }) => (
-                <PhoneInput
-                  country={"au"}
-                  value={value}
-                  onChange={onChange}
-                  inputStyle={{
-                    width: "100%",
-                    height: "40px",
-                    fontSize: "16px",
-                    paddingLeft: "48px",
-                    borderRadius: "4px",
-                    border: "1px solid #d1d5db",
-                  }}
-                  buttonStyle={{
-                    border: "1px solid #d1d5db",
-                    borderRight: "none",
-                    borderRadius: "4px 0 0 4px",
-                  }}
-                  containerStyle={{
-                    width: "100%",
-                  }}
-                  containerClass="react-tel-input"
-                  inputClass="phone-input"
-                  dropdownStyle={{
-                  }}
-                  searchClass="w-full"
-                  enableSearch
-                  disableSearchIcon
-                  // onlyCountries={['np','ph','ae','au']}
-                  countryCodeEditable={false}
-                  enableAreaCodes={true}
-                  searchPlaceholder="Search countries"
-                />
-              )}
-            />
-            {errors.phoneNumber && (
-              <FormMessage>{errors.phoneNumber.message}</FormMessage>
-            )}
-          </FormItem> */}
-
+         
           <FormField
             control={form.control}
             name="address"
@@ -373,9 +309,9 @@ const TeamForm: FC<TeamFormProps> = ({
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting
-              ? "Processing..."
+          <Button type="submit" className="w-full" disabled={isPending}>
+            {isPending
+              ? "..."
               : mode === "edit"
               ? "Update Member"
               : "Add Member"}

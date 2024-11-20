@@ -13,5 +13,9 @@ export const deleteUserUseCase = async (id: string): Promise<Response<User>> => 
     if (user.role !== "ADMIN") {
         throw new UnauthorizedError("Only admins can delete users.");
     }
+        // Prevent admin from deleting themselves
+        if (user.id === id) {
+            throw new UnauthorizedError("Admins cannot delete their own account.");
+        }
     return await deleteUser(id);
 };

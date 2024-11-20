@@ -187,7 +187,8 @@ export default function TeamTable({ teamMembers }: TeamTableProps) {
                           variant="ghost"
                           size="icon"
                           onClick={() => {
-                            setEditingMember(member);
+                            console.log(member.id)
+                            setEditingMember({...member, id:member.id});
                             setIsOpen(true);
                           }}
                         >
@@ -228,6 +229,7 @@ export default function TeamTable({ teamMembers }: TeamTableProps) {
               status: editingMember?.status || "ACTIVE",
               middleName: editingMember?.middleName || "",
             }}
+            memberId={editingMember?.id}
           />
         </SheetContent>
       </Sheet>

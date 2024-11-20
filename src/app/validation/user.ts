@@ -29,9 +29,7 @@ export const userSchema = z.object({
         message: "Title must be at least 2 characters.",
     }),
     phoneNumber: z
-        .string()
-        .max(10, { message: "Phone number must be exactly 10 characters." })
-        .min(10, { message: "Phone number must be exactly 10 characters." }),
+        .string(),
     branch: z
         .enum(branchEnum.enumValues, {
             errorMap: () => ({ message: "Invalid Branch. " }),
@@ -59,4 +57,5 @@ export const loginSchema = z.object({
 });
 
 export type ISignUp = z.infer<typeof userSchema>;
+export type IUserUpdate = Partial<z.infer<typeof userSchema>>;
 export type ISignIn = z.infer<typeof loginSchema>;

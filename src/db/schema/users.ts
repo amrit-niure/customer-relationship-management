@@ -19,7 +19,7 @@ export const users = pgTable("users", {
   hashedPassword: varchar("hashed_password").notNull(),
   role: roleEnum("role").default("USER").notNull(),
   title: varchar("title", { length: 255 }).notNull(),
-  phoneNumber: numeric("phone_number").notNull().unique(),
+  phoneNumber: varchar("phone_number", { length: 20 }).notNull().unique(),
   branch: branchEnum("branch").default("AUSTRALIA"),
   address: varchar("address", { length: 256 }).notNull(),
   status: userStatusEnum("status").default("ACTIVE").notNull(),
