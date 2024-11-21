@@ -1,5 +1,5 @@
 import "server-only";
-import { AuthenticationError } from "@/errors/common";
+import { AuthenticationError, UnauthenticatedError } from "@/errors/common";
 import { createSession, generateSessionToken, validateRequest } from "@/auth";
 import { cache } from "react";
 import { cookies } from "next/headers";
@@ -42,7 +42,7 @@ export const getCurrentUser = cache(async () => {
 export const assertAuthenticated = async () => {
   const user = await getCurrentUser();
   if (!user) {
-    throw new AuthenticationError();
+    throw new UnauthenticatedError();
   }
   return user;
 };

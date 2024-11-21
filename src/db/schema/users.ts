@@ -3,7 +3,6 @@ import {
   uuid,
   varchar,
   timestamp,
-  numeric,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { sessions } from "./sessions";
