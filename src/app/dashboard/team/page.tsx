@@ -1,11 +1,12 @@
-// page.tsx (Server Component)import { Calendar } from "lucide-react";import { Calendar } from "lucide-react";
+
 import { Calendar } from "lucide-react";
 import { getAllUsersAction } from "./actions";
 import TeamTable from "./components/team-table";
 import DisplayCard from "@/components/display-card";
 import PageHeaderWithForm from "@/components/page-header/page-header-with-form";
+import { withServerAuth } from "@/lib/protected-server-pages";
 
-export default async function TeamPage() {
+export default withServerAuth(async function TeamPage() {
   const [users] = await getAllUsersAction();
 
   if (!users) {
@@ -45,4 +46,4 @@ export default async function TeamPage() {
       <TeamTable teamMembers={users} />
     </div>
   );
-}
+})

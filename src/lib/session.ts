@@ -1,5 +1,5 @@
 import "server-only";
-import { AuthenticationError, UnauthenticatedError } from "@/errors/common";
+import {  UnauthenticatedError } from "@/errors/common";
 import { createSession, generateSessionToken, validateRequest } from "@/auth";
 import { cache } from "react";
 import { cookies } from "next/headers";
