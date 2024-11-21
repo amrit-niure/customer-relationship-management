@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 
 const SESSION_COOKIE_NAME = "session";
 
+
 export async function setSessionTokenCookie(token: string, expiresAt: Date): Promise<void> {
   const cookieStore = await cookies();
   cookieStore.set(SESSION_COOKIE_NAME, token, {

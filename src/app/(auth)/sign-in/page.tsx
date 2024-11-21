@@ -1,7 +1,4 @@
-"use client";
-import {  Card,  CardHeader,  CardTitle,  CardDescription,  CardContent,} from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+"use client";import {  Card,  CardHeader,  CardTitle,  CardDescription,  CardContent,} from "@/components/ui/card";import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -12,12 +9,20 @@ import { ISignIn, loginSchema } from "@/app/validation/user";
 import { useToast } from "@/hooks/use-toast";
 import { signInAction } from "../actions";
 import { useServerAction } from "zsa-react";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const { toast } = useToast();
 
 const { execute, isPending, reset } = useServerAction(signInAction, {
+  onSuccess() {
+    toast({
+      title: "Welcome 🙏",
+      description:
+        "Please go through the help and support section if you need any help.",
+    });
+  },
   onError(result) {
     if (result.err) {
       toast({
@@ -32,23 +37,10 @@ const { execute, isPending, reset } = useServerAction(signInAction, {
         variant: "destructive",
       });
     }
-  },
-  onSuccess(result) {
-    if (result.data) {
-      toast({
-        title: "Welcome 🙏",
-        description:
-          "Please go through the help and support section if you need any help.",
-      });
-    }
-  },
+  }
 });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ISignIn>({
+  const form = useForm<ISignIn>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
@@ -70,54 +62,61 @@ const { execute, isPending, reset } = useServerAction(signInAction, {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmitHandler)}>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  {...register("email")}
-                />
-                {errors.email && <p>{errors.email.message}</p>}
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <Link
-                    href="#"
-                    className="ml-auto inline-block text-sm underline"
-                    prefetch={false}
-                  >
-                    Forgot your password?
-                  </Link>
-                </div>
-                <div>
-                  <div className="relative">
-                    <Input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      {...register("password")}
-                    />
-
-                    <Button
-                      variant={"ghost"}
-                      size="icon"
-                      type="button"
-                      className="absolute bottom-1 right-1 h-7 w-7"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? (
-                        <EyeIcon className="h-4 w-4" />
-                      ) : (
-                        <EyeOffIcon className="h-4 w-4" />
-                      )}
-                    </Button>
-                  </div>
-                  {errors.password && <p>{errors.password.message}</p>}
-                </div>
-              </div>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmitHandler)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="m@example.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex items-center">
+                      <FormLabel>Password</FormLabel>
+                      <Link
+                        href="#"
+                        className="ml-auto inline-block text-sm underline"
+                        prefetch={false}
+                      >
+                        Forgot your password?
+                      </Link>
+                    </div>
+                    <FormControl>
+                      <div className="relative">
+                        <Input
+                          type={showPassword ? "text" : "password"}
+                          {...field}
+                        />
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          type="button"
+                          className="absolute bottom-1 right-1 h-7 w-7"
+                          onClick={() => setShowPassword(!showPassword)}
+                        >
+                          {showPassword ? (
+                            <EyeIcon className="h-4 w-4" />
+                          ) : (
+                            <EyeOffIcon className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <Button
                 type="submit"
                 className="w-full flex gap-4"
@@ -125,8 +124,8 @@ const { execute, isPending, reset } = useServerAction(signInAction, {
               >
                 {isPending ? "..." : "Login"}
               </Button>
-            </div>
-          </form>
+            </form>
+          </Form>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
             <Link href="signup" className="underline">
