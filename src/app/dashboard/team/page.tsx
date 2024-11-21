@@ -12,7 +12,7 @@ export default withServerAuth(async function TeamPage() {
   if (!users) {
     return <div>Failed to fetch team members</div>;
   }
-
+ 
   return (
     <div className="">
       <PageHeaderWithForm
