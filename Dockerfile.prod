@@ -1,0 +1,66 @@
+# Stage 1: Dependencies
+FROM node:18-alpine AS deps
+RUN apk add --no-cache libc6-compat
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies with specific flags for production
+RUN npm ci --omit=dev --frozen-lockfile --legacy-peer-deps
+
+RUN npm install --platform=linux --arch=x64 esbuild@0.19.12 --legacy-peer-deps
+
+# Stage 2: Builder (Compiling TypeScript)
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+# Copy the node_modules from deps stage (will install platform-specific binaries here)
+COPY --from=deps /app/node_modules ./node_modules
+
+# Copy the rest of the files
+COPY . .
+
+RUN npm run build
+# Precompile the seed file to JavaScript
+RUN npx esbuild src/db/seed.ts --outfile=dist/seed.js --platform=node
+
+# Stage 3: Runner (Production)
+FROM node:18-alpine AS runner
+
+WORKDIR /app
+
+# Set environment variables
+ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED 1
+
+# Add system dependencies
+RUN apk add --no-cache bash curl tini
+
+# Create a non-root user for security
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Set working directory permissions
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
+
+# Copy only necessary files from the builder stage
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/dist ./dist
+
+# Use non-root user
+USER nextjs
+
+# Expose port
+EXPOSE 3000
+
+# Set tini as entrypoint
+ENTRYPOINT ["/sbin/tini", "--"]
+
+# Start the application
+CMD ["node", "server.js"]
