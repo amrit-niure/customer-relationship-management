@@ -1,5 +1,5 @@
-
 // Base AppError class with HTTP status properties
+import { redirect } from 'next/navigation';
 export class AppError extends Error {
     public statusCode: number;
     public status: string;
@@ -17,10 +17,32 @@ export class AppError extends Error {
 }
 // Authentication errors
 export const AUTHENTICATION_ERROR_MESSAGE = "You must be logged in to view this content";
+
 export class UnauthenticatedError extends AppError {
-    constructor(message: string = AUTHENTICATION_ERROR_MESSAGE, details?: Record<string, any>) {
+    public redirectPath: string;
+
+    constructor(
+        message: string = AUTHENTICATION_ERROR_MESSAGE,
+        details?: Record<string, any>,
+        redirectPath: string = "/sign-in"
+    ) {
         super(message, 401, details);
         this.name = "UnauthenticatedError";
+        this.redirectPath = redirectPath;
+    }
+
+    handleRedirect() {
+        redirect(this.redirectPath);
+    }
+
+    // Optional method for more explicit error handling
+    toRedirectResponse() {
+        return {
+            redirect: {
+                destination: this.redirectPath,
+                permanent: false
+            }
+        };
     }
 }
 
@@ -28,12 +50,5 @@ export class UnauthorizedError extends AppError {
     constructor(message: string = "You are not authorized to perform this action", details?: Record<string, any>) {
         super(message, 403, details);
         this.name = "UnauthorizedError";
-    }
-}
-
-export class AuthenticationError extends AppError {
-    constructor(details?: Record<string, any>) {
-        super(AUTHENTICATION_ERROR_MESSAGE, 401, details);
-        this.name = "AuthenticationError";
     }
 }

@@ -1,6 +1,4 @@
 "use client";
-
-import { AppError, AuthenticationError } from "@/errors/common";
 import { useEffect } from "react";
 
 export default function ErrorBoundary({

@@ -1,7 +1,8 @@
+import { withServerAuth } from "@/lib/protected-server-pages";
 import { assertAuthenticated } from "@/lib/session";
 import React from "react";
 
-export default async function Dashboard() {
+export default withServerAuth(async function Dashboard() {
   const user = await assertAuthenticated();
   return (
     <div>
@@ -9,4 +10,4 @@ export default async function Dashboard() {
       <p>{JSON.stringify(user, null, 2)}</p>
     </div>
   );
-}
+})

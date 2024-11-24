@@ -1,10 +1,11 @@
 import "server-only";
-import { AuthenticationError } from "@/errors/common";
+import {  UnauthenticatedError } from "@/errors/common";
 import { createSession, generateSessionToken, validateRequest } from "@/auth";
 import { cache } from "react";
 import { cookies } from "next/headers";
 
 const SESSION_COOKIE_NAME = "session";
+
 
 export async function setSessionTokenCookie(token: string, expiresAt: Date): Promise<void> {
   const cookieStore = await cookies();
@@ -41,7 +42,7 @@ export const getCurrentUser = cache(async () => {
 export const assertAuthenticated = async () => {
   const user = await getCurrentUser();
   if (!user) {
-    throw new AuthenticationError();
+    throw new UnauthenticatedError();
   }
   return user;
 };

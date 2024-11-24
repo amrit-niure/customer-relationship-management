@@ -18,7 +18,7 @@ export class NotFoundError extends AppError {
 
 // Database errors with sub-classes for specific constraint issues
 export class DatabaseError extends AppError {
-    constructor(message: string, details: Record<string, any>, originalError: Error) {
+    constructor(message: string, details: Record<string, any>, _originalError: Error) {
         super(message, 500, details);
         this.name = "DatabaseError";
     }
