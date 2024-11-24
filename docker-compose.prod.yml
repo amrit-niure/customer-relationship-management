@@ -41,14 +41,18 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+
   seed:
     image: newcrm:prod
+    env_file:
+      - .env
     depends_on:
       postgres:
         condition: service_healthy
-    command: ["node", "dist/seed.js"]
+    command: ["node", "dist/db/seed.cjs"]
     networks:
       - app-network
+    restart: on-failure:3
 
 networks:
   app-network:
