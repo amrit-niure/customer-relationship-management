@@ -1,0 +1,31 @@
+FROM node:18-alpine
+
+# Install dependencies
+RUN apk add --no-cache libc6-compat bash curl
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install --legacy-peer-deps
+
+# Install TypeScript and ts-node globally
+RUN npm install -g typescript ts-node --legacy-peer-deps
+
+# Install esbuild for development
+RUN npm install --platform=linux --arch=x64 esbuild@0.19.12 --legacy-peer-deps
+
+# Copy tsconfig and other config files
+COPY tsconfig.json .
+COPY .env .
+
+# Copy the rest of the application
+COPY . .
+
+# Expose port 3000
+EXPOSE 3000
+
+# Start in development mode
+CMD ["npm", "run", "dev"]
