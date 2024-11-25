@@ -10,6 +10,8 @@ import { redirect } from "next/navigation";
 import { signUpUseCase } from "@/use-cases/users/sign-up.use-case";
 import { revalidatePath } from "next/cache";
 import { ValidationError } from "@/errors/database";
+import { invalidateSession, validateRequest } from "@/auth";
+import { sendEmail } from "@/lib/email";
 
 export const signInAction = unauthenticatedAction
     .createServerAction()
@@ -33,6 +35,46 @@ export const signInAction = unauthenticatedAction
         }
     });
 
+export async function signOutAction() {
+    const { session } = await validateRequest();
+
+    if (!session) {
+        redirect("/sign-in");
+    }
+
+    await invalidateSession(session.id);
+    redirect("/signed-out");
+}
+
+// export const signUpAction = unauthenticatedAction
+//     .createServerAction()
+//     .input(userSchema)
+//     .handler(async ({ input }) => {
+//         try {
+//             await rateLimitByKey({
+//                 key: input.email,
+//                 limit: 3,
+//                 window: 10000
+//             });
+
+//             await signUpUseCase({
+//                 ...input,
+//                 hashedPassword: input.password
+//             });
+
+//             //send email verification use case using resend library here
+
+
+//             revalidatePath("/dashboard/team");
+//         } catch (error) {
+//             if (error instanceof ValidationError) {
+//                 throw new ValidationError('Too many sign-up attempts. Please try again later.');
+//             }
+//                 throw error;
+//         }
+//     });
+
+
 export const signUpAction = unauthenticatedAction
     .createServerAction()
     .input(userSchema)
@@ -49,11 +91,36 @@ export const signUpAction = unauthenticatedAction
                 hashedPassword: input.password
             });
 
+            // Send welcome email
+            await sendEmail({
+                to: input.email,
+                subject: "Welcome to Our CRM",
+                body: `
+            <div>
+                <h1>Welcome to Our CRM Platform!</h1>
+                <p>Thank you for signing up. Here are your login credentials:</p>
+                <p><strong>Email:</strong> ${input.email}</p>
+                <p><strong>Password:</strong> ${input.password}</p>
+                <p>We recommend changing your password after your first login for security reasons.</p>
+                <a href="https://amritniure.com.np">Login to CRM</a>
+            </div>
+        `
+            });
+
             revalidatePath("/dashboard/team");
         } catch (error) {
             if (error instanceof ValidationError) {
                 throw new ValidationError('Too many sign-up attempts. Please try again later.');
             }
+            // Handle email sending errors
+            if (error instanceof Error && error.message.includes('email')) {
+                console.error('Failed to send welcome email:', error);
+                // You might want to log this error or handle it differently
+                // For now, we'll still allow the sign-up to succeed
+            } else {
                 throw error;
+            }
         }
     });
+
+
