@@ -12,6 +12,7 @@ import { revalidatePath } from "next/cache";
 import { ValidationError } from "@/errors/database";
 import { invalidateSession, validateRequest } from "@/auth";
 import { sendEmail } from "@/lib/email";
+import ApplyworldWelcomeEmail from "@/components/emails/welcome-user";
 
 export const signInAction = unauthenticatedAction
     .createServerAction()
@@ -86,7 +87,7 @@ export const signUpAction = unauthenticatedAction
                 window: 10000
             });
 
-            await signUpUseCase({
+           const user =  await signUpUseCase({
                 ...input,
                 hashedPassword: input.password
             });
@@ -95,16 +96,7 @@ export const signUpAction = unauthenticatedAction
             await sendEmail({
                 to: input.email,
                 subject: "Welcome to Our CRM",
-                body: `
-            <div>
-                <h1>Welcome to Our CRM Platform!</h1>
-                <p>Thank you for signing up. Here are your login credentials:</p>
-                <p><strong>Email:</strong> ${input.email}</p>
-                <p><strong>Password:</strong> ${input.password}</p>
-                <p>We recommend changing your password after your first login for security reasons.</p>
-                <a href="https://amritniure.com.np">Login to CRM</a>
-            </div>
-        `
+                body: ApplyworldWelcomeEmail({ userFirstname: user.firstName, email: user.email , password: input.password  })
             });
 
             revalidatePath("/dashboard/team");
