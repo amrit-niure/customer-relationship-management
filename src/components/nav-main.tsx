@@ -21,6 +21,7 @@ import Link from "next/link";
 
 export function NavMain({
   items,
+  group,
 }: {
   items: {
     title: string;
@@ -31,11 +32,12 @@ export function NavMain({
       title: string;
       url: string;
     }[];
-  }[];
+  }[], group: string;
 }) {
   return (
+    <div>
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      <SidebarGroupLabel>{group}</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
@@ -74,5 +76,6 @@ export function NavMain({
         ))}
       </SidebarMenu>
     </SidebarGroup>
+    </div>
   );
 }

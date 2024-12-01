@@ -3,7 +3,7 @@ import { Calendar } from "lucide-react";
 import { getAllUsersAction } from "./actions";
 import TeamTable from "./components/team-table";
 import DisplayCard from "@/components/display-card";
-import PageHeaderWithForm from "@/components/page-header/page-header-with-form";
+import PageHeaderWithForm from "@/components/headers/page-header-with-form";
 import { withServerAuth } from "@/lib/protected-server-pages";
 
 export default withServerAuth(async function TeamPage() {

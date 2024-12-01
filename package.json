@@ -10,7 +10,7 @@
     "lint": "next lint",
     "generate": "drizzle-kit generate",
     "migrate": "drizzle-kit migrate",
-    "studio": "drizzle-kit studio --host 0.0.0.0",
+    "studio": "drizzle-kit studio",
     "seed": "node -r esbuild-register src/db/seed.ts"
   },
   "dependencies": {
