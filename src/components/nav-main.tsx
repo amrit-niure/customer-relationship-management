@@ -43,10 +43,12 @@ export function NavMain({
           <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip={item.title}>
-                <Link href={item.url}>
+              <CollapsibleTrigger asChild>
+                <Link href={item.url} className={`rounded-sm  transition-all ease-in ${item.isActive ? "bg-primary text-background": " hover:bg-muted"}`}>
                   <item.icon />
                   <span>{item.title}</span>
                 </Link>
+                </CollapsibleTrigger>
               </SidebarMenuButton>
               {item.items?.length ? (
                 <>

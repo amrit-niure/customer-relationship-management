@@ -5,7 +5,7 @@
 import { RateLimitError } from "./errors";
 import { getIp } from "./get-ip";
 
-const PRUNE_INTERVAL = 60 * 1000; // 1 minute
+const PRUNE_INTERVAL = 60 * 5000; // 1 minute
 
 const trackers: Record<
     string,
