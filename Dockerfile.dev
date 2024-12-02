@@ -8,11 +8,9 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
+# Install dependencies including ts-node locally
 RUN npm install --legacy-peer-deps
-
-# Install TypeScript and ts-node globally
-RUN npm install -g typescript ts-node --legacy-peer-deps
+RUN npm install ts-node@latest typescript@latest --save-dev --legacy-peer-deps
 
 # Install esbuild for development
 RUN npm install --platform=linux --arch=x64 esbuild@0.19.12 --legacy-peer-deps

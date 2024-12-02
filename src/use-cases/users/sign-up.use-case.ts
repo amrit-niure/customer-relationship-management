@@ -19,5 +19,5 @@ export async function signUpUseCase(input: NewUser) {
     }
     const hashedPassword = await argon.hash(input.hashedPassword);
     const newUserData = { ...input, hashedPassword: hashedPassword }
-    await createUser(newUserData);
+    return await createUser(newUserData);
 }

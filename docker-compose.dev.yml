@@ -42,7 +42,6 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
-
   seed:
     build:
       context: .
@@ -57,7 +56,7 @@ services:
         condition: service_healthy
     networks:
       - app-network
-    command: sh -c "npx ts-node src/db/seed.ts"
+    command: sh -c "npx ts-node --skipProject src/db/seed.ts"
     restart: on-failure:3
 
   drizzle-studio:

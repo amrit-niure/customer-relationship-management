@@ -1,9 +1,11 @@
 import * as argon from "@node-rs/argon2";
 import { eq } from "drizzle-orm";
-import { Pool } from "pg";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { users } from "./schema";
 import "dotenv/config";
+import pg from "pg";
+
+const { Pool } = pg;
 
 if (!process.env.DATABASE_URL) {
   throw new Error(
@@ -45,7 +47,7 @@ async function main() {
       email: adminEmail,
       hashedPassword: hashedPassword,
       address: "104 Bathurst Street, Sydney NSW 2000, Australia",
-      phoneNumber: "+61424562124",
+      phoneNumber: "0424562124",
       title: "IT Administrator",
       role: "ADMIN",
       status: "ACTIVE",
