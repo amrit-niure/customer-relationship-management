@@ -8,6 +8,8 @@ export const env = createEnv({
     ADMIN_PASSWORD: z.string().min(8), 
     JWT_SECRET: z.string().min(32), 
     EMAIL_ID: z.string().email().min(1),
+    EMAIL_FROM: z.string().email().min(1),
+    RESEND_API_KEY: z.string().min(1),
     EMAIL_SECRET: z.string().min(1),
     NODE_ENV: z.enum(["development", "production", "test"]),
   },
@@ -23,5 +25,7 @@ export const env = createEnv({
     EMAIL_ID: process.env.EMAIL_ID,
     EMAIL_SECRET: process.env.EMAIL_SECRET,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+    EMAIL_FROM: process.env.EMAIL_FROM,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
   },
 });
