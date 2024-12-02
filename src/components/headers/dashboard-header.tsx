@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Menu, Bell, Sun, Search } from 'lucide-react'
+import {  Bell, Search } from 'lucide-react'
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -24,12 +24,6 @@ export function DashboardHeader({
   className,
   ...props
 }: DashboardHeaderProps) {
-const data = {
-    user : {
-        name: "Amrit Niure",
-        email: "email@gmail.com"
-    }
-}
   return (
     <header
       className={cn(
