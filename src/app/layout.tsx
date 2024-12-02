@@ -3,7 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { SessionProvider } from "@/components/providers/session-provider";
-import { getCurrentUser } from "@/lib/session";
+import { assertAuthenticated, getCurrentUser } from "@/lib/session";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

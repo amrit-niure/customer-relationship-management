@@ -1,5 +1,4 @@
-{
-  "name": "crm",
+{  "name": "crm",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -11,7 +10,7 @@
     "generate": "drizzle-kit generate",
     "migrate": "drizzle-kit migrate",
     "studio": "drizzle-kit studio",
-    "seed": "node -r esbuild-register src/db/seed.ts",
+    "seed": "tsx src/db/seed.ts",
     "email": "email dev --dir src/components/emails"
   },
   "dependencies": {
