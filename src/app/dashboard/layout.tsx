@@ -1,4 +1,5 @@
-import React from "react";import {
+import React from "react";
+import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
@@ -6,6 +7,7 @@ import React from "react";import {
 import { AppSidebar } from "@/components/app-sidebar";
 import { ModeToggle } from "@/components/toggle-mode";
 import DynamicBreadcrumb from "@/components/dynamic-breadcrumb";
+import { DashboardHeader } from "@/components/headers/dashboard-header";
 
 interface LayoutProps {
   children?: React.ReactNode;
@@ -13,16 +15,14 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   return (
     <SidebarProvider>
-      <AppSidebar collapsible="icon" variant="floating" />
+      <AppSidebar collapsible="icon" variant="sidebar" />
       <SidebarInset>
-        <header className="flex h-10 my-2 shrink-0 items-center justify-between sm:px-4 md:pl-0 md:pr-4 w-full">
-          <div className="flex items-center gap-2">
-            <SidebarTrigger />
-            <DynamicBreadcrumb />
+        <header className="flex h-10 my-2 shrink-0 items-center justify-between  w-full">
+          <div className="flex items-center gap-2 w-full">
+            <DashboardHeader />
           </div>
-          <ModeToggle />
         </header>
-        <main className="sm:px-4 md:pl-0 md:pr-4">{children}</main>
+        <main className="md:pr-4 lg:px-6 pt-4 ">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );

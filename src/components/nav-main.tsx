@@ -21,6 +21,7 @@ import Link from "next/link";
 
 export function NavMain({
   items,
+  group,
 }: {
   items: {
     title: string;
@@ -31,20 +32,23 @@ export function NavMain({
       title: string;
       url: string;
     }[];
-  }[];
+  }[], group: string;
 }) {
   return (
+    <div>
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      <SidebarGroupLabel>{group}</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip={item.title}>
-                <Link href={item.url}>
+              <CollapsibleTrigger asChild>
+                <Link href={item.url} className={`rounded-sm  transition-all ease-in ${item.isActive ? "bg-primary text-background": " hover:bg-muted"}`}>
                   <item.icon />
                   <span>{item.title}</span>
                 </Link>
+                </CollapsibleTrigger>
               </SidebarMenuButton>
               {item.items?.length ? (
                 <>
@@ -74,5 +78,6 @@ export function NavMain({
         ))}
       </SidebarMenu>
     </SidebarGroup>
+    </div>
   );
 }

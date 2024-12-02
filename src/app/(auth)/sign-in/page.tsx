@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { EyeIcon, EyeOffIcon, Info, Origami, Phone } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ISignIn, loginSchema } from "@/app/validation/user";
@@ -53,12 +53,24 @@ const { execute, isPending, reset } = useServerAction(signInAction, {
     reset();
   }
   return (
-    <div className="flex items-center justify-center h-[100vh]">
-      <Card className="w-full max-w-md">
+    <div className="flex items-center justify-center h-[100vh] w-full">
+      <div className="flex-1 flex items-center justify-center flex-col bg-muted h-full">
+      <Card className="border-0 shadow-none bg-transparent">
+      <Origami size={50} className="self-start" /> 
+      <CardHeader className="space-y-1 px-0">
+          <CardTitle className="text-2xl font-bold">Apply World Group CRM</CardTitle>
+          <CardDescription>
+            The most used client record management platform in the town.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+      </div>
+      <div className="flex-1 flex items-center justify-center">
+      <Card className="w-full max-w-md rounded-none shadow-none border-0">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold">Login</CardTitle>
           <CardDescription>
-            Enter your email below to login to your <b>Hamro Khata</b> account
+            Enter your credentials to login to your dashboard.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -71,7 +83,7 @@ const { execute, isPending, reset } = useServerAction(signInAction, {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="m@example.com" {...field} />
+                      <Input placeholder="m@example.com" {...field} className="rounded-none"/>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -97,6 +109,7 @@ const { execute, isPending, reset } = useServerAction(signInAction, {
                         <Input
                           type={showPassword ? "text" : "password"}
                           {...field}
+                          className="rounded-none"
                         />
                         <Button
                           variant="ghost"
@@ -119,21 +132,23 @@ const { execute, isPending, reset } = useServerAction(signInAction, {
               />
               <Button
                 type="submit"
-                className="w-full flex gap-4"
+                className="w-full flex gap-4 rounded-none"
                 disabled={isPending}
               >
                 {isPending ? "..." : "Login"}
               </Button>
             </form>
           </Form>
-          <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{" "}
-            <Link href="signup" className="underline">
-              Create account
+          <div className="mt-4 text-center text-sm flex items-center justify-center gap-2 flex-col text-muted-foreground ">
+            Don&apos;t have an account?
+            <Link href="#" className="flex items-center justify-center gap-2 underline hover:text-primary cursor-pointer">
+            <Phone size={14}/>  Contact Admin 
             </Link>
           </div>
         </CardContent>
       </Card>
+      </div>
+ 
     </div>
   );
 }
