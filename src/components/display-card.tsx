@@ -1,5 +1,4 @@
 import { FC } from "react";import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
-
 interface DisplayCardProps {
   title: string;
   description: string;

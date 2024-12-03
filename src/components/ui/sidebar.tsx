@@ -1,15 +1,14 @@
-"use client";
-import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
+"use client";import * as React from "react";import { Slot } from "@radix-ui/react-slot";
 import { VariantProps, cva } from "class-variance-authority";
-import {Menu, } from "lucide-react";
+import { Menu } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import {
   Tooltip,
   TooltipContent,
@@ -198,7 +197,7 @@ const Sidebar = React.forwardRef<
           <SheetContent
             data-sidebar="sidebar"
             data-mobile="true"
-            className="w-[--sidebar-width] bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
+            className="w-[--sidebar-width]  p-0 text-sidebar-foreground [&>button]:hidden"
             style={
               {
                 "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
@@ -206,6 +205,9 @@ const Sidebar = React.forwardRef<
             }
             side={side}
           >
+            <VisuallyHidden.Root>
+              <SheetTitle>Menu</SheetTitle>
+            </VisuallyHidden.Root>
             <div className="flex h-full w-full flex-col">{children}</div>
           </SheetContent>
         </Sheet>
@@ -278,7 +280,7 @@ const SidebarTrigger = React.forwardRef<
       }}
       {...props}
     >
-<Menu  size={32}/>
+      <Menu size={32} />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );

@@ -2,11 +2,8 @@ import React from "react";
 import {
   SidebarInset,
   SidebarProvider,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import { ModeToggle } from "@/components/toggle-mode";
-import DynamicBreadcrumb from "@/components/dynamic-breadcrumb";
 import { DashboardHeader } from "@/components/headers/dashboard-header";
 
 interface LayoutProps {
