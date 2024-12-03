@@ -3,10 +3,10 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="h-[100vh] flex items-center justify-center  flex-col px-4">
+    <div className="h-[100vh] flex items-center justify-center  flex-col">
       <div className="mx-auto my-auto max-w-6xl">
         {/* Grid Container */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap0 relative">
+        <div className="grid grid-cols-1 md:grid-cols-2  relative">
           {/* Heading */}
           <div className="col-span-full md:col-span-2 border-y border-muted-foreground/30 border-dashed py-8">
             <h1 className=" font-extrabold tracking-tight text-4xl md:text-5xl text-center">
@@ -15,7 +15,7 @@ export default function Home() {
           </div>
 
           {/* Description */}
-          <div className="col-span-full md:col-span-2 border-b border-muted-foreground/30  border-dashed py-4">
+          <div className="col-span-full md:col-span-2 border-b-[1px] border-muted-foreground/30  border-dashed py-4">
             <p className="text-sm md:text-lg text-center max-w-3xl mx-auto">
               Simplify{" "}
               <span className="font-semibold ">
@@ -29,11 +29,11 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="hidden md:block absolute -top-20 left-28 h-[550px] w-px border border-dashed"></div>
-          <div className="hidden md:block absolute -top-20 right-28 h-[550px] w-px border border-dashed"></div>
+          <div className="hidden md:block absolute -top-20 left-28 h-[550px]  border-[1px] border-dashed"></div>
+          <div className="hidden md:block absolute -top-20 right-28 h-[550px] border-[1px] border-dashed"></div>
 
-          <div className="hidden md:block absolute -bottom-6 left-96 h-[160px] w-px border border-dashed"></div>
-          <div className="hidden md:block absolute -bottom-6 right-96 h-[160px] w-px border border-dashed"></div>
+          <div className="hidden md:block absolute -bottom-6 left-96 h-[160px]  border-[1px] border-dashed"></div>
+          <div className="hidden md:block absolute -bottom-6 right-96 h-[160px] border-[1px] border-dashed"></div>
 
           {/* Buttons and Command */}
           <div className="col-span-full md:col-span-2 border-b border-dashed border-muted-foreground/30 py-4 flex flex-col items-center justify-center gap-6">
