@@ -49,7 +49,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    command: ["node", "dist/db/seed.cjs"]
+    command: ["tsx", "src/db/seed.ts"]
     networks:
       - app-network
     restart: on-failure:3

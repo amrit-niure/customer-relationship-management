@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { EyeIcon, EyeOffIcon, Info, Origami, Phone } from "lucide-react";
+import { EyeIcon, EyeOffIcon, Origami, Phone } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ISignIn, loginSchema } from "@/app/validation/user";
@@ -68,15 +68,15 @@ export default function SignIn() {
     reset();
   }
   return (
-    <div className="flex items-center justify-center h-[100vh] w-full">
+    <div className="flex items-center justify-center h-[100vh] w-full flex-col md:flex-row bg-muted md:bg-transparent">
       <div className="flex-1 flex items-center justify-center flex-col bg-muted h-full">
-        <Card className="border-0 shadow-none bg-transparent">
-          <Origami size={50} className="self-start" />
+        <Card className="border-0 shadow-none bg-transparent px-4 ">
+          <Origami size={80} className="self-start items-center w-full" />
           <CardHeader className="space-y-1 px-0">
-            <CardTitle className="text-5xl font-bold">
-              Apply World Group CRM
+            <CardTitle className="text-3xl md:text-5xl font-bold  text-center">
+              Client Record Management
             </CardTitle>
-            <CardDescription className="text-md py-2">
+            <CardDescription className="text-md py-2 text-center">
               The most used client record management platform in the town.
             </CardDescription>
           </CardHeader>

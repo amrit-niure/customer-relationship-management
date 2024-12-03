@@ -56,7 +56,7 @@ services:
         condition: service_healthy
     networks:
       - app-network
-    command: sh -c "npx ts-node --skipProject src/db/seed.ts"
+    command: sh -c "tsx src/db/seed.ts"
     restart: on-failure:3
 
   drizzle-studio:

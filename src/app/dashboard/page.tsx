@@ -1,5 +1,5 @@
 import { withServerAuth } from "@/lib/protected-server-pages";
-import {  assertAuthenticated, getCurrentUser } from "@/lib/session";
+import {  assertAuthenticated } from "@/lib/session";
 import React from "react";
 
 export default withServerAuth(async function Dashboard() {

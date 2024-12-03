@@ -17,7 +17,6 @@ import { ModeToggle } from "../toggle-mode"
 import { NavUser } from "../nav-user"
 
 interface DashboardHeaderProps extends React.HTMLAttributes<HTMLElement> {
-
 }
 
 export function DashboardHeader({

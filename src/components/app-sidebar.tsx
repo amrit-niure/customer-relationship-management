@@ -2,7 +2,6 @@
 import * as React from "react";
 import {
   BookOpen,
-  Bot,
   Command,
   Briefcase,
   Award,
