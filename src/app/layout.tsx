@@ -17,8 +17,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "CRM",
-  description: "Customer Relationship Managment software",
+  title: "Client Record Management",
+  description: "Customer Record Managment software",
 };
 
 export default async function RootLayout({
