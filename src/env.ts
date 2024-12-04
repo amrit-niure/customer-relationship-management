@@ -6,7 +6,7 @@ export const env = createEnv({
     DATABASE_URL: z.string().min(1),
     ADMIN_EMAIL: z.string().email().min(1),
     ADMIN_PASSWORD: z.string().min(8), 
-    JWT_SECRET: z.string().min(32), 
+    JWT_SECRET: z.string().min(2), 
     EMAIL_ID: z.string().email().min(1),
     EMAIL_FROM: z.string().email().min(1),
     RESEND_API_KEY: z.string().min(1),
