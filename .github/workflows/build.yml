@@ -36,6 +36,8 @@ jobs:
         run: npm run migrate
 
       - name: Build production
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npm run build
 
   deploy:
