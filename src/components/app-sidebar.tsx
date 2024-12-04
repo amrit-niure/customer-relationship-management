@@ -15,8 +15,6 @@ import {
   Building,
   Clock,
   Building2,
-  User2,
-  Users2,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
