@@ -14,6 +14,7 @@ import {
   HandHelping,
   Building,
   Clock,
+  Building2,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -115,6 +116,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: Send,
       },
     ],
+    navEducation: [
+      {
+        title: "Students",
+        url: "#",
+        icon: Users,
+      },
+      {
+        title: "Institutions",
+        url: "#",
+        icon: Building2,
+      },
+    ],
     navTeam: [
       {
         title: "Users",
@@ -156,6 +169,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarContent>
           <NavMain items={data.navBasics} group="Basics" />
           <NavMain items={data.navServices} group="Services" />
+          <NavMain items={data.navEducation} group="Education" />
           <NavMain items={data.navTeam} group="Team" />
           <NavSecondary items={data.navSecondary} className="mt-auto"/>
         </SidebarContent>

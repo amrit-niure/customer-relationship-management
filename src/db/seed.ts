@@ -47,7 +47,7 @@ async function main() {
       email: adminEmail,
       hashedPassword: hashedPassword,
       address: "104 Bathurst Street, Sydney NSW 2000, Australia",
-      phoneNumber: "0424562124",
+      phoneNumber: "+61424562124",
       title: "IT Administrator",
       role: "ADMIN",
       status: "ACTIVE",
