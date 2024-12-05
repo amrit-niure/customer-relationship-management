@@ -22,7 +22,13 @@ export default withServerAuth(async function TeamPage() {
         buttonText="New Member"
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 my-6">
+        <DisplayCard
+          description="This is a description"
+          icon={Calendar}
+          title="Team Member"
+          digit={23}
+        />
         <DisplayCard
           description="This is a description"
           icon={Calendar}
