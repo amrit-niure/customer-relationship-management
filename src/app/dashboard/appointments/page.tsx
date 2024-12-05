@@ -5,8 +5,8 @@ const page = () => {
   return (
     <div>
       <PageHeaderWithForm
-        description="This is description"
-        header="Header"
+        description="Book or assign appointments"
+        header="Appointments"
         formType="APPOINTMENT"
         buttonText="New Appointment"
       />{" "}

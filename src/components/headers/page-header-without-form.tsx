@@ -22,10 +22,10 @@ const PageHeaderWithoutForm: FC<PageHeaderProps> = ({
     console.log("Routing to ", pagePath);
   }
   return (
-    <CardHeader className="space-y-4 bg-gradient-to-r from-primary/5 to-muted-foreground/10 rounded-lg p-6">
+    <CardHeader className="space-y-4  rounded-sm p-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="space-y-1">
-          <CardTitle className="text-2xl font-bold tracking-tight">
+          <CardTitle className="text-3xl font-bold tracking-tight">
             {header}
           </CardTitle>
           <CardDescription className="text-sm max-w-2xl">
