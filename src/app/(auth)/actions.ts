@@ -4,7 +4,7 @@ import { afterLoginUrl } from "@/app-config";
 import { rateLimitByKey } from "@/lib/limiter";
 import { unauthenticatedAction } from "@/lib/safe-action";
 import { setSession } from "@/lib/session";
-import { loginSchema, userSchema } from "@/app/validation/user";
+import { loginSchema, userSchema } from "@/app/dashboard/(team)/users/components/validation";
 import { signInUseCase } from "@/use-cases/users/sign-in.use-case";
 import { redirect } from "next/navigation";
 import { signUpUseCase } from "@/use-cases/users/sign-up.use-case";

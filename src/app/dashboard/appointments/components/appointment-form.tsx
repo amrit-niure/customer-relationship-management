@@ -21,7 +21,7 @@ import { CalendarPlus } from "lucide-react";
 import {
   appointmentSchema,
   IAppointment,
-} from "@/app/validation/appointments";
+} from "./validation";
 import {
   Select,
   SelectContent,

@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 import * as z from "zod";
 import { deleteUserUseCase } from "@/use-cases/users/delete-user.use-case";
 import { ValidationError } from "@/errors/database";
-import { userSchema } from "@/app/validation/user";
+import { userSchema } from "./components/validation";
 import { updateUserUseCase } from "@/use-cases/users/update-user.use-case";
 export const getAllUsersAction = authenticatedAction
     .createServerAction()

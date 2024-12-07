@@ -2,7 +2,7 @@
 import { FC } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ISignUp, userSchema } from "@/app/validation/user";
+import { ISignUp, userSchema } from "./validation";
 import {
   Form,
   FormControl,

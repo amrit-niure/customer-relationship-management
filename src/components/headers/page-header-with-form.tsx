@@ -63,7 +63,7 @@ const PageHeaderWithForm: FC<PageHeaderProps> = ({
               )}
             </SheetTrigger>
           )}
-          <SheetContent className="min-w-[600px] sm:w-[600px] lg:w-[900px] overflow-y-auto">
+          <SheetContent className="min-w-[400px] md:min-w-[600px] overflow-y-auto">
             {renderForm()}
           </SheetContent>
         </Sheet>
