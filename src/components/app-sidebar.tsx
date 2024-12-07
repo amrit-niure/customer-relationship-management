@@ -1,8 +1,4 @@
-"use client";
-import * as React from "react";
-import {
-  BookOpen,
-  Command,
+"use client";import * as React from "react";import {  BookOpen,  Command,
   Briefcase,
   Award,
   Send,
@@ -15,6 +11,8 @@ import {
   Building,
   Clock,
   Building2,
+  Clock10,
+  ListTodo,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -59,9 +57,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: CircleHelp,
       },
       {
-        title: "Customers",
-        url: "/dashboard/customers",
+        title: "Clients",
+        url: "/dashboard/clients",
         icon: Smile,
+      },
+      {
+        title: "My Tasks",
+        url: "/dashboard/tasks",
+        icon: ListTodo,
       },
     ],
     navServices: [
@@ -72,30 +75,34 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         items: [
           {
             title: "Training Visa (407)",
-            url: "/dashboard/visa-applications/407",
+            url: "/dashboard/services/visa-applications/407",
           },
           {
             title: "Work Visa (482)",
-            url: "/dashboard/visa-applications/482",
+            url: "/dashboard/services/visa-applications/482",
           },
           {
             title: "Student Visa (500)",
-            url: "/dashboard/visa-applications/500",
+            url: "/dashboard/services/visa-applications/500",
           },
           {
             title: "Tourist Visa (600)",
-            url: "/dashboard/visa-applications/600",
+            url: "/dashboard/services/visa-applications/600",
+          },
+          {
+            title: "PSW Visa (485)",
+            url: "/dashboard/services/visa-applications/485",
           },
         ],
       },
       {
         title: "Job Ready Program",
-        url: "/dashboard/job-ready-program",
+        url: "/dashboard/services/job-ready-program",
         icon: Briefcase,
       },
       {
         title: "Skills Assessment",
-        url: "/dashboard/skills-assessment",
+        url: "/dashboard/services/skills-assessment",
         icon: Award,
       },
     ],
@@ -119,30 +126,35 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     navEducation: [
       {
         title: "Students",
-        url: "#",
+        url: "/dashboard/students",
         icon: Users,
       },
       {
         title: "Institutions",
-        url: "#",
+        url: "/dashboard/institutions",
         icon: Building2,
       },
     ],
     navTeam: [
       {
         title: "Users",
-        url: "/dashboard/team",
+        url: "/dashboard/users",
         icon: Users,
       },
       {
         title: "Collaboration",
-        url: "#",
+        url: "/dashboard/collaboration",
         icon: HandHelping,
       },
       {
         title: "Mails",
-        url: "#",
+        url: "/dashboard/mails",
         icon: Send,
+      },
+      {
+        title: "Shifts",
+        url: "/dashboard/shifts",
+        icon: Clock10,
       },
     ],
   };

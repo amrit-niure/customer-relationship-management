@@ -9,7 +9,7 @@ import { Plus } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useSession } from "../providers/session-provider";
 import AppointmentForm from "@/app/dashboard/appointments/components/appointment-form";
-import TeamForm from "@/app/dashboard/team/components/team-form";
+import TeamForm from "@/app/dashboard/(team)/users/components/team-form";
 
 interface PageHeaderProps {
   header: string;
@@ -39,7 +39,7 @@ const PageHeaderWithForm: FC<PageHeaderProps> = ({
   };
 
   return (
-    <CardHeader className="space-y-4  rounded-sm p-6">
+    <CardHeader className="space-y-4 rounded-sm p-0">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="space-y-1">
           <CardTitle className="text-3xl font-bold tracking-tight">

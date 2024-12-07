@@ -1,4 +1,5 @@
-import { FC } from "react";import PageHeaderWithForm from "./page-header-with-form";
+import { FC } from "react";
+import PageHeaderWithForm from "./page-header-with-form";
 import PageHeaderWithoutForm from "./page-header-without-form";
 interface PageHeaderProps {
   header: string;
