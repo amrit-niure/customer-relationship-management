@@ -20,10 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { DataTablePagination } from "@/components/data-table/pagination";
-import { Settings2 } from "lucide-react";
 import { DataTableToolbar } from "@/app/dashboard/clients/components/toolbar";
 
 interface DataTableProps<TData, TValue> {

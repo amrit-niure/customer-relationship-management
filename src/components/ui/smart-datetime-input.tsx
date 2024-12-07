@@ -74,9 +74,8 @@ const inputBase =
 
 // @source: https://www.perplexity.ai/search/in-javascript-how-RfI7fMtITxKr5c.V9Lv5KA#1
 // use this pattern to validate the transformed date string for the natural language input
-const naturalInputValidationPattern =
-  "^[A-Z][a-z]{2}sd{1,2},sd{4},sd{1,2}:d{2}s[AP]M$";
-
+// const _naturalInputValidationPattern =
+//   "^[A-Z][a-z]{2}sd{1,2},sd{4},sd{1,2}:d{2}s[AP]M$";
 const DEFAULT_SIZE = 96;
 
 /**
@@ -497,10 +496,10 @@ const DateTimeLocalInput = ({
 
   const formateSelectedDate = React.useCallback(
     (
-      date: Date | undefined,
+      _date: Date | undefined,
       selectedDate: Date,
-      m: ActiveModifiers,
-      e: React.MouseEvent,
+      _m: ActiveModifiers,
+      _e: React.MouseEvent,
     ) => {
       const parsedDateTime = parseDateTime(selectedDate);
 

@@ -1,4 +1,3 @@
-import { visaTypeEnum } from "@/db/schema/enums";
 import {
     ArrowDown,
     ArrowRight,

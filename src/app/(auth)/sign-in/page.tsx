@@ -13,7 +13,7 @@ import { useState } from "react";
 import { EyeIcon, EyeOffIcon, Origami, Phone } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ISignIn, loginSchema } from "@/app/validation/user";
+import { ISignIn, loginSchema } from "@/app/dashboard/(team)/users/components/validation";
 import { useToast } from "@/hooks/use-toast";
 import { signInAction } from "../actions";
 import { useServerAction } from "zsa-react";

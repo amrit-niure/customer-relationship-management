@@ -13,7 +13,7 @@ interface PageHeaderProps {
   header: string;
   description: string;
   pagePath?: string;
-  buttonText: string;
+  buttonText?: string;
 }
 const PageHeaderWithoutForm: FC<PageHeaderProps> = ({
   description,
