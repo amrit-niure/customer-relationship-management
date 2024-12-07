@@ -19,7 +19,7 @@ export default function Layout({ children }: LayoutProps) {
             <DashboardHeader />
           </div>
         </header>
-        <main className="md:pr-4 lg:px-6 pt-4 ">{children}</main>
+        <main className="px-4 md:pr-4 lg:px-6 pt-4 ">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );

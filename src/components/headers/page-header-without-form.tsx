@@ -7,20 +7,20 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import Link from "next/link";
 
 interface PageHeaderProps {
   header: string;
   description: string;
   pagePath?: string;
+  buttonText: string;
 }
 const PageHeaderWithoutForm: FC<PageHeaderProps> = ({
   description,
   header,
   pagePath,
+  buttonText
 }) => {
-  function onlcickHandler(pagePath: string | undefined) {
-    console.log("Routing to ", pagePath);
-  }
   return (
     <CardHeader className="space-y-4  rounded-sm p-0">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -33,13 +33,14 @@ const PageHeaderWithoutForm: FC<PageHeaderProps> = ({
           </CardDescription>
         </div>
         {pagePath && (
+          <Link href={pagePath}>
           <Button
             className="self-start sm:self-auto transition-colors hover:bg-primary/90"
-            onClick={() => onlcickHandler(pagePath)}
           >
             <Plus className="mr-2 h-4 w-4" />
-            New Member
+          {buttonText}
           </Button>
+          </Link>
         )}
       </div>
     </CardHeader>
