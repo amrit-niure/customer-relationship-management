@@ -9,7 +9,6 @@ export default function ErrorBoundary({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Optionally log to error reporting service
     console.error(error);
   }, [error]);
 

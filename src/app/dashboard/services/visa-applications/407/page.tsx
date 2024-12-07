@@ -1,18 +1,9 @@
-'use client'
+import { withServerAuth } from "@/lib/protected-server-pages";
 
-interface Props {
-	params: {
-		id: string;
-	};
-}
-
-export default function TrainingVisa({ params }: Props) {
-	const { id } = params;
-
-	return (
-		<>
-			<h1>Training Visa { id }</h1>
-			<p>Training Visa content</p>
-		</>
-	);
-}
+export default withServerAuth(async function Page() {
+  return (
+    <div>
+     Page
+    </div>
+  );
+})

@@ -1,18 +1,9 @@
-'use client'
+import { withServerAuth } from "@/lib/protected-server-pages";
 
-interface Props {
-	params: {
-		id: string;
-	};
-}
-
-export default function Shifts({ params }: Props) {
-	const { id } = params;
-
-	return (
-		<>
-			<h1>Page { id }</h1>
-			<p>Page content</p>
-		</>
-	);
-}
+export default withServerAuth(async function Shifts() {
+  return (
+    <div>
+     Shifts
+    </div>
+  );
+})
