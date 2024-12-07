@@ -26,3 +26,5 @@ export const customersRelations = relations(customers, ({ many }) => ({
   jobReadyPrograms: many(jobReadyPrograms),
   skillsAssessments: many(skillsAssessments),
 }));
+export type Customer = typeof customers.$inferSelect; 
+export type NewCustomer = typeof customers.$inferInsert; 
