@@ -1,4 +1,6 @@
-"use client";import { useState } from "react";import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+"use client";
+import { useState } from "react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
@@ -12,12 +14,29 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { Building2, Mail, MapPin, Pencil, Phone, Trash2 } from "lucide-react";
+import {
+  Building2,
+  Eye,
+  Mail,
+  MapPin,
+  MoreHorizontal,
+  Pencil,
+  Phone,
+  Trash2,
+} from "lucide-react";
 import TeamForm from "./team-form";
 import { User } from "@/db/schema/users";
 import { deleteUserAction } from "../actions";
 import { useServerAction } from "zsa-react";
 import { useToast } from "@/hooks/use-toast";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 
 interface TeamTableProps {
   teamMembers: User[];
@@ -59,12 +78,80 @@ export default function TeamTable({ teamMembers }: TeamTableProps) {
   };
   return (
     <>
-      <Tabs defaultValue="grid" className="space-y-4">
+      <Tabs defaultValue="table" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="grid">Grid View</TabsTrigger>
           <TabsTrigger value="table">Table View</TabsTrigger>
+          <TabsTrigger value="grid">Grid View</TabsTrigger>
         </TabsList>
 
+        <TabsContent value="table">
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Title</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Phone</TableHead>
+                  <TableHead>Branch</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {teamMembers?.map((member) => (
+                  <TableRow key={member.id}>
+                    <TableCell className="font-medium">
+                      <div className="flex items-center space-x-2">
+                        <Avatar className="h-8 w-8">
+                          <AvatarFallback className="bg-primary/10 text-xs">
+                            {getInitials(member.firstName, member.lastName)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span>{`${member.firstName} ${member.lastName}`}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell>{member.title}</TableCell>
+                    <TableCell>{member.email}</TableCell>
+                    <TableCell>{member.phoneNumber}</TableCell>
+                    <TableCell>{member.branch}</TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={
+                          member.status === "ACTIVE" ? "default" : "secondary"
+                        }
+                      >
+                        {member.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                  <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" className="h-8 w-8 p-0">
+                            <span className="sr-only">Open menu</span>
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                          <DropdownMenuItem onClick={() => {
+                            setEditingMember(member);
+                            setIsOpen(true);
+                          }}>    <Pencil className="h-4 w-4" /> Edit</DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem> <Eye  className="h-4 w-4" /> View User</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleDelete(member.id)}>
+                          <Trash2 className="h-4 w-4" />  Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </TabsContent>
         <TabsContent value="grid" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {teamMembers?.map((member) => (
@@ -114,81 +201,12 @@ export default function TeamTable({ teamMembers }: TeamTableProps) {
                           {member.status.toLowerCase()}
                         </Badge>
                       </div>
-                        <div className="flex items-center justify-center  space-x-2">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => {
-                              setEditingMember(member);
-                              setIsOpen(true);
-                            }}
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleDelete(member.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
-
-        <TabsContent value="table">
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Title</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Phone</TableHead>
-                  <TableHead>Branch</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {teamMembers?.map((member) => (
-                  <TableRow key={member.id}>
-                    <TableCell className="font-medium">
-                      <div className="flex items-center space-x-2">
-                        <Avatar className="h-8 w-8">
-                          <AvatarFallback className="bg-primary/10 text-xs">
-                            {getInitials(member.firstName, member.lastName)}
-                          </AvatarFallback>
-                        </Avatar>
-                        <span>{`${member.firstName} ${member.lastName}`}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>{member.title}</TableCell>
-                    <TableCell>{member.email}</TableCell>
-                    <TableCell>{member.phoneNumber}</TableCell>
-                    <TableCell>{member.branch}</TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          member.status === "ACTIVE" ? "default" : "secondary"
-                        }
-                      >
-                        {member.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex space-x-2">
+                      <div className="flex items-center justify-center  space-x-2">
                         <Button
                           variant="ghost"
                           size="icon"
                           onClick={() => {
-                            console.log(member.id)
-                            setEditingMember({...member, id:member.id});
+                            setEditingMember(member);
                             setIsOpen(true);
                           }}
                         >
@@ -197,16 +215,22 @@ export default function TeamTable({ teamMembers }: TeamTableProps) {
                         <Button
                           variant="ghost"
                           size="icon"
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="icon"
                           onClick={() => handleDelete(member.id)}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </TabsContent>
       </Tabs>

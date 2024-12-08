@@ -3,11 +3,10 @@ import PageHeaderWithoutForm from "@/components/headers/page-header-without-form
 import { withServerAuth } from "@/lib/protected-server-pages";
 import { Calendar } from "lucide-react";
 import { columns } from "./components/columns";
-import { DataTable } from "./components/data-table";
+import { DataTable } from "@/components/data-table/data-table";
 import { Customer } from "@/db/schema/customers";
 
 async function getData(): Promise<Customer[]> {
-  // Fetch data from your API here.
   return [
     {
       id: "e13bdc8b-58b1-4e9a-a8fa-7e0d5e55633e",
