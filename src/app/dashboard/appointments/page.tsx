@@ -9,7 +9,7 @@ const page = () => {
         header="Appointments"
         formType="APPOINTMENT"
         buttonText="New Appointment"
-      />{" "}
+      />
     </div>
   );
 };

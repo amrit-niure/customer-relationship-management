@@ -5,9 +5,9 @@ import { Calendar } from "lucide-react";
 import { columns } from "./components/columns";
 import { DataTable } from "./components/data-table";
 import { Customer } from "@/db/schema/customers";
+import { DataLinkTable } from "./components/data-link-table";
 
 async function getData(): Promise<Customer[]> {
-  // Fetch data from your API here.
   return [
     {
       id: "e13bdc8b-58b1-4e9a-a8fa-7e0d5e55633e",
@@ -203,7 +203,7 @@ export default withServerAuth(async function Clients() {
         />
       </div>
       <div>
-        <DataTable columns={columns} data={data} />
+        <DataLinkTable columns={columns} data={data} />
       </div>
     </div>
   );

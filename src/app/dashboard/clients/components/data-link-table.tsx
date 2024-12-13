@@ -1,6 +1,4 @@
-"use client";
-import * as React from "react";
-import {
+"use client";import * as React from "react";import {
   ColumnDef,
   ColumnFiltersState,
   flexRender,
@@ -18,17 +16,19 @@ import {
   TableCell,
   TableHead,
   TableHeader,
+  TableLinkRow,
   TableRow,
 } from "@/components/ui/table";
 import { DataTablePagination } from "@/components/data-table/pagination";
 import { DataTableToolbar } from "@/app/dashboard/clients/components/toolbar";
+import { usePathname } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function DataTable<TData, TValue>({
+export function DataLinkTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -54,7 +54,7 @@ export function DataTable<TData, TValue>({
       columnVisibility,
     },
   });
-
+    const pathname = usePathname();
   return (
     <div>
       <DataTableToolbar table={table} />
@@ -81,7 +81,8 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
+                <TableLinkRow
+                href={`${pathname}/${row.original.id}`}
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
@@ -93,7 +94,7 @@ export function DataTable<TData, TValue>({
                       )}
                     </TableCell>
                   ))}
-                </TableRow>
+                </TableLinkRow>
               ))
             ) : (
               <TableRow>
