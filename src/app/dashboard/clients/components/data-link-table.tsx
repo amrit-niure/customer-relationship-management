@@ -1,5 +1,4 @@
-"use client";import * as React from "react";import {
-  ColumnDef,
+"use client";import * as React from "react";import {  ColumnDef,
   ColumnFiltersState,
   flexRender,
   SortingState,
@@ -82,7 +81,7 @@ export function DataLinkTable<TData, TValue>({
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableLinkRow
-                href={`${pathname}/${row.original.id}`}
+                  href={`${pathname}/${(row.original as { id: string }).id}`}
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >

@@ -3,7 +3,6 @@ import PageHeaderWithoutForm from "@/components/headers/page-header-without-form
 import { withServerAuth } from "@/lib/protected-server-pages";
 import { Calendar } from "lucide-react";
 import { columns } from "./components/columns";
-import { DataTable } from "./components/data-table";
 import { Customer } from "@/db/schema/customers";
 import { DataLinkTable } from "./components/data-link-table";
 
