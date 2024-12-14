@@ -3,7 +3,7 @@
 import { DataTableColumnHeader } from "@/components/data-table/column-header"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Customer } from "@/db/schema/customers"
+import { Client } from "@/db/schema/clients"
 import { ColumnDef } from "@tanstack/react-table"
 import { MoreHorizontal } from "lucide-react"
 
@@ -11,7 +11,7 @@ import { MoreHorizontal } from "lucide-react"
 // You can use a Zod schema here if you want.
 
 
-export const columns: ColumnDef<Customer>[] = [
+export const columns: ColumnDef<Client>[] = [
   {
     accessorKey: "firstName",
     header: ({ column }) => (

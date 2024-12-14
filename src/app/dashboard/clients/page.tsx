@@ -3,10 +3,10 @@ import PageHeaderWithoutForm from "@/components/headers/page-header-without-form
 import { withServerAuth } from "@/lib/protected-server-pages";
 import { Calendar } from "lucide-react";
 import { columns } from "./components/columns";
-import { Customer } from "@/db/schema/customers";
+import { Client } from "@/db/schema/clients";
 import { DataLinkTable } from "./components/data-link-table";
 
-async function getData(): Promise<Customer[]> {
+async function getData(): Promise<Client[]> {
   return [
     {
       id: "e13bdc8b-58b1-4e9a-a8fa-7e0d5e55633e",
@@ -17,6 +17,7 @@ async function getData(): Promise<Customer[]> {
       phone: "+61412345678",
       address: "123 Elm Street, Sydney, NSW, Australia",
       passportNumber: "M1234567",
+      isActive: true,
       currentVisa: "SUB_186",
       visaExpiry: new Date("2025-12-01T00:00:00Z"),
       createdAt: new Date("2024-12-01T12:00:00Z"),
@@ -29,6 +30,7 @@ async function getData(): Promise<Customer[]> {
       lastName: "Smith",
       email: "janesmith@gmail.com",
       phone: "+61423456789",
+      isActive: true,
       address: "456 Oak Avenue, Melbourne, VIC, Australia",
       passportNumber: "N7654321",
       currentVisa: "SUB_189",
@@ -41,6 +43,7 @@ async function getData(): Promise<Customer[]> {
       firstName: "Arjun",
       middleName: null,
       lastName: "Tamang",
+      isActive: true,
       email: "arjun.t@gmail.com",
       phone: "+61498765432",
       address: "789 Willow Road, Brisbane, QLD, Australia",
@@ -57,6 +60,7 @@ async function getData(): Promise<Customer[]> {
       lastName: "Gonzalez",
       email: "maria.g@gmail.com",
       phone: "+61423412345",
+      isActive: true,
       address: "55 Pine Lane, Adelaide, SA, Australia",
       passportNumber: "P9876543",
       currentVisa: "SUB_407",
@@ -75,6 +79,8 @@ async function getData(): Promise<Customer[]> {
       passportNumber: "A9876543",
       currentVisa: "SUB_482",
       visaExpiry: null,
+      isActive: true,
+
       createdAt: new Date("2024-09-01T12:00:00Z"),
       updatedAt: new Date("2024-09-01T12:00:00Z"),
     },
@@ -88,6 +94,8 @@ async function getData(): Promise<Customer[]> {
       address: "22 Birch Boulevard, Canberra, ACT, Australia",
       passportNumber: "D4321987",
       currentVisa: "SUB_482",
+      isActive: true,
+
       visaExpiry: new Date("2026-07-20T00:00:00Z"),
       createdAt: new Date("2024-08-10T12:00:00Z"),
       updatedAt: new Date("2024-08-10T12:00:00Z"),
@@ -101,6 +109,8 @@ async function getData(): Promise<Customer[]> {
       phone: "+61498765432",
       address: "789 Willow Road, Brisbane, QLD, Australia",
       passportNumber: null,
+      isActive: true,
+
       currentVisa: "SUB_600",
       visaExpiry: new Date("2024-12-31T00:00:00Z"),
       createdAt: new Date("2024-11-15T12:00:00Z"),
@@ -116,6 +126,8 @@ async function getData(): Promise<Customer[]> {
       address: "123 Elm Street, Sydney, NSW, Australia",
       passportNumber: "M1234567",
       currentVisa: "SUB_500",
+      isActive: true,
+
       visaExpiry: new Date("2025-12-01T00:00:00Z"),
       createdAt: new Date("2024-12-01T12:00:00Z"),
       updatedAt: new Date("2024-12-01T12:00:00Z"),
@@ -130,6 +142,8 @@ async function getData(): Promise<Customer[]> {
       address: "456 Oak Avenue, Melbourne, VIC, Australia",
       passportNumber: "N7654321",
       currentVisa: "SUB_482",
+      isActive: true,
+
       visaExpiry: new Date("2026-03-15T00:00:00Z"),
       createdAt: new Date("2024-12-01T12:00:00Z"),
       updatedAt: new Date("2024-12-01T12:00:00Z"),
@@ -140,6 +154,8 @@ async function getData(): Promise<Customer[]> {
       middleName: null,
       lastName: "Tamang",
       email: "arjun.t@gmail.com",
+      isActive: true,
+
       phone: "+61498765432",
       address: "789 Willow Road, Brisbane, QLD, Australia",
       passportNumber: null,
@@ -157,6 +173,8 @@ async function getData(): Promise<Customer[]> {
       phone: "+61423412345",
       address: "55 Pine Lane, Adelaide, SA, Australia",
       passportNumber: "P9876543",
+      isActive: true,
+
       currentVisa: "SUB_186",
       visaExpiry: new Date("2027-06-01T00:00:00Z"),
       createdAt: new Date("2024-10-05T12:00:00Z"),
