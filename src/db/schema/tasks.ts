@@ -15,6 +15,8 @@ import {
   import { users } from "./users";
   import { clients } from "./clients";
   import { appointments } from "./appointments";
+import { taskComments } from "./task-comments";
+import { relations } from "drizzle-orm";
   
   export const tasks = pgTable('tasks', {
     id: uuid('id').primaryKey().defaultRandom(),
@@ -49,3 +51,26 @@ import {
       .$onUpdateFn(() => new Date())
       .notNull(),
   });
+
+
+  export const tasksRelations = relations(tasks, ({ one, many }) => ({
+    assignedTo: one(users, {
+      fields: [tasks.assignedToId],
+      references: [users.id],
+      relationName: "assignedTo"
+    }),
+    createdBy: one(users, {
+      fields: [tasks.createdById],
+      references: [users.id],
+      relationName: "createdBy"
+    }),
+    client: one(clients, {
+      fields: [tasks.clientId],
+      references: [clients.id]
+    }),
+    appointment: one(appointments, {
+      fields: [tasks.appointmentId],
+      references: [appointments.id]
+    }),
+    comments: many(taskComments)
+  }));
