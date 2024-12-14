@@ -1,8 +1,11 @@
-"use client";import * as React from "react";import {  BookOpen,  Command,
+"use client";
+import * as React from "react";
+import {
+  BookOpen,
+  Command,
   Briefcase,
   Award,
   Send,
-  SquareTerminal,
   Smile,
   Users,
   CircleHelp,
@@ -12,7 +15,13 @@
   Clock,
   Building2,
   Clock10,
-  ListTodo,
+  ListTodoIcon,
+  Settings2,
+  LayoutDashboard,
+  BookA,
+  User,
+  Globe2,
+  ListCheck,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -38,7 +47,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {
         title: "Home",
         url: "/dashboard",
-        icon: SquareTerminal,
+        icon: LayoutDashboard,
         isActive: true,
       },
       {
@@ -60,11 +69,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         title: "Clients",
         url: "/dashboard/clients",
         icon: Smile,
-      },
-      {
-        title: "My Tasks",
-        url: "/dashboard/tasks",
-        icon: ListTodo,
       },
     ],
     navServices: [
@@ -156,6 +160,45 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         url: "/dashboard/shifts",
         icon: Clock10,
       },
+      {
+        title: "Tasks",
+        url: "/dashboard/tasks",
+        icon: ListTodoIcon,
+      },
+    ],
+    navPersonal: [
+      {
+        title: "Profile",
+        url: `/dashboard/profile/${user?.id}`,
+        icon: Users,
+      },
+      {
+        title: "My Tasks",
+        url: "/dashboard/my-tasks",
+        icon: ListCheck,
+      },
+      {
+        title: "Preferences",
+        url: `/dashboard/preferences/${user?.id}`,
+        icon: Settings2,
+      },
+    ],
+    navAnalytics: [
+      {
+        title: "Overview",
+        url: `/dashboard/overview`,
+        icon: BookA,
+      },
+      {
+        title: "Agent Performance",
+        url: "/dashboard/agent-performance",
+        icon: User,
+      },
+      {
+        title: "Customer Demographics",
+        url: `/dashboard/customer-demographics`,
+        icon: Globe2,
+      },
     ],
   };
   return (
@@ -170,7 +213,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     <Command className="size-4" />
                   </div>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">Apply World Records</span>
+                    <span className="truncate font-semibold">
+                      Apply World Records
+                    </span>
                     <span className="truncate text-xs">Visa & Migrations</span>
                   </div>
                 </a>
@@ -183,7 +228,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <NavMain items={data.navServices} group="Services" />
           <NavMain items={data.navEducation} group="Education" />
           <NavMain items={data.navTeam} group="Team" />
-          <NavSecondary items={data.navSecondary} className="mt-auto"/>
+          <NavMain items={data.navPersonal} group="Personal" />
+          <NavMain items={data.navAnalytics} group="Analytics" />
+          <NavSecondary items={data.navSecondary} className="mt-auto" />
         </SidebarContent>
       </Sidebar>
     </div>

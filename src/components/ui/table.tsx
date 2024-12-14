@@ -1,6 +1,6 @@
 import * as React from "react"
-
 import { cn } from "@/lib/utils"
+import Link from "next/link"
 
 const Table = React.forwardRef<
   HTMLTableElement,
@@ -66,6 +66,26 @@ const TableRow = React.forwardRef<
 ))
 TableRow.displayName = "TableRow"
 
+
+const TableLinkRow = React.forwardRef<
+  HTMLTableRowElement,
+  React.HTMLAttributes<HTMLTableRowElement> & { href: string }
+>(({ className, href, ...props }, ref) => (
+  <Link href={href} passHref legacyBehavior>
+    <tr
+      ref={ref}
+      className={cn(
+        "border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted cursor-pointer",
+        className
+      )}
+      {...props}
+    />
+  </Link>
+));
+
+TableLinkRow.displayName = "TableLinkRow";
+
+
 const TableHead = React.forwardRef<
   HTMLTableCellElement,
   React.ThHTMLAttributes<HTMLTableCellElement>
@@ -115,6 +135,7 @@ export {
   TableFooter,
   TableHead,
   TableRow,
+  TableLinkRow,
   TableCell,
   TableCaption,
 }
