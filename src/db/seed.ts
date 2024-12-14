@@ -1,77 +1,3 @@
-// import * as argon from "@node-rs/argon2";
-// import { eq } from "drizzle-orm";
-// import { drizzle } from "drizzle-orm/node-postgres";
-// import { users } from "./schema";
-// import "dotenv/config";
-// import pg from "pg";
-
-// const { Pool } = pg;
-
-// if (!process.env.DATABASE_URL) {
-//   throw new Error(
-//     "Database URL not found. Please set DATABASE_URL in your environment variables.",
-//   );
-// }
-
-// const pool = new Pool({
-//   connectionString: process.env.DATABASE_URL,
-// });
-
-// const db = drizzle(pool);
-
-// async function main() {
-//   const startTime = Date.now();
-//   console.log("Seeding Started...");
-
-//   const existingAdmin = await db
-//     .select()
-//     .from(users)
-//     .where(eq(users.role, "ADMIN"))
-//     .limit(1);
-
-//   if (existingAdmin.length === 0) {
-//     if (!process.env.ADMIN_PASSWORD || !process.env.ADMIN_EMAIL) {
-//       throw new Error(
-//         "Admin credentials not found. Please set both ADMIN_EMAIL and ADMIN_PASSWORD in your environment variables.",
-//       );
-//     }
-
-//     const adminPassword = process.env.ADMIN_PASSWORD;
-//     const adminEmail = process.env.ADMIN_EMAIL;
-//     const hashedPassword = await argon.hash(adminPassword);
-
-//     // Insert the admin user
-//     await db.insert(users).values({
-//       firstName: "Amrit",
-//       lastName: "Niure",
-//       email: adminEmail,
-//       hashedPassword: hashedPassword,
-//       address: "104 Bathurst Street, Sydney NSW 2000, Australia",
-//       phoneNumber: "+61424562124",
-//       title: "IT Administrator",
-//       role: "ADMIN",
-//       status: "ACTIVE",
-//     });
-
-//     console.log("Admin user created successfully");
-//   } else {
-//     console.log("Admin user already exists");
-//   }
-
-//   const endTime = Date.now();
-//   const durationInMs = endTime - startTime;
-//   console.log(`Data seeded successfully in ${durationInMs} ms.`);
-//   process.exit(0);
-// }
-
-// main().catch((err) => {
-//   console.error("Error seeding users:", err);
-//   process.exit(0);
-// });
-
-
-
-
 import * as argon from "@node-rs/argon2";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
@@ -83,7 +9,6 @@ import {
     officeVisits, 
     tasks, 
     taskComments,
-    sessions 
 } from "./schema";
 import { 
     roleEnum, 
@@ -100,7 +25,6 @@ import {
 import "dotenv/config";
 import pg from "pg";
 import { faker } from "@faker-js/faker";
-import { randomUUID } from "crypto";
 
 const { Pool } = pg;
 
@@ -137,7 +61,7 @@ const generateUniqueEmail = async () => {
     return email;
 };
 
-async function seedAdmin() {
+async function _seedAdmin() {
 
   const existingAdmin = await db
     .select()
@@ -174,7 +98,7 @@ async function seedAdmin() {
     console.log("Admin user already exists");
   }
 }
-async function seedUsers() {
+async function _seedUsers() {
     const existingUsers = await db.select().from(users);
     
     if (existingUsers.length > 1) return; // Skip if users already exist (except admin)
@@ -207,7 +131,7 @@ async function seedUsers() {
     await db.insert(users).values(usersToInsert);
 }
 
-async function seedClients() {
+async function _seedClients() {
     const existingClients = await db.select().from(clients);
     
     if (existingClients.length >= 5) return;
@@ -233,7 +157,7 @@ async function seedClients() {
     await db.insert(clients).values(clientsToInsert);
 }
 
-async function seedAppointments() {
+async function _seedAppointments() {
     const existingClients = await db.select({ id: clients.id }).from(clients);
     const existingUsers = await db.select({ id: users.id }).from(users);
 
@@ -255,7 +179,7 @@ async function seedAppointments() {
     await db.insert(appointments).values(appointmentsToInsert);
 }
 
-async function seedClientAssignments() {
+async function _seedClientAssignments() {
     const existingClients = await db.select({ id: clients.id }).from(clients);
     const existingUsers = await db.select({ id: users.id }).from(users);
 
@@ -276,7 +200,7 @@ async function seedClientAssignments() {
     await db.insert(clientAssignments).values(assignmentsToInsert);
 }
 
-async function seedOfficeVisits() {
+async function _seedOfficeVisits() {
     const existingClients = await db.select({ id: clients.id }).from(clients);
     const existingUsers = await db.select({ id: users.id }).from(users);
     const existingAppointments = await db.select({ id: appointments.id }).from(appointments);
@@ -302,7 +226,7 @@ async function seedOfficeVisits() {
     await db.insert(officeVisits).values(officeVisitsToInsert);
 }
 
-async function seedTasks() {
+async function _seedTasks() {
     const existingClients = await db.select({ id: clients.id }).from(clients);
     const existingUsers = await db.select({ id: users.id }).from(users);
     const existingAppointments = await db.select({ id: appointments.id }).from(appointments);
@@ -344,7 +268,7 @@ async function seedTasks() {
     await db.insert(tasks).values(tasksToInsert);
 }
 
-async function seedTaskComments() {
+async function _seedTaskComments() {
     const existingTasks = await db.select({ id: tasks.id }).from(tasks);
     const existingUsers = await db.select({ id: users.id }).from(users);
 
