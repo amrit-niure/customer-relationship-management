@@ -1,56 +1,86 @@
 import { pgEnum } from "drizzle-orm/pg-core";
 
-export const roleEnum = pgEnum("role", ["ADMIN", "USER"]);
-export const appointmentStatusEnum = pgEnum("status", [
-  "CONFIRMED",
-  "CANCELLED",
-  "VISITED",
+// User Enums
+export const roleEnum = pgEnum('user_role', [
+  'ADMIN', 
+  'MANAGER', 
+  'AGENT',
+  'MIGRTATION_AGENT', 
+  'USER'
 ]);
-export const overseerEnum = pgEnum("overseer", ["DEEPAK", "GANESH"]);
-export const statusEnum = pgEnum("status", ["PENDING", "APPROVED", "REJECTED"]);
-export const sbsStatusEnum = pgEnum("sbs_status", [
-  "PENDING",
-  "APPROVED",
-  "NOT APPROVED",
+
+export const userStatusEnum = pgEnum('user_status', [
+  'ACTIVE', 
+  'INACTIVE', 
+  'SUSPENDED'
 ]);
-export const branchEnum = pgEnum("branch", [
-  "AUSTRALIA",
-  "NEPAL",
-  "DUBAI",
-  "PHILIPPINES",
+
+export const branchEnum = pgEnum('branch', [
+  'AUSTRALIA', 
+  'PHILIPPINES', 
+  'DUBAI', 
+  'NEPAL'
 ]);
-export const userStatusEnum = pgEnum("user_status", ["ACTIVE", "INACTIVE"]);
-export const visaTypeEnum = pgEnum("visa_type", [
-  "SUB_500",
-  "SUB_482",
-  "SUB_407",
-  "SUB_186",
-  "SUB_189",
-  "SUB_190",
-  "SUB_600",
-  "SUB_820",
-  "SUB_801",
+
+// Client Enums
+export const visaTypeEnum = pgEnum('visa_type', [
+    "SUB_500",
+    "SUB_482",
+    "SUB_485",
+    "SUB_407",
+    "SUB_186",
+    "SUB_189",
+    "SUB_190",
+    "SUB_600",
+    "SUB_820",
+    "SUB_801",
 ]);
-export const jrpStageEnum = pgEnum("jrp_stage", [
-  "JRPRE",
-  "JRE",
-  "JRWA",
-  "JRFA",
+
+// Appointment Enums
+export const appointmentStatusEnum = pgEnum('appointment_status', [
+  'SCHEDULED', 
+  'CONFIRMED', 
+  'COMPLETED', 
+  'CANCELLED'
 ]);
-export const saStatusEnum = pgEnum("sa_status", [
-  "SUBMITTED",
-  "UNDER_ASSESSMENT",
-  "ADDITIONAL_INFO_REQUIRED",
-  "COMPLETED",
-  "APPEALED",
+
+// Office Visit Enums
+export const officeVisitStatus = pgEnum('office_visit_status', [
+  'WAITING', 
+  'IN_PROGRESS', 
+  'COMPLETED', 
+  'CANCELLED'
 ]);
-export const saTypeEnum = pgEnum("sa_type", [
-  "SKILLS_ASSESSMENT",
-  "QUALIFICATION_ASSESSMENT",
-  "PROVISIONAL_SKILLS_ASSESSMENT",
+
+// Task Enums
+export const taskStatusEnum = pgEnum('task_status', [
+  'PENDING',
+  'IN_PROGRESS', 
+  'BLOCKED', 
+  'COMPLETED', 
+  'CANCELLED'
 ]);
-export const outcomeEnum = pgEnum("outcome", [
-  "SUCCESSFUL",
-  "UNSUCCESSFUL",
-  "PENDING",
+
+export const taskPriorityEnum = pgEnum('task_priority', [
+  'LOW', 
+  'MEDIUM', 
+  'HIGH', 
+  'CRITICAL'
+]);
+
+export const taskTypeEnum = pgEnum('task_type', [
+  'CLIENT_FOLLOW_UP',
+  'DOCUMENT_PREPARATION',
+  'VISA_APPLICATION_REVIEW',
+  'CONSULTATION_PREP',
+  'INTERNAL_ADMIN',
+  'COMMUNICATION',
+  'OTHER'
+]);
+
+// Client Assignment Enums
+export const clientAssignmentStatusEnum = pgEnum('client_assignment_status', [
+  'ACTIVE', 
+  'PENDING', 
+  'INACTIVE'
 ]);
