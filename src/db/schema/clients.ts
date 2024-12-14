@@ -14,7 +14,7 @@ import { clientAssignments } from "./client-assignments";
 import { officeVisits } from "./office-visits";
 import { tasks } from "./tasks";
   
-  export const clients = pgTable('customers', {
+  export const clients = pgTable('clients', {
     id: uuid('id').primaryKey().defaultRandom(),
     firstName: varchar('first_name',{ length: 255 }).notNull(),
     middleName: varchar('middle_name',{ length: 255 }),
