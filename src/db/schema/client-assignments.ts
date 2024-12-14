@@ -31,7 +31,7 @@ client: one(clients, {
 agent: one(users, {
   fields: [clientAssignments.agentId],
   references: [users.id],
-  relationName: 'agentAssignment'
+  relationName: 'assignedAgent'
 }),
 assignedBy: one(users, {
   fields: [clientAssignments.assignedBy],

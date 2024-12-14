@@ -17,6 +17,7 @@ import {
   import { appointments } from "./appointments";
 import { taskComments } from "./task-comments";
 import { relations } from "drizzle-orm";
+import { officeVisits } from "./office-visits";
   
   export const tasks = pgTable('tasks', {
     id: uuid('id').primaryKey().defaultRandom(),
@@ -30,6 +31,7 @@ import { relations } from "drizzle-orm";
     // Optional client and appointment association
     clientId: uuid('client_id').references(() => clients.id),
     appointmentId: uuid('appointment_id').references(() => appointments.id),
+    officeVisitId: uuid('office_visit_id').references(() => officeVisits.id),
     
     // Task Metadata
     status: taskStatusEnum('status').default('PENDING').notNull(),
@@ -71,6 +73,10 @@ import { relations } from "drizzle-orm";
     appointment: one(appointments, {
       fields: [tasks.appointmentId],
       references: [appointments.id]
+    }),
+    officeVisit: one(officeVisits, {
+      fields: [tasks.officeVisitId],
+      references: [officeVisits.id]
     }),
     comments: many(taskComments)
   }));
