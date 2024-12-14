@@ -3,11 +3,20 @@ import {
   uuid,
   varchar,
   timestamp,
+  index
 } from "drizzle-orm/pg-core";
+import {
+  roleEnum,
+  userStatusEnum,
+  branchEnum
+} from "./enums";
 import { relations } from "drizzle-orm";
-import { sessions } from "./sessions";
-import { resetTokens } from "./reset_token";
-import { branchEnum, roleEnum, userStatusEnum } from "./enums";
+import { appointments } from "./appointments";
+import { clientAssignments } from "./client-assignments";
+import { officeVisits } from "./office-visits";
+import { taskComments } from "./task-comments";
+import { tasks } from "./tasks";
+import { sessions } from "./session";
 
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -27,21 +36,33 @@ export const users = pgTable("users", {
     .defaultNow()
     .$onUpdateFn(() => new Date())
     .notNull(),
-});
+}, (table) => [
+  index('users_email_idx').on(table.email),
+  index('users_phone_idx').on(table.phoneNumber)
+]);
 
-// Relations
 export const usersRelations = relations(users, ({ many }) => ({
+  appointments: many(appointments), // One user (agent) can have many appointments
+  officeVisits: many(officeVisits),  // One user (agent) can have many office visits
+
+  assignedAgent: many(clientAssignments, {
+    relationName: 'assignedAgent'
+  }),
+  assignedBy: many(clientAssignments, {
+    relationName: 'assignedByUser'
+  }),
+  // New task-related relations
+  assignedTo: many(tasks, {
+    relationName: 'assignedTo' // Tasks assigned to this user
+  }),
+  taskCreatedBy: many(tasks, {
+    relationName: 'createdBy' // Tasks created by this user
+  }),
+  taskComments: many(taskComments), // Comments made by this user
   sessions: many(sessions),
-  resetTokens: many(resetTokens),
 }));
 
 export type User = typeof users.$inferSelect; 
 export type NewUser = typeof users.$inferInsert; 
-// export type NewUser = Omit<typeof users.$inferInsert, 'hashedPassword'> & {
-//   password: string;
-// };
-// export type NewUser = {
-//   [K in Exclude<keyof typeof users.$inferInsert, 'hashedPassword'>]: (typeof users.$inferInsert)[K]
-// } & {
-//   password: string;
-// };
+
+

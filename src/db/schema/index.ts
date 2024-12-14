@@ -1,13 +1,15 @@
-export { customers, customersRelations } from "./customers";
-export { resetTokens, resetTokenRealtions } from "./reset_token";
-export { sessions, sessionsRelations } from "./sessions";
+export { clients, clientsRelations } from "./clients";
+export { sessions, sessionsRelations } from "./session";
 export { users, usersRelations } from "./users";
-export {
-  visaApplications,
-  visaApplicationsRelations,
-} from "./visa_applications";
+export { appointments, appointmentsRelations } from "./appointments";
+export { clientAssignments, clientAssignmentsRelations } from "./client-assignments";
+export { officeVisits, officeVisitsRelations } from "./office-visits";
+export { taskComments, taskCommentsRelations } from "./task-comments";
+export { tasks, tasksRelations } from "./tasks";
+export * from "./enums"
 
 
-//types
-export type { Session } from "./sessions";
+
+//Types
+export type { Session } from "./session";
 export type { User, NewUser } from "./users";
