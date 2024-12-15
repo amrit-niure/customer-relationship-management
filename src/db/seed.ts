@@ -242,7 +242,7 @@ async function _seedTasks() {
     ];
     const taskTypes: typeof taskTypeEnum.enumValues = [
         'CLIENT_FOLLOW_UP', 'DOCUMENT_PREPARATION', 'VISA_APPLICATION_REVIEW', 
-        'CONSULTATION_PREP', 'INTERNAL_ADMIN', 'COMMUNICATION', 'OTHER'
+        'CONSULTATION_PREP', 'INTERNAL_ADMIN', 'COMMUNICATION', 'MARKETING', 'OTHER'
     ];
 
     const tasksToInsert = Array.from({ length: 5 }).map(() => ({
