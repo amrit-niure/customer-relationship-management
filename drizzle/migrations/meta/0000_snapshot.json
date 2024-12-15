@@ -1,5 +1,5 @@
 {
-  "id": "a855cc88-b81c-4a4c-8dbb-348bd7639919",
+  "id": "2b8df2e9-f2df-4269-ab91-4618af23c79a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -71,10 +71,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "appointments_client_id_customers_id_fk": {
-          "name": "appointments_client_id_customers_id_fk",
+        "appointments_client_id_clients_id_fk": {
+          "name": "appointments_client_id_clients_id_fk",
           "tableFrom": "appointments",
-          "tableTo": "customers",
+          "tableTo": "clients",
           "columnsFrom": [
             "client_id"
           ],
@@ -121,6 +121,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "assigned_by": {
+          "name": "assigned_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
         "client_id": {
           "name": "client_id",
           "type": "uuid",
@@ -134,12 +140,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'ACTIVE'"
-        },
-        "assigned_by": {
-          "name": "assigned_by",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
         },
         "primary_contact": {
           "name": "primary_contact",
@@ -200,12 +200,12 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "client_assignments_client_id_customers_id_fk": {
-          "name": "client_assignments_client_id_customers_id_fk",
+        "client_assignments_assigned_by_users_id_fk": {
+          "name": "client_assignments_assigned_by_users_id_fk",
           "tableFrom": "client_assignments",
-          "tableTo": "customers",
+          "tableTo": "users",
           "columnsFrom": [
-            "client_id"
+            "assigned_by"
           ],
           "columnsTo": [
             "id"
@@ -213,12 +213,12 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "client_assignments_assigned_by_users_id_fk": {
-          "name": "client_assignments_assigned_by_users_id_fk",
+        "client_assignments_client_id_clients_id_fk": {
+          "name": "client_assignments_client_id_clients_id_fk",
           "tableFrom": "client_assignments",
-          "tableTo": "users",
+          "tableTo": "clients",
           "columnsFrom": [
-            "assigned_by"
+            "client_id"
           ],
           "columnsTo": [
             "id"
@@ -233,8 +233,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.customers": {
-      "name": "customers",
+    "public.clients": {
+      "name": "clients",
       "schema": "",
       "columns": {
         "id": {
@@ -371,22 +371,22 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "customers_email_unique": {
-          "name": "customers_email_unique",
+        "clients_email_unique": {
+          "name": "clients_email_unique",
           "nullsNotDistinct": false,
           "columns": [
             "email"
           ]
         },
-        "customers_phone_unique": {
-          "name": "customers_phone_unique",
+        "clients_phone_unique": {
+          "name": "clients_phone_unique",
           "nullsNotDistinct": false,
           "columns": [
             "phone"
           ]
         },
-        "customers_passport_number_unique": {
-          "name": "customers_passport_number_unique",
+        "clients_passport_number_unique": {
+          "name": "clients_passport_number_unique",
           "nullsNotDistinct": false,
           "columns": [
             "passport_number"
@@ -470,10 +470,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "office_visits_client_id_customers_id_fk": {
-          "name": "office_visits_client_id_customers_id_fk",
+        "office_visits_client_id_clients_id_fk": {
+          "name": "office_visits_client_id_clients_id_fk",
           "tableFrom": "office_visits",
-          "tableTo": "customers",
+          "tableTo": "clients",
           "columnsFrom": [
             "client_id"
           ],
@@ -696,6 +696,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "office_visit_id": {
+          "name": "office_visit_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
         "status": {
           "name": "status",
           "type": "task_status",
@@ -787,10 +793,10 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "tasks_client_id_customers_id_fk": {
-          "name": "tasks_client_id_customers_id_fk",
+        "tasks_client_id_clients_id_fk": {
+          "name": "tasks_client_id_clients_id_fk",
           "tableFrom": "tasks",
-          "tableTo": "customers",
+          "tableTo": "clients",
           "columnsFrom": [
             "client_id"
           ],
@@ -806,6 +812,19 @@
           "tableTo": "appointments",
           "columnsFrom": [
             "appointment_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "tasks_office_visit_id_office_visits_id_fk": {
+          "name": "tasks_office_visit_id_office_visits_id_fk",
+          "tableFrom": "tasks",
+          "tableTo": "office_visits",
+          "columnsFrom": [
+            "office_visit_id"
           ],
           "columnsTo": [
             "id"
@@ -979,9 +998,9 @@
       "schema": "public",
       "values": [
         "SCHEDULED",
-        "CONFIRMED",
         "COMPLETED",
-        "CANCELLED"
+        "CANCELLED",
+        "EXPIRED"
       ]
     },
     "public.branch": {

@@ -1,4 +1,4 @@
-CREATE TYPE "public"."appointment_status" AS ENUM('SCHEDULED', 'CONFIRMED', 'COMPLETED', 'CANCELLED');--> statement-breakpoint
+CREATE TYPE "public"."appointment_status" AS ENUM('SCHEDULED', 'COMPLETED', 'CANCELLED', 'EXPIRED');--> statement-breakpoint
 CREATE TYPE "public"."branch" AS ENUM('AUSTRALIA', 'PHILIPPINES', 'DUBAI', 'NEPAL');--> statement-breakpoint
 CREATE TYPE "public"."client_assignment_status" AS ENUM('ACTIVE', 'PENDING', 'INACTIVE');--> statement-breakpoint
 CREATE TYPE "public"."office_visit_status" AS ENUM('WAITING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED');--> statement-breakpoint
@@ -23,15 +23,15 @@ CREATE TABLE IF NOT EXISTS "appointments" (
 CREATE TABLE IF NOT EXISTS "client_assignments" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"agent_id" uuid NOT NULL,
+	"assigned_by" uuid,
 	"client_id" uuid NOT NULL,
 	"status" "client_assignment_status" DEFAULT 'ACTIVE' NOT NULL,
-	"assigned_by" uuid,
 	"primary_contact" boolean DEFAULT false NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "customers" (
+CREATE TABLE IF NOT EXISTS "clients" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"first_name" varchar(255) NOT NULL,
 	"middle_name" varchar(255),
@@ -45,9 +45,9 @@ CREATE TABLE IF NOT EXISTS "customers" (
 	"is_active" boolean DEFAULT true NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
-	CONSTRAINT "customers_email_unique" UNIQUE("email"),
-	CONSTRAINT "customers_phone_unique" UNIQUE("phone"),
-	CONSTRAINT "customers_passport_number_unique" UNIQUE("passport_number")
+	CONSTRAINT "clients_email_unique" UNIQUE("email"),
+	CONSTRAINT "clients_phone_unique" UNIQUE("phone"),
+	CONSTRAINT "clients_passport_number_unique" UNIQUE("passport_number")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "office_visits" (
@@ -85,6 +85,7 @@ CREATE TABLE IF NOT EXISTS "tasks" (
 	"created_by_id" uuid NOT NULL,
 	"client_id" uuid,
 	"appointment_id" uuid,
+	"office_visit_id" uuid,
 	"status" "task_status" DEFAULT 'PENDING' NOT NULL,
 	"priority" "task_priority" DEFAULT 'MEDIUM' NOT NULL,
 	"type" "task_type" NOT NULL,
@@ -116,7 +117,7 @@ CREATE TABLE IF NOT EXISTS "users" (
 );
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "appointments" ADD CONSTRAINT "appointments_client_id_customers_id_fk" FOREIGN KEY ("client_id") REFERENCES "public"."customers"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "appointments" ADD CONSTRAINT "appointments_client_id_clients_id_fk" FOREIGN KEY ("client_id") REFERENCES "public"."clients"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -134,19 +135,19 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "client_assignments" ADD CONSTRAINT "client_assignments_client_id_customers_id_fk" FOREIGN KEY ("client_id") REFERENCES "public"."customers"("id") ON DELETE no action ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
  ALTER TABLE "client_assignments" ADD CONSTRAINT "client_assignments_assigned_by_users_id_fk" FOREIGN KEY ("assigned_by") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "office_visits" ADD CONSTRAINT "office_visits_client_id_customers_id_fk" FOREIGN KEY ("client_id") REFERENCES "public"."customers"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "client_assignments" ADD CONSTRAINT "client_assignments_client_id_clients_id_fk" FOREIGN KEY ("client_id") REFERENCES "public"."clients"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "office_visits" ADD CONSTRAINT "office_visits_client_id_clients_id_fk" FOREIGN KEY ("client_id") REFERENCES "public"."clients"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -194,7 +195,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "tasks" ADD CONSTRAINT "tasks_client_id_customers_id_fk" FOREIGN KEY ("client_id") REFERENCES "public"."customers"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "tasks" ADD CONSTRAINT "tasks_client_id_clients_id_fk" FOREIGN KEY ("client_id") REFERENCES "public"."clients"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -205,10 +206,16 @@ EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "tasks" ADD CONSTRAINT "tasks_office_visit_id_office_visits_id_fk" FOREIGN KEY ("office_visit_id") REFERENCES "public"."office_visits"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "unique_client_assignment" ON "client_assignments" USING btree ("agent_id","client_id");--> statement-breakpoint
-CREATE INDEX IF NOT EXISTS "clients_email_idx" ON "customers" USING btree ("email");--> statement-breakpoint
-CREATE INDEX IF NOT EXISTS "clients_phone_idx" ON "customers" USING btree ("phone");--> statement-breakpoint
-CREATE INDEX IF NOT EXISTS "clients_passport_idx" ON "customers" USING btree ("passport_number");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "clients_email_idx" ON "clients" USING btree ("email");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "clients_phone_idx" ON "clients" USING btree ("phone");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "clients_passport_idx" ON "clients" USING btree ("passport_number");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "sessions_user_id_idx" ON "sessions" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "users_email_idx" ON "users" USING btree ("email");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "users_phone_idx" ON "users" USING btree ("phone_number");

@@ -47,7 +47,7 @@ const AppointmentForm: FC<AppointmentFormProps> = ({ onClose }) => {
       email: "",
       address: "",
       phone: "",
-      status: "CONFIRMED",
+      status: "SCHEDULED",
       dateTime: new Date(),
       reason: "",
     },
