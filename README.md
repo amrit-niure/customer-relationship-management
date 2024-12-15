@@ -1,5 +1,5 @@
 # Client Record Management Software
-This project leverages the power of Next.js with a structured architecture that includes server actions, use case layers, and data access layers. It is designed to efficiently manage client records while providing features such as client tracking, reminders, and email notifications through scheduled cron jobs
+This project leverages the power of Next.js with a structured architecture that includes server actions, use case layers, and data access layers. It is designed to efficiently manage client records while providing features such as client tracking, reminders, and email notifications
 
 ## Table of Contents
 
