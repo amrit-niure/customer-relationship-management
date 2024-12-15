@@ -79,6 +79,30 @@ body {
   }
 }
 
+@layer utilities {
+  /* For the entire scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+    height: 10px;
+  }
+
+  /* For the track */
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #e5e7eb; /* Light gray */
+  }
+
+  /* For the thumb */
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #eff3f2; /* Blue */
+    border-radius: 5px;
+  }
+
+  /* For the thumb on hover */
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #c9cecd; /* Darker blue */
+  }
+}
+
 @layer base {
   * {
     @apply border-border;
