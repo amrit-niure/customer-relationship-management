@@ -6,7 +6,11 @@ export { clientAssignments, clientAssignmentsRelations } from "./client-assignme
 export { officeVisits, officeVisitsRelations } from "./office-visits";
 export { taskComments, taskCommentsRelations } from "./task-comments";
 export { tasks, tasksRelations } from "./tasks";
-export * from "./enums"
+export {appointmentStatusEnum,branchEnum,clientAssignmentStatusEnum,officeVisitStatus,roleEnum,taskPriorityEnum,taskStatusEnum,
+    taskTypeEnum, 
+    userStatusEnum, 
+    visaTypeEnum, 
+} from "./enums"
 
 
 
