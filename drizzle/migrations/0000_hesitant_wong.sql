@@ -1,3 +1,13 @@
+DROP TYPE IF EXISTS appointment_status CASCADE;
+DROP TYPE IF EXISTS branch CASCADE;
+DROP TYPE IF EXISTS client_assignment_status CASCADE;
+DROP TYPE IF EXISTS office_visit_status CASCADE;
+DROP TYPE IF EXISTS user_role CASCADE;
+DROP TYPE IF EXISTS task_priority CASCADE;
+DROP TYPE IF EXISTS task_status CASCADE;
+DROP TYPE IF EXISTS task_type CASCADE;
+DROP TYPE IF EXISTS user_status CASCADE;
+DROP TYPE IF EXISTS visa_type CASCADE;
 CREATE TYPE "public"."appointment_status" AS ENUM('SCHEDULED', 'COMPLETED', 'CANCELLED', 'EXPIRED');--> statement-breakpoint
 CREATE TYPE "public"."branch" AS ENUM('AUSTRALIA', 'PHILIPPINES', 'DUBAI', 'NEPAL');--> statement-breakpoint
 CREATE TYPE "public"."client_assignment_status" AS ENUM('ACTIVE', 'PENDING', 'INACTIVE');--> statement-breakpoint
@@ -5,7 +15,7 @@ CREATE TYPE "public"."office_visit_status" AS ENUM('WAITING', 'IN_PROGRESS', 'CO
 CREATE TYPE "public"."user_role" AS ENUM('ADMIN', 'MANAGER', 'AGENT', 'MIGRTATION_AGENT', 'USER');--> statement-breakpoint
 CREATE TYPE "public"."task_priority" AS ENUM('LOW', 'MEDIUM', 'HIGH', 'CRITICAL');--> statement-breakpoint
 CREATE TYPE "public"."task_status" AS ENUM('PENDING', 'IN_PROGRESS', 'BLOCKED', 'COMPLETED', 'CANCELLED');--> statement-breakpoint
-CREATE TYPE "public"."task_type" AS ENUM('CLIENT_FOLLOW_UP', 'DOCUMENT_PREPARATION', 'VISA_APPLICATION_REVIEW', 'CONSULTATION_PREP', 'INTERNAL_ADMIN', 'COMMUNICATION', 'OTHER');--> statement-breakpoint
+CREATE TYPE "public"."task_type" AS ENUM('CLIENT_FOLLOW_UP', 'DOCUMENT_PREPARATION', 'VISA_APPLICATION_REVIEW', 'CONSULTATION_PREP', 'INTERNAL_ADMIN', 'COMMUNICATION', 'MARKETING', 'OTHER');--> statement-breakpoint
 CREATE TYPE "public"."user_status" AS ENUM('ACTIVE', 'INACTIVE', 'SUSPENDED');--> statement-breakpoint
 CREATE TYPE "public"."visa_type" AS ENUM('SUB_500', 'SUB_482', 'SUB_485', 'SUB_407', 'SUB_186', 'SUB_189', 'SUB_190', 'SUB_600', 'SUB_820', 'SUB_801');--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "appointments" (

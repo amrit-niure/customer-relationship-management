@@ -75,6 +75,7 @@ export const taskTypeEnum = pgEnum('task_type', [
   'CONSULTATION_PREP',
   'INTERNAL_ADMIN',
   'COMMUNICATION',
+  'MARKETING',
   'OTHER'
 ]);
 

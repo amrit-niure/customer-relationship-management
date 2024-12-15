@@ -1,5 +1,5 @@
 {
-  "id": "2b8df2e9-f2df-4269-ab91-4618af23c79a",
+  "id": "2d17b32e-2d96-4a46-a65e-df9c540950bc",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -1074,6 +1074,7 @@
         "CONSULTATION_PREP",
         "INTERNAL_ADMIN",
         "COMMUNICATION",
+        "MARKETING",
         "OTHER"
       ]
     },
