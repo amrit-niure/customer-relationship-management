@@ -43,5 +43,5 @@ export const clientsRelations = relations(clients, ({ many }) => ({
     tasks: many(tasks) // Tasks associated with this client
   }));
 
-  export type Client = typeof clients.$inferSelect; 
+export type Client = typeof clients.$inferSelect; 
 export type NewClient = typeof clients.$inferInsert; 

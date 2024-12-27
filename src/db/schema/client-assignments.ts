@@ -12,9 +12,9 @@ import { relations } from "drizzle-orm";
 
 export const clientAssignments = pgTable('client_assignments', {
   id: uuid('id').primaryKey().defaultRandom(),
-  agentId: uuid('agent_id').references(() => users.id).notNull(),
-  assignedBy: uuid('assigned_by').references(() => users.id),
-  clientId: uuid('client_id').references(() => clients.id).notNull(),
+  agentId: uuid('agent_id').references(() => users.id,{onDelete: 'cascade'}).notNull(),
+  assignedBy: uuid('assigned_by').references(() => users.id, {onDelete: 'cascade'}),
+  clientId: uuid('client_id').references(() => clients.id, {onDelete: 'cascade'}).notNull(),
   status: clientAssignmentStatusEnum('status').default('ACTIVE').notNull(),
   primaryContact: boolean('primary_contact').default(false).notNull(),
   createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),

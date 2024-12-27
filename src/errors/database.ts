@@ -73,7 +73,7 @@ export function handleDatabaseError(
             const match = errorMessage.match(/column "(\w+)".*value "(.+)"/);
             const field = match ? match[1] : "unknown";
             const value = match ? match[2] : "unknown";
-            return new InvalidInputError(
+            throw new InvalidInputError(
                 `Invalid input for ${field}: "${value}"`,
                 { ...details, field, value },
                 error,
@@ -83,7 +83,7 @@ export function handleDatabaseError(
         if (errorMessage.includes("unique constraint")) {
             const match = errorMessage.match(/unique constraint "(\w+)"/);
             const constraint = match ? match[1] : "unknown";
-            return new UniqueConstraintViolationError(
+            throw new UniqueConstraintViolationError(
                 `Unique constraint violation. Please specify unique ${constraint.replace("_unique", "").replace(/_/g, " ")}`, 
                 { ...details, constraint },
                 error,
@@ -93,7 +93,7 @@ export function handleDatabaseError(
         if (errorMessage.includes("foreign key constraint")) {
             const match = errorMessage.match(/foreign key constraint "(\w+)"/);
             const constraint = match ? match[1] : "unknown";
-            return new ForeignKeyConstraintViolationError(
+            throw new ForeignKeyConstraintViolationError(
                 `Foreign key constraint violation: ${constraint}`,
                 { ...details, constraint },
                 error,
@@ -103,7 +103,7 @@ export function handleDatabaseError(
         if (errorMessage.includes("not-null constraint")) {
             const match = errorMessage.match(/column "(\w+)"/);
             const column = match ? match[1] : "unknown";
-            return new NotNullConstraintViolationError(
+            throw new NotNullConstraintViolationError(
                 `Not-null constraint violation on column: ${column}`,
                 { ...details, column },
                 error,
@@ -113,7 +113,7 @@ export function handleDatabaseError(
         if (errorMessage.includes("check constraint")) {
             const match = errorMessage.match(/check constraint "(\w+)"/);
             const constraint = match ? match[1] : "unknown";
-            return new CheckConstraintViolationError(
+            throw new CheckConstraintViolationError(
                 `Check constraint violation: ${constraint}`,
                 { ...details, constraint },
                 error,
@@ -121,7 +121,7 @@ export function handleDatabaseError(
         }
 
         // // Default case for unknown database error
-        // return new DatabaseError(
+        // throw new DatabaseError(
         //     `Database operation failed: ${operation}`,
         //     details,
         //     error,
@@ -129,7 +129,7 @@ export function handleDatabaseError(
     }
 
     // Wrap non-Error instances in a DatabaseError
-    return new DatabaseError(
+    throw new DatabaseError(
         `Unknown error during ${operation}`,
         { operation, data },
         new Error(String(error)),
