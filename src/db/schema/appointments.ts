@@ -14,8 +14,8 @@ import { tasks } from "./tasks";
   
   export const appointments = pgTable('appointments', {
     id: uuid('id').primaryKey().defaultRandom(),
-    clientId: uuid('client_id').references(() => clients.id).notNull(),
-    agentId: uuid('agent_id').references(() => users.id),
+    clientId: uuid('client_id').references(() => clients.id,{onDelete: "cascade"}).notNull(),
+    agentId: uuid('agent_id').references(() => users.id,{onDelete: "cascade"}),
     status: appointmentStatusEnum('status').default('SCHEDULED').notNull(),
     purpose: text('purpose'),
     appointmentDateTime: timestamp('appointment_date_time').notNull(),

@@ -25,13 +25,13 @@ import { officeVisits } from "./office-visits";
     description: text('description'),
     
     // Assignee and Creator
-    assignedToId: uuid('assigned_to_id').references(() => users.id),
-    createdById: uuid('created_by_id').references(() => users.id).notNull(),
+    assignedToId: uuid('assigned_to_id').references(() => users.id, {onDelete: "cascade"}),
+    createdById: uuid('created_by_id').references(() => users.id,{onDelete: "cascade"}).notNull(),
     
     // Optional client and appointment association
-    clientId: uuid('client_id').references(() => clients.id),
-    appointmentId: uuid('appointment_id').references(() => appointments.id),
-    officeVisitId: uuid('office_visit_id').references(() => officeVisits.id),
+    clientId: uuid('client_id').references(() => clients.id,{onDelete: "cascade"}),
+    appointmentId: uuid('appointment_id').references(() => appointments.id,{onDelete: "cascade"}),
+    officeVisitId: uuid('office_visit_id').references(() => officeVisits.id,{onDelete: "cascade"}),
     
     // Task Metadata
     status: taskStatusEnum('status').default('PENDING').notNull(),
