@@ -39,9 +39,9 @@ export const visaTypeEnum = pgEnum('visa_type', [
 // Appointment Enums
 export const appointmentStatusEnum = pgEnum('appointment_status', [
   'SCHEDULED', 
-  'CONFIRMED', 
   'COMPLETED', 
-  'CANCELLED'
+  'CANCELLED',
+  'EXPIRED'
 ]);
 
 // Office Visit Enums
@@ -75,6 +75,7 @@ export const taskTypeEnum = pgEnum('task_type', [
   'CONSULTATION_PREP',
   'INTERNAL_ADMIN',
   'COMMUNICATION',
+  'MARKETING',
   'OTHER'
 ]);
 

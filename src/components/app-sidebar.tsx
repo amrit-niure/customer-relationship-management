@@ -203,7 +203,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   };
   return (
     <div>
-      <Sidebar {...props}>
+      <Sidebar {...props} >
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem>

@@ -164,7 +164,7 @@ async function _seedAppointments() {
     if (existingClients.length === 0 || existingUsers.length === 0) return;
 
     const appointmentStatuses: typeof appointmentStatusEnum.enumValues = [
-        'SCHEDULED', 'CONFIRMED', 'COMPLETED', 'CANCELLED'
+        'SCHEDULED', 'COMPLETED', 'CANCELLED', 'EXPIRED'
     ];
 
     const appointmentsToInsert = Array.from({ length: 5 }).map(() => ({
@@ -172,7 +172,7 @@ async function _seedAppointments() {
         agentId: faker.helpers.arrayElement(existingUsers).id,
         status: faker.helpers.arrayElement(appointmentStatuses),
         purpose: faker.lorem.sentence(),
-        appointmentDateTime: faker.date.future(),
+        appointmentDateTime: faker.date.future().toISOString(),
         isWalkIn: faker.datatype.boolean()
     }));
 
@@ -242,7 +242,7 @@ async function _seedTasks() {
     ];
     const taskTypes: typeof taskTypeEnum.enumValues = [
         'CLIENT_FOLLOW_UP', 'DOCUMENT_PREPARATION', 'VISA_APPLICATION_REVIEW', 
-        'CONSULTATION_PREP', 'INTERNAL_ADMIN', 'COMMUNICATION', 'OTHER'
+        'CONSULTATION_PREP', 'INTERNAL_ADMIN', 'COMMUNICATION', 'MARKETING', 'OTHER'
     ];
 
     const tasksToInsert = Array.from({ length: 5 }).map(() => ({
@@ -287,14 +287,14 @@ async function main() {
     const startTime = Date.now();
     console.log("Seeding Started...");
 
-    // await _seedAdmin();
-    // await _seedUsers();
-    // await _seedClients();
-    // await _seedAppointments();
-    // await _seedClientAssignments();
-    // await _seedOfficeVisits();
-    // await _seedTasks();
-    // await _seedTaskComments();
+    await _seedAdmin();
+    await _seedUsers();
+    await _seedClients();
+    await _seedAppointments();
+    await _seedClientAssignments();
+    await _seedOfficeVisits();
+    await _seedTasks();
+    await _seedTaskComments();
 
     const endTime = Date.now();
     const durationInMs = endTime - startTime;

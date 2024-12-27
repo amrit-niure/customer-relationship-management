@@ -11,7 +11,7 @@ export const appointmentSchema = z.object({
     .enum(appointmentStatusEnum.enumValues, {
         errorMap: () => ({ message: "Invalid Branch. " }),
     })
-    .default("CONFIRMED"),
+    .default("SCHEDULED"),
     dateTime: z.coerce.date(),
     reason: z.string().optional()
     })

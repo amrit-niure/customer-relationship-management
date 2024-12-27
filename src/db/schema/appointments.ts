@@ -1,13 +1,13 @@
 import {
-    pgTable,
-    uuid,
-    timestamp,
-    text,
-    boolean
-  } from "drizzle-orm/pg-core";
-  import { appointmentStatusEnum } from "./enums";
-  import { users } from "./users";
-  import { clients } from "./clients";
+  pgTable,
+  uuid,
+  timestamp,
+  text,
+  boolean
+} from "drizzle-orm/pg-core";
+import { appointmentStatusEnum } from "./enums";
+import { users } from "./users";
+import { clients } from "./clients";
 import { relations } from "drizzle-orm";
 import { officeVisits } from "./office-visits";
 import { tasks } from "./tasks";
@@ -24,17 +24,15 @@ import { tasks } from "./tasks";
     updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().$onUpdateFn( ()=> new Date()).notNull(),
   });
 
-  export const appointmentsRelations = relations(appointments, ({ one, many }) => ({
-    client: one(clients, {
-      fields: [appointments.clientId],
-      references: [clients.id]
-    }),
-    agent: one(users, {
-      fields: [appointments.agentId],
-      references: [users.id]
-    }),
-    officeVisits: many(officeVisits), // One appointment can have many office visits
-    
-    // New relation
-    tasks: many(tasks) // Tasks associated with this appointment
-  }));
+export const appointmentsRelations = relations(appointments, ({ one, many }) => ({
+  client: one(clients, {
+    fields: [appointments.clientId],
+    references: [clients.id]
+  }),
+  agent: one(users, {
+    fields: [appointments.agentId],
+    references: [users.id]
+  }),
+  officeVisits: many(officeVisits), // One appointment can have many office visits
+  tasks: many(tasks) // Tasks associated with this appointment
+}));
