@@ -21,12 +21,13 @@ import {
 } from "@/components/ui/select";
 
 import { toast } from "@/hooks/use-toast";
-import { DatetimePicker } from "@/components/ui/datetime-picker";
 import { useServerAction } from "zsa-react";
 import { clientSchema, IClient } from "../validation";
 import { createClientAction } from "../actions";
+import { useRouter } from "next/navigation";
 
 export default function CreateClientForm() {
+  const router = useRouter()
   const form = useForm<IClient>({
     resolver: zodResolver(clientSchema),
     defaultValues: {
@@ -38,18 +39,20 @@ export default function CreateClientForm() {
       address: "",
       passportNumber: "",
       currentVisa: undefined,
-      visaExpiry: new Date(),
+      visaExpiry: undefined,
       isActive: true,
     },
   });
 
   const { execute , isPending } = useServerAction(createClientAction,{
-    onSuccess() {
+    onSuccess(result) {
+      console.log(result)
       toast({
         title: "Action Successful",
         description: "The client record is created successfully"
       })
       form.reset()
+      router.push('./')
     },
     onError(result) {
       toast({
@@ -112,7 +115,7 @@ export default function CreateClientForm() {
                 <FormItem>
                   <FormLabel>Last Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" type="text" {...field} />
+                    <Input placeholder="Niure" type="text" {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -196,7 +199,6 @@ export default function CreateClientForm() {
                   <FormLabel>Current Visa</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
                   >
                     <FormControl>
                         <SelectTrigger>
@@ -222,22 +224,26 @@ export default function CreateClientForm() {
           </div>
         </div>
 
-        <div className="grid grid-cols-12">
-          <div className="col-span-12 md:col-span-6">
+        <div className="grid grid-cols-12 gap-4">
+          <div className="col-span-12 md:col-span-6 self-end">
             <FormField
               control={form.control}
               name="visaExpiry"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Visa Expiry Date</FormLabel>
-                  <DatetimePicker
-                    {...field}
-                    format={[
-                      ["months", "days", "years"],
-                      ["hours", "minutes", "am/pm"],
-                    ]}
-                  />
-
+                  <Input
+                        type="date"
+                        {...field}
+                        value={
+                          field.value instanceof Date
+                            ? field.value.toISOString().split("T")[0]
+                            : (field.value ?? "")
+                        }
+                        onChange={(e) =>
+                          field.onChange(new Date(e.target.value))
+                        }
+                      />
                   <FormMessage />
                 </FormItem>
               )}

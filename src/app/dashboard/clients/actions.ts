@@ -3,9 +3,10 @@ import { authenticatedAction } from "@/lib/safe-action";
 import { clientSchema } from "./validation";
 import { rateLimitByKey } from "@/lib/limiter";
 import { sendEmail } from "@/lib/email";
-import ApplyworldWelcomeEmail from "@/components/emails/welcome-user";
 import { revalidatePath } from "next/cache";
 import { createClientUseCase } from "@/use-cases/clients/create-client.use-case";
+import { getCurrentUser } from "@/lib/session";
+import { ClientWelcomeEmail } from "@/components/emails/welcome-client";
 
 export const createClientAction = authenticatedAction.createServerAction().input(clientSchema).handler(async ({ input }) => {
     try {
@@ -14,13 +15,16 @@ export const createClientAction = authenticatedAction.createServerAction().input
             limit: 3,
             window: 10000
         });
-        const client = await createClientUseCase(input);
+        const currentUser = await getCurrentUser()
+        const payload = { ...input, createdBy: currentUser?.id, updatedBy: currentUser?.id }
+        const client = await createClientUseCase(payload);
         await sendEmail({
             to: input.email,
             subject: "Welcome to Our CRM",
-            body: ApplyworldWelcomeEmail({ userFirstname: client.firstName, email: client.email, password: "xxxxx" })
+            body: ClientWelcomeEmail({ userFirstname: client.firstName })
         });
         revalidatePath("/dashboard/client");
+        return client;
     } catch (error) {
         throw error;
     }

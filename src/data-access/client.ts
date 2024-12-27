@@ -26,8 +26,6 @@ export async function getAllClients() {
             throw new Error("User creation failed.");
         }
     } catch(err) {
-        console.log(err);
-        console.error("Error in createUser:", err);
         throw handleDatabaseError(err, "user creation", input);
     }
 }

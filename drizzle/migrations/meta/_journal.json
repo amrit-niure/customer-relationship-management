@@ -71,6 +71,13 @@
       "when": 1735295376817,
       "tag": "0009_awesome_kylun",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1735305770349,
+      "tag": "0010_fat_kronos",
+      "breakpoints": true
     }
   ]
 }

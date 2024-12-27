@@ -9,9 +9,7 @@ export const clientSchema = z.object({
     address: z.string().max(100).optional(),
     passportNumber: z.string().max(100).optional(),
     currentVisa: z
-        .enum(visaTypeEnum.enumValues, {
-            errorMap: () => ({ message: "Invalid Visa type. " }),
-        }),
+        .enum(visaTypeEnum.enumValues).optional(),
     visaExpiry: z.coerce.date().optional(),
     isActive: z.boolean().optional(),
 });

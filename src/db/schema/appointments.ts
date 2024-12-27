@@ -22,6 +22,8 @@ import { tasks } from "./tasks";
     isWalkIn: boolean('is_walk_in').default(false).notNull(),
     createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().$onUpdateFn( ()=> new Date()).notNull(),
+    bookedBy: uuid('booked_by').references(() => users.id, { onDelete: "set null"}),
+    updatedBy: uuid('updated_by').references(() => users.id, { onDelete: "set null"}),
   });
 
   export const appointmentsRelations = relations(appointments, ({ one, many }) => ({

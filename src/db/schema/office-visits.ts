@@ -22,6 +22,8 @@ import { relations } from "drizzle-orm";
     isScheduled: boolean('is_scheduled').default(false).notNull(),
     createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().$onUpdateFn( ()=> new Date()).notNull(),
+    createdBy: uuid('created_by').references(() => users.id, { onDelete: "set null"}),
+    updatedBy: uuid('updated_by').references(() => users.id, { onDelete: "set null"}),
   });
 
   export const officeVisitsRelations = relations(officeVisits, ({ one }) => ({
