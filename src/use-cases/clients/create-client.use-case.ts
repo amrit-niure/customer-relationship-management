@@ -1,12 +1,12 @@
 import { NewClient } from "@/db/schema/clients";
 import { getCurrentUser } from "@/lib/session";
-import { LoginError } from "../errors";
+import { AuthenticationError } from "../errors";
 import { createClient, getClientByEmail } from "@/data-access/client";
 
 export async function createClientUseCase(input: NewClient) {
     const user = await getCurrentUser();
     if (!user) {
-        throw new LoginError();
+        throw new AuthenticationError();
     }
     const existingUser = await getClientByEmail(input.email);
     if (existingUser) {

@@ -23,14 +23,25 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { useServerAction } from "zsa-react";
 import { clientSchema, IClient } from "../validation";
-import { createClientAction } from "../actions";
+import { createClientAction, updateClientAction } from "../actions";
 import { useRouter } from "next/navigation";
+import Spinner from "@/components/spinner";
+import { Client } from "@/db/schema/clients";
+import { sanitizeData } from "@/lib/utils";
 
-export default function CreateClientForm() {
-  const router = useRouter()
+interface CreateClientFormProps {
+  initialValues?: Client;
+  isUpdate?: boolean;
+}
+
+export default function CreateClientForm({
+  initialValues,
+  isUpdate,
+}: CreateClientFormProps) {
+  const router = useRouter();
   const form = useForm<IClient>({
     resolver: zodResolver(clientSchema),
-    defaultValues: {
+    defaultValues: sanitizeData(initialValues) || {
       firstName: "",
       middleName: "",
       lastName: "",
@@ -44,26 +55,32 @@ export default function CreateClientForm() {
     },
   });
 
-  const { execute , isPending } = useServerAction(createClientAction,{
-    onSuccess(result) {
-      console.log(result)
-      toast({
-        title: "Action Successful",
-        description: "The client record is created successfully"
-      })
-      form.reset()
-      router.push('./')
-    },
-    onError(result) {
-      toast({
-        variant: "destructive",
-        description: result.err.message,
-      });
+  const { execute, isPending } = useServerAction(
+    isUpdate ? updateClientAction : createClientAction,
+    {
+      onSuccess() {
+        toast({
+          title: "Action Successful",
+          description: "The client record is created successfully",
+        });
+        form.reset();
+        router.push("../");
+      },
+      onError(result) {
+        toast({
+          variant: "destructive",
+          description: result.err.message,
+        });
+      },
     }
-  })
+  );
 
   async function onSubmit(values: IClient) {
-   await execute(values)
+    if (isUpdate && initialValues?.id) {
+      execute({ id: initialValues.id, ...values });
+    }else{
+      execute(values)
+    }
   }
 
   return (
@@ -98,7 +115,12 @@ export default function CreateClientForm() {
                 <FormItem>
                   <FormLabel>Middle Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="" type="text" {...field} />
+                    <Input
+                      placeholder=""
+                      type="text"
+                      {...field}
+                      value={field.value ?? ""}
+                    />
                   </FormControl>
 
                   <FormMessage />
@@ -166,6 +188,7 @@ export default function CreateClientForm() {
                   placeholder="2 Some Road , Sydney, Australia"
                   type="text"
                   {...field}
+                  value={field.value ?? ""}
                 />
               </FormControl>
 
@@ -182,7 +205,12 @@ export default function CreateClientForm() {
                 <FormItem>
                   <FormLabel>Passport Number</FormLabel>
                   <FormControl>
-                    <Input placeholder="" type="text" {...field} />
+                    <Input
+                      placeholder=""
+                      type="text"
+                      {...field}
+                      value={field.value ?? ""}
+                    />
                   </FormControl>
 
                   <FormMessage />
@@ -197,24 +225,22 @@ export default function CreateClientForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Current Visa</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                  >
+                  <Select onValueChange={field.onChange}>
                     <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select current Visa" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="SUB_500">500</SelectItem>
-                        <SelectItem value="SUB_482">482</SelectItem>
-                        <SelectItem value="SUB_485">485</SelectItem>
-                        <SelectItem value="SUB_407">407</SelectItem>
-                        <SelectItem value="SUB_186">186</SelectItem>
-                        <SelectItem value="SUB_189">189</SelectItem>
-                        <SelectItem value="SUB_190">190</SelectItem>
-                        <SelectItem value="SUB_600">600</SelectItem>
-                      </SelectContent>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select current Visa" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="SUB_500">500</SelectItem>
+                      <SelectItem value="SUB_482">482</SelectItem>
+                      <SelectItem value="SUB_485">485</SelectItem>
+                      <SelectItem value="SUB_407">407</SelectItem>
+                      <SelectItem value="SUB_186">186</SelectItem>
+                      <SelectItem value="SUB_189">189</SelectItem>
+                      <SelectItem value="SUB_190">190</SelectItem>
+                      <SelectItem value="SUB_600">600</SelectItem>
+                    </SelectContent>
                   </Select>
 
                   <FormMessage />
@@ -233,17 +259,15 @@ export default function CreateClientForm() {
                 <FormItem className="flex flex-col">
                   <FormLabel>Visa Expiry Date</FormLabel>
                   <Input
-                        type="date"
-                        {...field}
-                        value={
-                          field.value instanceof Date
-                            ? field.value.toISOString().split("T")[0]
-                            : (field.value ?? "")
-                        }
-                        onChange={(e) =>
-                          field.onChange(new Date(e.target.value))
-                        }
-                      />
+                    type="date"
+                    {...field}
+                    value={
+                      field.value instanceof Date
+                        ? field.value.toISOString().split("T")[0]
+                        : field.value ?? ""
+                    }
+                    onChange={(e) => field.onChange(new Date(e.target.value))}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
@@ -280,7 +304,9 @@ export default function CreateClientForm() {
           </div>
         </div>
 
-        <Button type="submit" disabled={isPending}>Submit</Button>
+        <Button type="submit" disabled={isPending}>
+          {isPending ? <Spinner text={"Submitting"} /> : "Submit"}
+        </Button>
       </form>
     </Form>
   );
