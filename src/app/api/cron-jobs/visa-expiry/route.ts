@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
   try {
     
     // Convert current date to a Date object
-    const currentDate = new Date().toISOString()
+    const currentDate = new Date()
     // Find appointments that are expired
     const expiredAppointments = await database
       .select()
