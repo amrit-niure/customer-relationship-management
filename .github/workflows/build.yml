@@ -45,6 +45,7 @@ jobs:
       - name: Build production
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
         run: npm run build
 
   deploy:
