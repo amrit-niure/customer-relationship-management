@@ -13,6 +13,7 @@ import { appointments } from "./appointments";
 import { clientAssignments } from "./client-assignments";
 import { officeVisits } from "./office-visits";
 import { tasks } from "./tasks";
+import { users } from "./users";
   
   export const clients = pgTable('clients', {
     id: uuid('id').primaryKey().defaultRandom(),
@@ -28,6 +29,8 @@ import { tasks } from "./tasks";
     isActive: boolean('is_active').default(true).notNull(),
     createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().$onUpdateFn( ()=> new Date()).notNull(),
+    createdBy: uuid('created_by').references(() => users.id, { onDelete: "set null"}),
+    updatedBy: uuid('updated_by').references(() => users.id, { onDelete: "set null"}),
   }, (table) => [
     index('clients_email_idx').on(table.email),
     index('clients_phone_idx').on(table.phone),
@@ -43,5 +46,5 @@ export const clientsRelations = relations(clients, ({ many }) => ({
     tasks: many(tasks) // Tasks associated with this client
   }));
 
-  export type Client = typeof clients.$inferSelect; 
+export type Client = typeof clients.$inferSelect; 
 export type NewClient = typeof clients.$inferInsert; 

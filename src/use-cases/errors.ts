@@ -6,7 +6,13 @@ export class PublicError extends Error {
 
 export class AuthenticationError extends PublicError {
     constructor() {
-        super("You must be logged in to view this content");
+        super("No user Authentication");
+        this.name = "AuthenticationError";
+    }
+}
+export class Authorization extends PublicError {
+    constructor() {
+        super("No user Authorization");
         this.name = "AuthenticationError";
     }
 }

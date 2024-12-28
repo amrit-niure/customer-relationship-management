@@ -38,7 +38,8 @@ export const users = pgTable("users", {
     .notNull(),
 }, (table) => [
   index('users_email_idx').on(table.email),
-  index('users_phone_idx').on(table.phoneNumber)
+  index('users_phone_idx').on(table.phoneNumber),
+  
 ]);
 
 export const usersRelations = relations(users, ({ many }) => ({

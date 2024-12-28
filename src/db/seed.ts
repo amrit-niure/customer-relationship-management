@@ -136,23 +136,31 @@ async function _seedClients() {
     
     if (existingClients.length >= 5) return;
 
+    const existingUsers = await db.select({ id: users.id }).from(users);
+    if (existingUsers.length === 0) return;
+
     const visaTypes: typeof visaTypeEnum.enumValues = [
         "SUB_500", "SUB_482", "SUB_485", "SUB_407", 
         "SUB_186", "SUB_189", "SUB_190", "SUB_600", 
         "SUB_820", "SUB_801"
     ];
 
-    const clientsToInsert = Array.from({ length: 5 }).map(() => ({
-        firstName: faker.person.firstName(),
-        lastName: faker.person.lastName(),
-        email: faker.internet.email(),
-        phone: faker.phone.number({ style: 'international' }),
-        address: faker.location.streetAddress(),
-        passportNumber: faker.string.alphanumeric(10).toUpperCase(),
-        currentVisa: faker.helpers.arrayElement(visaTypes),
-        visaExpiry: faker.date.future(),
-        isActive: true
-    }));
+    const clientsToInsert = Array.from({ length: 5 }).map(() => {
+        const createdByUser = faker.helpers.arrayElement(existingUsers).id;
+        return {
+            firstName: faker.person.firstName(),
+            lastName: faker.person.lastName(),
+            email: faker.internet.email(),
+            phone: faker.phone.number({ style: 'international' }),
+            address: faker.location.streetAddress(),
+            passportNumber: faker.string.alphanumeric(10).toUpperCase(),
+            currentVisa: faker.helpers.arrayElement(visaTypes),
+            visaExpiry: faker.date.future(),
+            isActive: true,
+            createdBy: createdByUser,
+            updatedBy: createdByUser,
+        };
+    });
 
     await db.insert(clients).values(clientsToInsert);
 }
@@ -167,14 +175,19 @@ async function _seedAppointments() {
         'SCHEDULED', 'COMPLETED', 'CANCELLED', 'EXPIRED'
     ];
 
-    const appointmentsToInsert = Array.from({ length: 5 }).map(() => ({
-        clientId: faker.helpers.arrayElement(existingClients).id,
-        agentId: faker.helpers.arrayElement(existingUsers).id,
-        status: faker.helpers.arrayElement(appointmentStatuses),
-        purpose: faker.lorem.sentence(),
-        appointmentDateTime: faker.date.future().toISOString(),
-        isWalkIn: faker.datatype.boolean()
-    }));
+    const appointmentsToInsert = Array.from({ length: 5 }).map(() => {
+        const bookedByUser = faker.helpers.arrayElement(existingUsers).id;
+        return {
+            clientId: faker.helpers.arrayElement(existingClients).id,
+            agentId: faker.helpers.arrayElement(existingUsers).id,
+            status: faker.helpers.arrayElement(appointmentStatuses),
+            purpose: faker.lorem.sentence(),
+            appointmentDateTime: faker.date.future(),
+            isWalkIn: faker.datatype.boolean(),
+            bookedBy: bookedByUser,
+            updatedBy: bookedByUser, 
+        };
+    });
 
     await db.insert(appointments).values(appointmentsToInsert);
 }
@@ -211,17 +224,22 @@ async function _seedOfficeVisits() {
         'WAITING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'
     ];
 
-    const officeVisitsToInsert = Array.from({ length: 5 }).map(() => ({
-        clientId: faker.helpers.arrayElement(existingClients).id,
-        agentId: faker.helpers.arrayElement(existingUsers).id,
-        dateTime: faker.date.past(),
-        appointmentId: existingAppointments.length > 0 
-            ? faker.helpers.arrayElement(existingAppointments).id 
-            : null,
-        status: faker.helpers.arrayElement(officeVisitStatuses),
-        purpose: faker.lorem.sentence(),
-        isScheduled: faker.datatype.boolean()
-    }));
+    const officeVisitsToInsert = Array.from({ length: 5 }).map(() => {
+        const createdByUser = faker.helpers.arrayElement(existingUsers).id;
+        return {
+            clientId: faker.helpers.arrayElement(existingClients).id,
+            agentId: faker.helpers.arrayElement(existingUsers).id,
+            dateTime: faker.date.past(),
+            appointmentId: existingAppointments.length > 0 
+                ? faker.helpers.arrayElement(existingAppointments).id 
+                : null,
+            status: faker.helpers.arrayElement(officeVisitStatuses),
+            purpose: faker.lorem.sentence(),
+            isScheduled: faker.datatype.boolean(),
+            createdBy: createdByUser,
+            updatedBy: createdByUser,
+        };
+    });
 
     await db.insert(officeVisits).values(officeVisitsToInsert);
 }

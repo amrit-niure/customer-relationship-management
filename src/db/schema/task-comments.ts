@@ -10,8 +10,8 @@ import { relations } from "drizzle-orm";
   
   export const taskComments = pgTable('task_comments', {
     id: uuid('id').primaryKey().defaultRandom(),
-    taskId: uuid('task_id').references(() => tasks.id).notNull(),
-    commentById: uuid('comment_by_id').references(() => users.id).notNull(),
+    taskId: uuid('task_id').references(() => tasks.id,{onDelete: "cascade"} ).notNull(),
+    commentById: uuid('comment_by_id').references(() => users.id,{onDelete: "cascade"}).notNull(),
     content: text('content').notNull(),
     createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
   });

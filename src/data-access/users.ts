@@ -69,12 +69,12 @@ export const deleteUser = async (id: string): Promise<Response<User>> => {
             .returning();
 
         if (!deletedUser.length) {
-            return err(new NotFoundError('User'));
+            throw err(new NotFoundError('User'));
         }
 
         return ok(deletedUser[0]);
     } catch (error) {
-        return err(handleDatabaseError(
+        throw err(handleDatabaseError(
             error,
             'delete',
             'user'
@@ -94,7 +94,7 @@ export const updateUser = async (values: Partial<User> , id: string): Promise<Re
 
         return ok(updatedUser[0]);
     } catch (error) {
-        return err(handleDatabaseError(
+        throw err(handleDatabaseError(
             error,
             'Update',
             'user'

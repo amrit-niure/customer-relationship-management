@@ -30,8 +30,7 @@ export const deleteUserAction = authenticatedAction.createServerAction()
                 window: 10000
             });
             const result = await deleteUserUseCase(input.id);
-
-            if (result.success) {
+            if (result?.success) {
                 revalidatePath('/dashboard/team');
                 return result;
             }

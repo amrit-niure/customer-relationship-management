@@ -33,3 +33,4 @@ export async function hashPassword(plainTextPassword: string): Promise<string> {
         throw new Error("Error hashing password");
     }
 }
+
