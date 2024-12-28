@@ -6,11 +6,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { preferencesSchema, PreferencesFormData } from './schema';
+import { PreferencesFormProps } from './MultiStepForm';
 
-interface PreferencesFormProps {
-  onSubmit?: (data: PreferencesFormData) => void;
-  stepName?: string;
-}
 
 export const PreferencesForm: React.FC<PreferencesFormProps> = ({ onSubmit }) => {
   const { formData, updateFormData } = useFormContext();
@@ -20,7 +17,6 @@ export const PreferencesForm: React.FC<PreferencesFormProps> = ({ onSubmit }) =>
   });
 
   const onSubmitForm = (data: PreferencesFormData) => {
-    updateFormData('preferences', data);
     if (onSubmit) onSubmit(data);
   };
 
@@ -57,4 +53,3 @@ export const PreferencesForm: React.FC<PreferencesFormProps> = ({ onSubmit }) =>
     </form>
   );
 };
-

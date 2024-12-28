@@ -13,7 +13,7 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const updateFormData = (stepId: string, data: Record<string, any>) => {
     setFormData(prevData => ({
       ...prevData,
-      [stepId]: { ...prevData[stepId], ...data }
+      [stepId]: data
     }));
   };
 
@@ -31,4 +31,3 @@ export const useFormContext = () => {
   }
   return context;
 };
-

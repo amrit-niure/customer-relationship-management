@@ -5,12 +5,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { personalInfoSchema, PersonalInfoFormData } from './schema';
+import { PersonalInfoFormProps } from './MultiStepForm';
 
-interface PersonalInfoFormProps {
-    onSubmit?: (data: PersonalInfoFormData) => void;
-    stepName?: string;
-  }
-  
   export const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({ onSubmit }) => {
     const { formData, updateFormData } = useFormContext();
     const { register, handleSubmit, formState: { errors } } = useForm<PersonalInfoFormData>({
@@ -18,8 +14,8 @@ interface PersonalInfoFormProps {
       defaultValues: formData.personalInfo || {}
     });
   
+    
     const onSubmitForm = (data: PersonalInfoFormData) => {
-      updateFormData('personalInfo', data);
       if (onSubmit) onSubmit(data);
     };
   

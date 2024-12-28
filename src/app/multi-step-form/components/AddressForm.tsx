@@ -5,12 +5,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { addressSchema, AddressFormData } from './schema';
+import { AddressFormProps } from './MultiStepForm';
 
-interface AddressFormProps {
-    onSubmit?: (data: AddressFormData) => void;
-    stepName?: string;
-  }
-  
   export const AddressForm: React.FC<AddressFormProps> = ({ onSubmit }) => {
     const { formData, updateFormData } = useFormContext();
     const { register, handleSubmit, formState: { errors } } = useForm<AddressFormData>({
@@ -19,8 +15,8 @@ interface AddressFormProps {
     });
   
     const onSubmitForm = (data: AddressFormData) => {
-      updateFormData('address', data);
       if (onSubmit) onSubmit(data);
+      console.log(formData.address)
     };
   
     return (
@@ -51,6 +47,5 @@ interface AddressFormProps {
         </div>
       </form>
     );
-  };
-  
+  };  
   
