@@ -1,45 +1,52 @@
 import React from 'react';
-import { useFormContext } from './FormContext';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { personalInfoSchema, PersonalInfoFormData } from './schema';
-import { PersonalInfoFormProps } from './MultiStepForm';
+import { Button } from "@/components/ui/button"
+import { personalInfoSchema, PersonalInfoFormData } from '../schemas/formSchemas';
 
-  export const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({ onSubmit }) => {
-    const { formData, updateFormData } = useFormContext();
-    const { register, handleSubmit, formState: { errors } } = useForm<PersonalInfoFormData>({
-      resolver: zodResolver(personalInfoSchema),
-      defaultValues: formData.personalInfo || {}
-    });
-  
-    
-    const onSubmitForm = (data: PersonalInfoFormData) => {
-      if (onSubmit) onSubmit(data);
-    };
-  
-    return (
-      <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
-        <div>
-          <Label htmlFor="fullName">Full Name</Label>
-          <Input
-            id="fullName"
-            {...register('fullName')}
-          />
-          {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName.message}</p>}
-        </div>
-        <div>
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            {...register('email')}
-          />
-          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
-        </div>
-      </form>
-    );
+interface PersonalInfoFormProps {
+  formData?: PersonalInfoFormData;
+  updateForm: (data: PersonalInfoFormData) => void;
+  handleNext: () => void;
+}
+
+export const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({ formData, updateForm, handleNext }) => {
+  const { register, handleSubmit, formState: { errors } } = useForm<PersonalInfoFormData>({
+    resolver: zodResolver(personalInfoSchema),
+    defaultValues: formData || {}
+  });
+
+  const onSubmit = (data: PersonalInfoFormData) => {
+    updateForm(data);
+    handleNext();
   };
-  
-  
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div>
+        <Label htmlFor="fullName">Full Name</Label>
+        <Input
+          id="fullName"
+          {...register('fullName')}
+        />
+        {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName.message}</p>}
+      </div>
+      <div>
+        <Label htmlFor="email">Email</Label>
+        <Input
+          id="email"
+          type="email"
+          {...register('email')}
+        />
+        {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
+      </div>
+      <div className='flex items-center'>
+      <Button type="submit" className='ml-auto'>Next</Button>
+      </div>
+
+    </form>
+  );
+};
+

@@ -21,3 +21,4 @@ export const preferencesSchema = z.object({
 export type PersonalInfoFormData = z.infer<typeof personalInfoSchema>
 export type AddressFormData = z.infer<typeof addressSchema>
 export type PreferencesFormData = z.infer<typeof preferencesSchema>
+
