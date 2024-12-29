@@ -36,16 +36,7 @@ export default function ClientVisaInfoForm({
 }: ClientVisaInfoProps) {
   const form = useForm<IClientVisaInfo>({
     resolver: zodResolver(clientVisaInfoSchema),
-    defaultValues: sanitizeData(formData) || {
-      firstName: "",
-      middleName: "",
-      lastName: "",
-      email: "",
-      phone: "",
-      address: "",
-      passportNumber: "",
-      isActive: true,
-    },
+    defaultValues: sanitizeData(formData) || {},
   });
 
   const onSubmit = (data: IClientVisaInfo) => {

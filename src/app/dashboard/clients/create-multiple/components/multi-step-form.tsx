@@ -4,25 +4,25 @@ import { CheckIcon, ClipboardIcon, HomeIcon } from "lucide-react";
 import {
   IClientBasicInfo,
   IClientDocuments,
+  IClientFull,
   IClientVisaInfo,
 } from "../../schema";
-import { toast } from "@/hooks/use-toast";
 import ClientBasicInfoForm from "./basic-info-form";
 import ClientVisaInfoForm from "./visa-info-form";
 import ClientFileUploadForm from "./upload-files";
-
-type FormData = {
+import { toast } from "sonner";
+import { useServerAction } from "zsa-react";
+import { createClientAction } from "../../actions";
+import {useRouter} from "next/navigation";
+export type FormData = {
   clientBasicInfo?: IClientBasicInfo;
   clientVisaInfo?: IClientVisaInfo;
   clientDocuments?: IClientDocuments;
 };
 
-const onSubmit = (formData: FormData) => {
-  console.log("Form submitted with data:", formData);
-  // Here you would typically send the data to your backend
-};
 
 export const ClientMultiStepForm: React.FC = () => {
+  const router = useRouter();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({});
 
@@ -40,24 +40,35 @@ export const ClientMultiStepForm: React.FC = () => {
   const handlePrevious = () => {
     setStep((prev) => prev - 1);
   };
-
+  const { execute, isPending } = useServerAction(
+    createClientAction,
+      {
+        onSuccess() {
+          toast.success("Client record is created successfully");
+          router.push("../");
+        },
+        onError(result) {
+          toast.error(result.err.message);
+        },
+      }
+    );
+    
+    const onSubmit = async (formData: IClientFull) => {
+      const payload = {
+        clientBasicInfo: formData.clientBasicInfo,
+        clientVisaInfo: formData.clientVisaInfo,
+        clientDocuments: formData.clientDocuments
+      };
+      execute(payload);
+      toast.info("Processing...")
+    };
   const submitForm = (lastFormData: IClientDocuments) => {
-    alert("here")
-    const finalFormData = {
-      ...formData,
-      documents: lastFormData,
+    const finalFormData: IClientFull = {
+      clientBasicInfo: formData.clientBasicInfo!,
+      clientVisaInfo: formData.clientVisaInfo!,
+      clientDocuments: [lastFormData],
     };
     onSubmit(finalFormData);
-    toast({
-      title: "Form Submitted Successfully",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">
-            {JSON.stringify(finalFormData, null, 2)}
-          </code>
-        </pre>
-      ),
-    });
   };
   const steps = [
     { number: 1, name: "Step 1", icon: <HomeIcon className="w-4 h-4" /> },

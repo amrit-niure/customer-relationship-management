@@ -34,12 +34,12 @@ export const clientVisaInfoSchema = z.object({
   visaExpiry: z.coerce.date().optional(),
 });
 export const clientDocumentsSchema = z.object({
-  fileNames: z.array(z.instanceof(File)),
+  fileNames: z.array(z.instanceof(File)).optional(),
 });
 export const clientSchemaFull = z.object({
-  basicInfo: clientBasicInfoSchema,
-  visaInfo: clientVisaInfoSchema,
-  documents: z.array(clientDocumentsSchema),
+  clientBasicInfo: clientBasicInfoSchema,
+  clientVisaInfo: clientVisaInfoSchema,
+  clientDocuments: z.array(clientDocumentsSchema),
 });
 
 export type IClientFull = z.infer<typeof clientSchemaFull>;

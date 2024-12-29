@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState } from "react";
 import { toast } from "sonner";
@@ -24,7 +24,6 @@ import {
 
 import { IClientDocuments, clientDocumentsSchema } from "../../schema";
 import { uploadFileAction } from "../../actions";
-
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
@@ -52,39 +51,45 @@ export default function ClientFileUploadForm({
     resolver: zodResolver(clientDocumentsSchema),
   });
   const onSubmit = async (data: IClientDocuments) => {
+    console.log("Submitted");
     if (!files || files.length === 0) {
-      toast.error("Please select at least one file.");
+      toast.info("No files to upload.");
+      updateForm(data);
       return;
     }
-  
+
     setIsUploading(true);
     try {
       for (const file of files) {
         if (file.size > MAX_FILE_SIZE) {
           throw new Error(`File ${file.name} exceeds size limit!`);
         }
-  
+
         // Converting the file to base64
         const fileData = await new Promise<string>((resolve, reject) => {
           const reader = new FileReader();
           reader.readAsDataURL(file);
           reader.onload = () => resolve(reader.result as string);
-          reader.onerror = error => reject(error);
+          reader.onerror = (error) => reject(error);
         });
 
-        const result = await uploadFileAction(fileData, file.name, `Documents/Uploads`);
-        
+        const result = await uploadFileAction(
+          fileData,
+          file.name,
+          `Documents/Uploads`
+        );
+
         if (!result.success) {
           throw new Error(`Failed to upload ${file.name}: ${result.error}`);
         }
-        
+
         toast.success(`Successfully uploaded ${file.name}`);
       }
-  
+      // TODO: send the uploaded file metadata (like webUrl, name, etc) that matches the fileTable to create a file record in the database
       updateForm(data);
     } catch (error: Error | any) {
-      console.error('Upload error:', error);
-      toast.error(error.message || 'Failed to upload files');
+      console.error("Upload error:", error);
+      toast.error(error.message || "Failed to upload files");
     } finally {
       setIsUploading(false);
     }
@@ -148,19 +153,16 @@ export default function ClientFileUploadForm({
           )}
         />
         <div className="flex justify-between">
-          <Button 
-            type="button" 
-            onClick={handlePrevious} 
+          <Button
+            type="button"
+            onClick={handlePrevious}
             variant="outline"
             disabled={isUploading}
           >
             Previous
           </Button>
-          <Button 
-            type="submit"
-            disabled={isUploading}
-          >
-            {isUploading ? 'Uploading...' : 'Submit'}
+          <Button type="submit" disabled={isUploading}>
+            {isUploading ? "Uploading..." : "Submit"}
           </Button>
         </div>
       </form>

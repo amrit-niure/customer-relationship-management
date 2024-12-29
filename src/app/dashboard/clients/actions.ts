@@ -1,6 +1,6 @@
 "use server"
 import { authenticatedAction } from "@/lib/safe-action";
-import { clientSchema } from "./schema";
+import { clientSchema, clientSchemaFull } from "./schema";
 import { rateLimitByKey } from "@/lib/limiter";
 import { sendEmail } from "@/lib/email";
 import { revalidatePath } from "next/cache";
@@ -13,10 +13,10 @@ import { deleteClientUseCase } from "@/use-cases/clients/delete-client.use-case"
 import { AuthenticationError } from "@/use-cases/errors";
 import { updateClientUseCase } from "@/use-cases/clients/update-client.use-case";
 
-export const createClientAction = authenticatedAction.createServerAction().input(clientSchema).handler(async ({ input }) => {
+export const createClientAction = authenticatedAction.createServerAction().input(clientSchemaFull).handler(async ({ input }) => {
     try {
         await rateLimitByKey({
-            key: input.email,
+            key: input.clientBasicInfo.email,
             limit: 3,
             window: 10000
         });
@@ -24,15 +24,19 @@ export const createClientAction = authenticatedAction.createServerAction().input
         if (!currentUser) {
             throw new AuthenticationError()
         }
-        const payload = { ...input, createdBy: currentUser?.id, updatedBy: currentUser?.id }
-        const client = await createClientUseCase(payload);
+        const gatheredData = {...input.clientBasicInfo, ...input.clientVisaInfo, ...input.clientDocuments}
+        const payload = { ...gatheredData, createdBy: currentUser?.id, updatedBy: currentUser?.id }
+        // const client = await createClientUseCase(payload);
+        // TODO: prepare payload for creating file table in database
+        // TODO: const document = await createClientFileUseCase(filepayload);
+        // 
         await sendEmail({
-            to: input.email,
+            to: input.clientBasicInfo.email,
             subject: "Welcome to Our CRM",
-            body: ClientWelcomeEmail({ userFirstname: client.firstName })
+            body: ClientWelcomeEmail({ userFirstname: input.clientBasicInfo.firstName })
         });
         revalidatePath("/dashboard/client");
-        return client;
+        // return client;
     } catch (error) {
         throw error;
     }
