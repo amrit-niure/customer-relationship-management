@@ -1,33 +1,28 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import { CheckIcon, ClipboardIcon, HomeIcon } from "lucide-react";
 import {
-  PersonalInfoFormData,
-  AddressFormData,
-  PreferencesFormData,
-} from "../schemas/formSchemas";
-import { PersonalInfoForm } from "./PersonalInfoForm";
-import { AddressForm } from "./AddressForm";
-import { PreferencesForm } from "./PreferencesForm";
+  IClientBasicInfo,
+  IClientDocuments,
+  IClientVisaInfo,
+} from "../../schema";
 import { toast } from "@/hooks/use-toast";
+import ClientBasicInfoForm from "./basic-info-form";
+import ClientVisaInfoForm from "./visa-info-form";
+import ClientFileUploadForm from "./upload-files";
 
 type FormData = {
-  personalInfo?: PersonalInfoFormData;
-  address?: AddressFormData;
-  preferences?: PreferencesFormData;
+  clientBasicInfo?: IClientBasicInfo;
+  clientVisaInfo?: IClientVisaInfo;
+  clientDocuments?: IClientDocuments;
 };
 
-interface MultiStepFormProps {
-  // onSubmit: (formData: FormData) => void;
-}
 const onSubmit = (formData: FormData) => {
-  console.log('Form submitted with data:', formData);
-  alert('Form submitted with data: ' + JSON.stringify(formData));
+  console.log("Form submitted with data:", formData);
   // Here you would typically send the data to your backend
 };
 
-
-export const MultiStepForm: React.FC<MultiStepFormProps> = () => {
+export const ClientMultiStepForm: React.FC = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({});
 
@@ -46,10 +41,11 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = () => {
     setStep((prev) => prev - 1);
   };
 
-  const submitForm = (preferencesData: PreferencesFormData) => {
+  const submitForm = (lastFormData: IClientDocuments) => {
+    alert("here")
     const finalFormData = {
       ...formData,
-      preferences: preferencesData,
+      documents: lastFormData,
     };
     onSubmit(finalFormData);
     toast({
@@ -102,21 +98,21 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = () => {
         {/* Form Steps */}
         <div className="card-body">
           {step === 1 ? (
-            <PersonalInfoForm
-              formData={formData.personalInfo}
-              updateForm={(data) => updateForm({ personalInfo: data })}
+            <ClientBasicInfoForm
+              formData={formData.clientBasicInfo}
+              updateForm={(data) => updateForm({ clientBasicInfo: data })}
               handleNext={handleNext}
             />
           ) : step === 2 ? (
-            <AddressForm
-              formData={formData.address}
-              updateForm={(data) => updateForm({ address: data })}
+            <ClientVisaInfoForm
+              formData={formData.clientVisaInfo}
+              updateForm={(data) => updateForm({ clientVisaInfo: data })}
               handleNext={handleNext}
               handlePrevious={handlePrevious}
             />
           ) : (
-            <PreferencesForm
-              formData={formData.preferences}
+            <ClientFileUploadForm
+              formData={formData.clientDocuments}
               updateForm={submitForm}
               handlePrevious={handlePrevious}
             />
@@ -126,5 +122,3 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = () => {
     </div>
   );
 };
-
-export default MultiStepForm;

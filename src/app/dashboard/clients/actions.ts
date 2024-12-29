@@ -1,6 +1,6 @@
 "use server"
 import { authenticatedAction } from "@/lib/safe-action";
-import { clientSchema } from "./validation";
+import { clientSchema } from "./schema";
 import { rateLimitByKey } from "@/lib/limiter";
 import { sendEmail } from "@/lib/email";
 import { revalidatePath } from "next/cache";
@@ -97,3 +97,29 @@ export const deleteClientAction = authenticatedAction
         revalidatePath("/dashboard/clients");
         return await deleteClientUseCase(input.id);
     })
+
+
+import { uploadToOneDrive } from '@/lib/onedrive/upload';
+export async function uploadFileAction(fileData: string, fileName: string, folderPath = "root") {
+  try {
+    // Convert base64 to buffer
+    const buffer = Buffer.from(fileData.split(',')[1], 'base64');
+    
+    const result = await uploadToOneDrive({
+      fileName,
+      folderPath,
+      buffer,
+      onProgress: (progress) => {
+        // Note: Server-side progress updates need to be handled differently,
+        // such as through WebSockets or Server-Sent Events if needed
+        console.log(`Upload progress: ${progress}%`);
+      }
+    });
+
+    console.log('Upload result:', result);
+    return result;
+  } catch (error) {
+    console.error('Error in upload action:', error);
+    throw error;
+  }
+}

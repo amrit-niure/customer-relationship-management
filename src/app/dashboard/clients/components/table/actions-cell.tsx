@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from '@/components/ui/dropdown-menu'; 
 import { MoreHorizontal, Eye, Calendar, Edit, MapPin, Trash } from 'lucide-react'; 
-import { Button } from './ui/button';
+import { Button } from '../../../../../components/ui/button';
 import { useServerAction } from "zsa-react";
 import { toast } from "@/hooks/use-toast";
 import { deleteClientAction } from '@/app/dashboard/clients/actions';
@@ -31,7 +31,7 @@ interface Row {
   };
 }
 
-export const ActionsCell = ({ row }: { row: Row }) => {
+export const ClientsTableActionsCell = ({ row }: { row: Row }) => {
   const { execute, isPending } = useDeleteClient();
   
   const handleDelete = (e: React.MouseEvent, id: string) => {

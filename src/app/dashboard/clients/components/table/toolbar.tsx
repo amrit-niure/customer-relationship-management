@@ -2,12 +2,11 @@
 
 import { Table } from "@tanstack/react-table"
 import { X } from "lucide-react"
-
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { visas } from "@/app/dashboard/clients/components/toolbar-data"
-import { DataTableFacetedFilter } from "../../../../components/data-table/faceted-filter"
-import { DataTableViewOptions } from "../../../../components/data-table/view-options"
+import { visas } from "@/app/dashboard/clients/components/table/toolbar-data"
+import { DataTableFacetedFilter } from "@/components/data-table/faceted-filter"
+import { DataTableViewOptions } from "@/components/data-table/view-options"
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>

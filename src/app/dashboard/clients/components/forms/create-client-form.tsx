@@ -22,8 +22,8 @@ import {
 
 import { toast } from "@/hooks/use-toast";
 import { useServerAction } from "zsa-react";
-import { clientSchema, IClient } from "../validation";
-import { createClientAction, updateClientAction } from "../actions";
+import { clientSchema, IClient } from "../../schema";
+import { createClientAction, updateClientAction } from "../../actions";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/spinner";
 import { Client } from "@/db/schema/clients";

@@ -1,6 +1,7 @@
 import PageHeaderWithoutForm from "@/components/headers/page-header-without-form";
 import { FC } from "react";
-import CreateClientForm from "../components/forms/create-client-form";
+import { ClientMultiStepForm } from "./components/multi-step-form";
+
 
 interface CreateProps {}
 
@@ -11,7 +12,7 @@ const Create: FC<CreateProps> = ({}) => {
         header="New Customer "
         description="Register new customer to our database."
       />
-      <CreateClientForm />
+      <ClientMultiStepForm />
     </div>
   );
 };
