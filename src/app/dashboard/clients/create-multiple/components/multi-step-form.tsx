@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { useServerAction } from "zsa-react";
 import { createClientAction } from "../../actions";
 import {useRouter} from "next/navigation";
+
 export type FormData = {
   clientBasicInfo?: IClientBasicInfo;
   clientVisaInfo?: IClientVisaInfo;
@@ -24,12 +25,23 @@ export type FormData = {
 export const ClientMultiStepForm: React.FC = () => {
   const router = useRouter();
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState<FormData>({});
+  const defaultFormData: IClientFull = {
+    clientBasicInfo: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+    },
+    clientVisaInfo: {},
+    clientDocuments: []
+  };
+  
+  const [formData, setFormData] = useState<IClientFull>(defaultFormData);
 
-  const updateForm = (stepData: Partial<FormData>) => {
-    setFormData((prev) => ({
+  const updateForm = (update: Partial<IClientFull>) => {
+    setFormData(prev => ({
       ...prev,
-      ...stepData,
+      ...update
     }));
   };
 
@@ -110,20 +122,20 @@ export const ClientMultiStepForm: React.FC = () => {
         <div className="card-body">
           {step === 1 ? (
             <ClientBasicInfoForm
-              formData={formData.clientBasicInfo}
+              formData={formData}
               updateForm={(data) => updateForm({ clientBasicInfo: data })}
               handleNext={handleNext}
             />
           ) : step === 2 ? (
             <ClientVisaInfoForm
-              formData={formData.clientVisaInfo}
+              formData={formData}
               updateForm={(data) => updateForm({ clientVisaInfo: data })}
               handleNext={handleNext}
               handlePrevious={handlePrevious}
             />
           ) : (
             <ClientFileUploadForm
-              formData={formData.clientDocuments}
+              formData={formData}
               updateForm={submitForm}
               handlePrevious={handlePrevious}
             />

@@ -22,13 +22,17 @@ import {
   FileUploaderItem,
 } from "@/components/ui/file-upload";
 
-import { IClientDocuments, clientDocumentsSchema } from "../../schema";
+import {
+  IClientDocuments,
+  IClientFull,
+  clientDocumentsSchema,
+} from "../../schema";
 import { uploadFileAction } from "../../actions";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
 interface ClientFileUploadProps {
-  formData?: IClientDocuments;
+  formData?: IClientFull;
   updateForm: (data: IClientDocuments) => void;
   handlePrevious: () => void;
 }
@@ -76,16 +80,30 @@ export default function ClientFileUploadForm({
         const result = await uploadFileAction(
           fileData,
           file.name,
-          `Documents/Uploads`
+          `Apply World CRM/Clients/${formData?.clientBasicInfo?.firstName} ${formData?.clientBasicInfo?.lastName}`
         );
 
         if (!result.success) {
           throw new Error(`Failed to upload ${file.name}: ${result.error}`);
         }
-
+        // TODO: send the uploaded file metadata (like webUrl, name, etc) that matches the fileTable to create a file record in the database 
+        //DONE: Work next form here. 
+        const transformUploadResponse = (response: any): FileUploadResult => ({
+          success: response.success,
+          data: {
+            id: response.data.id,
+            name: response.data.name,
+            webUrl: response.data.webUrl,
+            size: response.data.size,
+            mimeType: response.data.file.mimeType,
+            downloadUrl: response.data["@microsoft.graph.downloadUrl"],
+            uploadedAt: response.data.createdDateTime,
+          },
+        });
         toast.success(`Successfully uploaded ${file.name}`);
+        return transformUploadResponse;
       }
-      // TODO: send the uploaded file metadata (like webUrl, name, etc) that matches the fileTable to create a file record in the database
+
       updateForm(data);
     } catch (error: Error | any) {
       console.error("Upload error:", error);

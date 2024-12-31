@@ -6,7 +6,9 @@ export const files = pgTable("files", {
   id: uuid('id').primaryKey().defaultRandom(),
   clientId: uuid("client_id").references(() => clients.id, { onDelete: "cascade" }),
   name: varchar("name", { length: 255 }),
-  path: text("path"), // Path on OneDrive
+  webUrl: text("web_url"),
+  mimeType: text("mime_type"),
+  downloadUrl: text("download_url"),
   size: text("size"),
   uploadedAt: timestamp('uploaded_at', { mode: 'date' }).defaultNow().notNull(),
 });

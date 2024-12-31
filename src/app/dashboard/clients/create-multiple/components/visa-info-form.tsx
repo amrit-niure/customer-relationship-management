@@ -18,11 +18,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { clientVisaInfoSchema, IClientVisaInfo } from "../../schema";
+import { clientVisaInfoSchema, IClientFull, IClientVisaInfo } from "../../schema";
 import { sanitizeData } from "@/lib/utils";
 
 interface ClientVisaInfoProps {
-  formData?: IClientVisaInfo;
+  formData?: IClientFull;
   updateForm: (data: IClientVisaInfo) => void;
   handleNext: () => void;
   handlePrevious: () => void;
@@ -36,7 +36,7 @@ export default function ClientVisaInfoForm({
 }: ClientVisaInfoProps) {
   const form = useForm<IClientVisaInfo>({
     resolver: zodResolver(clientVisaInfoSchema),
-    defaultValues: sanitizeData(formData) || {},
+    defaultValues: sanitizeData(formData?.clientVisaInfo) || {},
   });
 
   const onSubmit = (data: IClientVisaInfo) => {

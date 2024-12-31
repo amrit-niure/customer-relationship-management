@@ -19,11 +19,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { clientBasicInfoSchema, IClientBasicInfo } from "../../schema";
+import { clientBasicInfoSchema, IClientBasicInfo, IClientFull } from "../../schema";
 import { sanitizeData } from "@/lib/utils";
 
 interface ClientBasicInfoFormProps {
-  formData?: IClientBasicInfo;
+  formData?: IClientFull;
   updateForm: (data: IClientBasicInfo) => void;
   handleNext: () => void;
 }
@@ -35,7 +35,7 @@ export default function ClientBasicInfoForm({
 }: ClientBasicInfoFormProps) {
   const form = useForm<IClientBasicInfo>({
     resolver: zodResolver(clientBasicInfoSchema),
-    defaultValues: sanitizeData(formData) || {
+    defaultValues: sanitizeData(formData?.clientBasicInfo) || {
       firstName: "",
       middleName: "",
       lastName: "",
