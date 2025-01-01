@@ -12,7 +12,7 @@ import ClientVisaInfoForm from "./visa-info-form";
 import ClientFileUploadForm from "./upload-files";
 import { toast } from "sonner";
 import { useServerAction } from "zsa-react";
-import { createClientAction } from "../../actions";
+import { createClientAction, updateClientAction } from "../../actions";
 import { useRouter } from "next/navigation";
 
 export type FormData = {
@@ -61,15 +61,22 @@ export const ClientMultiStepForm: React.FC<ClientMultiStepFormProps> = ({
     setStep((prev) => prev - 1);
   };
 
-  const { execute, isPending } = useServerAction(createClientAction, {
-    onSuccess() {
-      toast.success("Client record created successfully");
-      router.push("./");
-    },
-    onError(result) {
-      toast.error(result.err.message);
-    },
-  });
+  const { execute, isPending } = useServerAction(
+    isUpdate ? updateClientAction : createClientAction,
+    {
+      onSuccess() {
+        if(isUpdate) {
+          toast("The client record is updated successfully");
+        }else{
+          toast("The client record is created successfully");
+        }
+        router.push("../");
+      },
+      onError(result) {
+        toast(result.err.message);
+      },
+    }
+  );
 
   const onSubmit = async (formData: FormData) => {
     const payload: IClientFull = {
@@ -77,7 +84,11 @@ export const ClientMultiStepForm: React.FC<ClientMultiStepFormProps> = ({
       clientVisaInfo: formData.clientVisaInfo,
       clientDocuments: formData.clientDocuments,
     };
-    execute(payload);
+    if (isUpdate && defaultFormData?.clientBasicInfo?.id) {
+      execute({...payload });
+    } else {
+      execute(payload);
+    }
   };
 
   const submitForm = (lastFormData: IClientDocuments) => {

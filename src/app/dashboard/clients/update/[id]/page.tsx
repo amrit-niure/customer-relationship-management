@@ -40,7 +40,7 @@ const UpdatePage: FC<UpdatePageProps> = async ({ params }) => {
   }
   return (
     <div>
-     <ClientMultiStepForm defaultFormData={defaultFormData}/>
+     <ClientMultiStepForm defaultFormData={defaultFormData} isUpdate={true}/>
     </div>
   );
 };

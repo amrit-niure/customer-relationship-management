@@ -89,9 +89,7 @@ export const createClientAction = authenticatedAction
     });
 export const updateClientAction = authenticatedAction
     .createServerAction()
-    .input(clientSchema.extend({
-        id: z.string()
-    }))
+    .input(clientSchemaFull)
     .handler(async ({ input }) => {
         await rateLimitByKey({
             key: "update",
@@ -102,8 +100,10 @@ export const updateClientAction = authenticatedAction
         if (!currentUser) {
             throw new AuthenticationError()
         }
-        const payload = { ...input, updatedBy: currentUser?.id };
-        return await updateClientUseCase(payload, input.id);
+        const payload = {...input.clientBasicInfo, ...input.clientVisaInfo, updatedBy: currentUser?.id };
+        const updated =  updateClientUseCase(payload, input.clientBasicInfo.id!);
+        revalidatePath("/dashboard/client");
+        return updated;
     })
 
 export const getAllClientsAction = authenticatedAction.createServerAction().handler(async () => {
