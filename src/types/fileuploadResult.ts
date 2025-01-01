@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 interface FileUploadResult {
     success: boolean;
     data: {

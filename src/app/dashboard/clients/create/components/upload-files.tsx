@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -38,7 +37,6 @@ interface ClientFileUploadProps {
 
 export default function ClientFileUploadForm({
   isPending,
-  formData,
   updateForm,
   handlePrevious,
 }: ClientFileUploadProps) {

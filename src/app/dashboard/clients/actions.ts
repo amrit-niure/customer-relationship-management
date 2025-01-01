@@ -14,7 +14,6 @@ import { AuthenticationError } from "@/use-cases/errors";
 import { updateClientUseCase } from "@/use-cases/clients/update-client.use-case";
 import { createClientFilesUseCase } from "@/use-cases/files/create-files.use-case";
 import { uploadToOneDrive } from '@/lib/onedrive/upload';
-import { NewFile } from "@/db/schema/files";
 import { uploadFileUseCase } from "@/use-cases/files/upload-file.use-case";
 
 // File upload action with proper typing
