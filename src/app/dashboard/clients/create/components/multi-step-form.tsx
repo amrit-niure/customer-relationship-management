@@ -53,8 +53,8 @@ export const ClientMultiStepForm: React.FC = () => {
   };
   const { execute, isPending } = useServerAction(createClientAction, {
     onSuccess() {
-      toast.success("Client record is created successfully");
-      router.push("../");
+      toast.success("Client record created successfully");
+      router.push("./");
     },
     onError(result) {
       toast.error(result.err.message);

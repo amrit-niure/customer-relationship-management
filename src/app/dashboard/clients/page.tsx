@@ -14,7 +14,7 @@ export default withServerAuth(async function Clients() {
       <PageHeaderWithoutForm
         description="View contact information of all associated clients"
         header="Clients"
-        pagePath="clients/create-multiple"
+        pagePath="clients/create"
         buttonText="Register New Client"
       />
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 my-6">
