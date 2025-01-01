@@ -1,6 +1,6 @@
 "use client";
 
-import { ActionsCell } from "@/components/actions-cell";
+import {  ClientsTableActionsCell } from "@/app/dashboard/clients/components/table/actions-cell";
 import { DataTableColumnHeader } from "@/components/data-table/column-header";
 import { Client } from "@/db/schema/clients";
 import { ColumnDef } from "@tanstack/react-table";
@@ -74,6 +74,6 @@ export const columns: ColumnDef<Client>[] = [
   {
     id: "actions",
     header: () => <div>Options</div>,
-    cell: ({ row }) => <ActionsCell row={row} />
+    cell: ({ row }) => <ClientsTableActionsCell row={row} />
   }
 ];

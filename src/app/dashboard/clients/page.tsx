@@ -2,7 +2,7 @@ import DisplayCard from "@/components/display-card";
 import PageHeaderWithoutForm from "@/components/headers/page-header-without-form";
 import { withServerAuth } from "@/lib/protected-server-pages";
 import { Calendar } from "lucide-react";
-import { columns } from "./components/columns";
+import { columns } from "./components/table/columns";
 import { DataLinkTable } from "../../../components/data-table/data-link-table";
 import { getAllClientsAction } from "./actions";
 

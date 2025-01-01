@@ -19,7 +19,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { DataTablePagination } from "@/components/data-table/pagination";
-import { DataTableToolbar } from "@/app/dashboard/clients/components/toolbar";
+import { DataTableToolbar } from "@/app/dashboard/clients/components/table/toolbar";
 import { usePathname } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
