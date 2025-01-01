@@ -1,7 +1,7 @@
 interface FileUploadResult {
     success: boolean;
     data: {
-      id: string;
+      documentId: string;
       name: string;
       webUrl: string;
       size: number;

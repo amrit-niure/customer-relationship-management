@@ -12,36 +12,82 @@ import * as z from "zod";
 import { deleteClientUseCase } from "@/use-cases/clients/delete-client.use-case";
 import { AuthenticationError } from "@/use-cases/errors";
 import { updateClientUseCase } from "@/use-cases/clients/update-client.use-case";
+import { createClientFilesUseCase } from "@/use-cases/files/create-files.use-case";
+import { uploadToOneDrive } from '@/lib/onedrive/upload';
+import { NewFile } from "@/db/schema/files";
+import { uploadFileUseCase } from "@/use-cases/files/upload-file.use-case";
 
-export const createClientAction = authenticatedAction.createServerAction().input(clientSchemaFull).handler(async ({ input }) => {
+// File upload action with proper typing
+export async function uploadFileAction(
+    fileData: string,
+    fileName: string,
+    folderPath = "root"
+) {
     try {
-        await rateLimitByKey({
-            key: input.clientBasicInfo.email,
-            limit: 3,
-            window: 10000
+        const buffer = Buffer.from(fileData.split(',')[1], 'base64');
+
+        const result = await uploadToOneDrive({
+            fileName,
+            folderPath,
+            buffer,
+            onProgress: (progress) => {
+                console.log(`Upload progress: ${progress}%`);
+            }
         });
-        const currentUser = await getCurrentUser();
-        if (!currentUser) {
-            throw new AuthenticationError()
-        }
-        const gatheredData = {...input.clientBasicInfo, ...input.clientVisaInfo, ...input.clientDocuments}
-        const payload = { ...gatheredData, createdBy: currentUser?.id, updatedBy: currentUser?.id }
-        // const client = await createClientUseCase(payload);
-        // TODO: prepare payload for creating file table in database
-        // TODO: const document = await createClientFileUseCase(filepayload);
-        // 
-        await sendEmail({
-            to: input.clientBasicInfo.email,
-            subject: "Welcome to Our CRM",
-            body: ClientWelcomeEmail({ userFirstname: input.clientBasicInfo.firstName })
-        });
-        revalidatePath("/dashboard/client");
-        // return client;
+
+        return result;
     } catch (error) {
+        console.error('Error in upload action:', error);
         throw error;
     }
-})
+}
 
+// Create client action with file handling
+export const createClientAction = authenticatedAction
+    .createServerAction()
+    .input(clientSchemaFull)
+    .handler(async ({ input }) => {
+        try {
+            await rateLimitByKey({
+                key: input.clientBasicInfo.email,
+                limit: 3,
+                window: 10000
+            });
+
+            const currentUser = await getCurrentUser();
+            if (!currentUser) {
+                throw new AuthenticationError();
+            }
+
+            // Create client
+            const payload = { ...input.clientBasicInfo, ...input.clientVisaInfo, createdBy: currentUser?.id };
+            const client = await createClientUseCase(payload);
+
+            const files = input.clientDocuments?.files || [];
+            if (files.length > 0) {
+                // Upload files
+                const uploadedFiles = await Promise.all(files.map((file) => uploadFileUseCase(file, file.name, `Apply World CRM/Clients/${input?.clientBasicInfo?.firstName} ${input?.clientBasicInfo?.lastName}`)));
+
+                const filePayload = uploadedFiles.map(result => ({
+                    ...result.data,
+                    uploadedAt: new Date(result.data.uploadedAt),
+                }));
+
+                // create files upload record
+                await createClientFilesUseCase(filePayload, client.id);
+            }
+            await sendEmail({
+                to: client.email,
+                subject: "Thank you for trusting us - Apply World Group",
+                body: ClientWelcomeEmail({ userFirstname: client.firstName })
+            });
+
+            revalidatePath("/dashboard/client");
+            return client;
+        } catch (error) {
+            throw error;
+        }
+    });
 export const updateClientAction = authenticatedAction
     .createServerAction()
     .input(clientSchema.extend({
@@ -101,29 +147,3 @@ export const deleteClientAction = authenticatedAction
         revalidatePath("/dashboard/clients");
         return await deleteClientUseCase(input.id);
     })
-
-
-import { uploadToOneDrive } from '@/lib/onedrive/upload';
-export async function uploadFileAction(fileData: string, fileName: string, folderPath = "root") {
-  try {
-    // Convert base64 to buffer
-    const buffer = Buffer.from(fileData.split(',')[1], 'base64');
-    
-    const result = await uploadToOneDrive({
-      fileName,
-      folderPath,
-      buffer,
-      onProgress: (progress) => {
-        // Note: Server-side progress updates need to be handled differently,
-        // such as through WebSockets or Server-Sent Events if needed
-        console.log(`Upload progress: ${progress}%`);
-      }
-    });
-
-    console.log('Upload result:', result);
-    return result;
-  } catch (error) {
-    console.error('Error in upload action:', error);
-    throw error;
-  }
-}

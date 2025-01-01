@@ -13,7 +13,7 @@ import ClientFileUploadForm from "./upload-files";
 import { toast } from "sonner";
 import { useServerAction } from "zsa-react";
 import { createClientAction } from "../../actions";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export type FormData = {
   clientBasicInfo?: IClientBasicInfo;
@@ -21,27 +21,26 @@ export type FormData = {
   clientDocuments?: IClientDocuments;
 };
 
-
 export const ClientMultiStepForm: React.FC = () => {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const defaultFormData: IClientFull = {
     clientBasicInfo: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
     },
     clientVisaInfo: {},
-    clientDocuments: []
+    clientDocuments: {},
   };
-  
+
   const [formData, setFormData] = useState<IClientFull>(defaultFormData);
 
   const updateForm = (update: Partial<IClientFull>) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      ...update
+      ...update,
     }));
   };
 
@@ -52,33 +51,29 @@ export const ClientMultiStepForm: React.FC = () => {
   const handlePrevious = () => {
     setStep((prev) => prev - 1);
   };
-  const { execute, isPending } = useServerAction(
-    createClientAction,
-      {
-        onSuccess() {
-          toast.success("Client record is created successfully");
-          router.push("../");
-        },
-        onError(result) {
-          toast.error(result.err.message);
-        },
-      }
-    );
-    
-    const onSubmit = async (formData: IClientFull) => {
-      const payload = {
-        clientBasicInfo: formData.clientBasicInfo,
-        clientVisaInfo: formData.clientVisaInfo,
-        clientDocuments: formData.clientDocuments
-      };
-      execute(payload);
-      toast.info("Processing...")
+  const { execute, isPending } = useServerAction(createClientAction, {
+    onSuccess() {
+      toast.success("Client record is created successfully");
+      router.push("../");
+    },
+    onError(result) {
+      toast.error(result.err.message);
+    },
+  });
+
+  const onSubmit = async (formData: IClientFull) => {
+    const payload = {
+      clientBasicInfo: formData.clientBasicInfo,
+      clientVisaInfo: formData.clientVisaInfo,
+      clientDocuments: formData.clientDocuments,
     };
+    execute(payload);
+  };
   const submitForm = (lastFormData: IClientDocuments) => {
     const finalFormData: IClientFull = {
-      clientBasicInfo: formData.clientBasicInfo!,
-      clientVisaInfo: formData.clientVisaInfo!,
-      clientDocuments: [lastFormData],
+      clientBasicInfo: formData.clientBasicInfo,
+      clientVisaInfo: formData.clientVisaInfo,
+      clientDocuments: lastFormData,
     };
     onSubmit(finalFormData);
   };
@@ -138,6 +133,7 @@ export const ClientMultiStepForm: React.FC = () => {
               formData={formData}
               updateForm={submitForm}
               handlePrevious={handlePrevious}
+              isPending={isPending}
             />
           )}
         </div>

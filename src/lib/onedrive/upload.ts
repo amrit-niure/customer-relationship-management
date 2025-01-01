@@ -7,81 +7,10 @@ interface UploadOptions {
   onProgress?: (progress: number) => void;
 }
 
-// export async function uploadToOneDrive({
-//   fileName,
-//   folderPath = "root",
-//   buffer,
-//   onProgress
-// }: UploadOptions) {
-//   const graphClient = getGraphClient();
-//   const fileSize = buffer.byteLength;
-  
-//   try {
-//     // For files smaller than 4MB, use single upload
-//     if (fileSize < 4 * 1024 * 1024) {
-//       const driveItem = await graphClient
-//         .api(`/drive/${folderPath === "root" ? "root" : `root:/${folderPath}`}:/${fileName}:/content`)
-//         .put(buffer);
-//       return { success: true, data: driveItem };
-//     } 
-    
-//     // For larger files, use upload session
-//     const uploadSession = await graphClient
-//       .api(`/drive/${folderPath === "root" ? "root" : `root:/${folderPath}`}:/${fileName}:/createUploadSession`)
-//       .post({});
-
-//     const maxChunkSize = 320 * 1024; // 320 KB chunks
-//     const arrayBuffer = buffer instanceof Buffer ? buffer : new Uint8Array(buffer);
-//     let uploadedBytes = 0;
-
-//     // Upload chunks
-//     for (let i = 0; i < arrayBuffer.length; i += maxChunkSize) {
-//       const chunk = arrayBuffer.slice(i, Math.min(i + maxChunkSize, arrayBuffer.length));
-//       const range = `bytes ${i}-${Math.min(i + chunk.length - 1, arrayBuffer.length - 1)}/${arrayBuffer.length}`;
-      
-//       await fetch(uploadSession.uploadUrl, {
-//         method: 'PUT',
-//         headers: {
-//           'Content-Length': `${chunk.length}`,
-//           'Content-Range': range,
-//         },
-//         body: chunk,
-//       });
-
-//       uploadedBytes += chunk.length;
-//       onProgress?.(Math.round((uploadedBytes / fileSize) * 100));
-//     }
-
-//     // Get the final drive item
-//     const driveItem = await graphClient
-//       .api(`/drive/${folderPath === "root" ? "root" : `root:/${folderPath}`}:/${fileName}`)
-//       .get();
-    
-//     return { success: true, data: driveItem };
-//   } catch (error) {
-//     console.error("Error uploading to OneDrive:", error);
-//     const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
-//     return { success: false, error: errorMessage };
-//   }
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export async function uploadToOneDrive({
     fileName,
-    folderPath = "root", // default to root if no folder path is provided
+    folderPath = "root",
     buffer,
     onProgress,
   }: UploadOptions) {
@@ -132,9 +61,10 @@ export async function uploadToOneDrive({
       }
       return { success: true, data: driveItem };
     } catch (error) {
-      console.error("Error uploading to OneDrive:", error);
-      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
-      return { success: false, error: errorMessage };
+      // console.error("Error uploading to OneDrive:", error);
+      // const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+      // return { success: false, error: errorMessage };
+      throw error;
     }
   }
   

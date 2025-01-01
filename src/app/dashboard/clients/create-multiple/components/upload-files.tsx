@@ -23,27 +23,26 @@ import {
 } from "@/components/ui/file-upload";
 
 import {
+  clientDocumentsSchema,
   IClientDocuments,
   IClientFull,
-  clientDocumentsSchema,
 } from "../../schema";
-import { uploadFileAction } from "../../actions";
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
 interface ClientFileUploadProps {
   formData?: IClientFull;
   updateForm: (data: IClientDocuments) => void;
   handlePrevious: () => void;
+  isPending: boolean;
 }
 
 export default function ClientFileUploadForm({
+  isPending,
   formData,
   updateForm,
   handlePrevious,
 }: ClientFileUploadProps) {
   const [files, setFiles] = useState<File[] | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
 
   const dropZoneConfig = {
     maxFiles: 5,
@@ -53,66 +52,12 @@ export default function ClientFileUploadForm({
 
   const form = useForm<IClientDocuments>({
     resolver: zodResolver(clientDocumentsSchema),
+    defaultValues: { files: [] },
   });
+
   const onSubmit = async (data: IClientDocuments) => {
-    console.log("Submitted");
-    if (!files || files.length === 0) {
-      toast.info("No files to upload.");
       updateForm(data);
-      return;
-    }
-
-    setIsUploading(true);
-    try {
-      for (const file of files) {
-        if (file.size > MAX_FILE_SIZE) {
-          throw new Error(`File ${file.name} exceeds size limit!`);
-        }
-
-        // Converting the file to base64
-        const fileData = await new Promise<string>((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = () => resolve(reader.result as string);
-          reader.onerror = (error) => reject(error);
-        });
-
-        const result = await uploadFileAction(
-          fileData,
-          file.name,
-          `Apply World CRM/Clients/${formData?.clientBasicInfo?.firstName} ${formData?.clientBasicInfo?.lastName}`
-        );
-
-        if (!result.success) {
-          throw new Error(`Failed to upload ${file.name}: ${result.error}`);
-        }
-        // TODO: send the uploaded file metadata (like webUrl, name, etc) that matches the fileTable to create a file record in the database 
-        //DONE: Work next form here. 
-        const transformUploadResponse = (response: any): FileUploadResult => ({
-          success: response.success,
-          data: {
-            id: response.data.id,
-            name: response.data.name,
-            webUrl: response.data.webUrl,
-            size: response.data.size,
-            mimeType: response.data.file.mimeType,
-            downloadUrl: response.data["@microsoft.graph.downloadUrl"],
-            uploadedAt: response.data.createdDateTime,
-          },
-        });
-        toast.success(`Successfully uploaded ${file.name}`);
-        return transformUploadResponse;
-      }
-
-      updateForm(data);
-    } catch (error: Error | any) {
-      console.error("Upload error:", error);
-      toast.error(error.message || "Failed to upload files");
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
+  }
   return (
     <Form {...form}>
       <form
@@ -121,8 +66,8 @@ export default function ClientFileUploadForm({
       >
         <FormField
           control={form.control}
-          name="fileNames"
-          render={({ field }) => (
+          name="files"
+          render={({field}) => (
             <FormItem>
               <FormLabel>Select File</FormLabel>
               <FormControl>
@@ -175,12 +120,11 @@ export default function ClientFileUploadForm({
             type="button"
             onClick={handlePrevious}
             variant="outline"
-            disabled={isUploading}
           >
             Previous
           </Button>
-          <Button type="submit" disabled={isUploading}>
-            {isUploading ? "Uploading..." : "Submit"}
+          <Button type="submit" disabled={isPending}>
+            {isPending ? "Uploading..." : "Submit"}
           </Button>
         </div>
       </form>

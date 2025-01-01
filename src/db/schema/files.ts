@@ -4,12 +4,13 @@ import { relations } from "drizzle-orm";
 
 export const files = pgTable("files", {
   id: uuid('id').primaryKey().defaultRandom(),
+  documentId: varchar("document_id", { length: 255 }),
   clientId: uuid("client_id").references(() => clients.id, { onDelete: "cascade" }),
   name: varchar("name", { length: 255 }),
   webUrl: text("web_url"),
   mimeType: text("mime_type"),
   downloadUrl: text("download_url"),
-  size: text("size"),
+  size: integer("size"),
   uploadedAt: timestamp('uploaded_at', { mode: 'date' }).defaultNow().notNull(),
 });
 
