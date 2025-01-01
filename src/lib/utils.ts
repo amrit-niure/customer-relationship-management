@@ -15,5 +15,6 @@ export function sanitizeData(data: Record<string, any> | undefined): Record<stri
       key,
       value === null ? undefined : value, // Convert null to undefined
     ])
-  );
+  ) as Record<string, string | undefined>;
 }
+
