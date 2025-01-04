@@ -45,6 +45,8 @@ const TeamForm: FC<TeamFormProps> = ({
   memberId,
 }) => {
   const { toast } = useToast();
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars 
   const { password, ...rest } = initialValues || {};
   const valuesToPopulate = { ...rest, password: "" };
   const form = useForm<ISignUp>({

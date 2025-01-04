@@ -43,7 +43,7 @@ export default function TeamTable({ teamMembers }: TeamTableProps) {
     try {
       await deleteExecute({ id });
     } catch (error) {
-    toast("Failed to delete user");
+    toast("Failed to delete user with error : " + error);
     }
   };
 

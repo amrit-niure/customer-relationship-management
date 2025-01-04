@@ -1,6 +1,6 @@
 "use server"
 import { authenticatedAction } from "@/lib/safe-action";
-import { clientSchema, clientSchemaFull } from "./schema";
+import { clientSchemaFull } from "./schema";
 import { rateLimitByKey } from "@/lib/limiter";
 import { sendEmail } from "@/lib/email";
 import { revalidatePath } from "next/cache";

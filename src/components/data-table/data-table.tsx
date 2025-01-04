@@ -26,7 +26,7 @@ import { DataTableToolbar } from "@/app/dashboard/clients/components/table/toolb
 
 
 // Define the fuzzy filter function
-const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
+const fuzzyFilter: FilterFn<any> = (row, columnId, value) => {
   // Get the cell value
   const cellValue = row.getValue(columnId) as string
   if (!cellValue) return false

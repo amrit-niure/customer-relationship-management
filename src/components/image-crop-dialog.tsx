@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import ReactCrop, { Crop } from 'react-image-crop';
+import React, { useState, useRef } from "react";
+import ReactCrop, { Crop } from "react-image-crop";
 import {
   Dialog,
   DialogContent,
@@ -8,7 +8,8 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import 'react-image-crop/dist/ReactCrop.css'
+import "react-image-crop/dist/ReactCrop.css";
+import Image from "next/image";
 
 interface ImageCropDialogProps {
   open: boolean;
@@ -29,14 +30,14 @@ const ImageCropDialog = ({
   aspectRatio = 1,
   circularCrop = false,
   maxHeight = 500,
-  title = "Crop Image"
+  title = "Crop Image",
 }: ImageCropDialogProps) => {
   const [crop, setCrop] = useState<Crop>({
-    unit: '%',
+    unit: "%",
     width: 90,
     x: 5,
     y: 5,
-    height: aspectRatio ? 90 * aspectRatio : 90
+    height: aspectRatio ? 90 * aspectRatio : 90,
   });
   const [completedCrop, setCompletedCrop] = useState<Crop | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
@@ -44,13 +45,13 @@ const ImageCropDialog = ({
   const getCroppedImg = async () => {
     if (!completedCrop || !imageRef.current) return null;
 
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     const scaleX = imageRef.current.naturalWidth / imageRef.current.width;
     const scaleY = imageRef.current.naturalHeight / imageRef.current.height;
 
     canvas.width = completedCrop.width;
     canvas.height = completedCrop.height;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
 
     if (!ctx) return null;
 
@@ -74,7 +75,7 @@ const ImageCropDialog = ({
       const radius = Math.min(canvas.width, canvas.height) / 2;
 
       // Create a circular clip path
-      ctx.globalCompositeOperation = 'destination-in';
+      ctx.globalCompositeOperation = "destination-in";
       ctx.beginPath();
       ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
       ctx.closePath();
@@ -84,15 +85,15 @@ const ImageCropDialog = ({
     return new Promise<string>((resolve) => {
       canvas.toBlob((blob) => {
         if (!blob) {
-          resolve('');
+          resolve("");
           return;
         }
         resolve(URL.createObjectURL(blob));
-      }, 'image/jpeg');
+      }, "image/jpeg");
     });
   };
 
-  const handleCropComplete = (crop: Crop, percentCrop: Crop) => {
+  const handleCropComplete = (crop: Crop) => {
     setCompletedCrop(crop);
   };
 
@@ -119,13 +120,16 @@ const ImageCropDialog = ({
               aspect={aspectRatio}
               circularCrop={circularCrop}
             >
-              <img
-                ref={imageRef}
-                src={imageSrc}
-                alt="Crop"
-                className="max-w-full"
-                style={{ maxHeight: `${maxHeight}px` }}
-              />
+              <div>
+                <Image
+                  ref={imageRef}
+                  src={imageSrc}
+                  alt="Crop"
+                  width={maxHeight}
+                  height={10}
+                  layout="responsive"
+                />
+              </div>
             </ReactCrop>
           </div>
         )}
