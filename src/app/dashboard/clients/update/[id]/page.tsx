@@ -3,6 +3,7 @@ import { getClientAction } from "../../actions";
 import FetchErrorPage from "@/components/FetchErrorPage";
 import { ClientMultiStepForm, FormData } from "../../create/components/multi-step-form";
 import { sanitizeData } from "@/lib/utils";
+import PageHeaderWithoutForm from "@/components/headers/page-header-without-form";
 
 interface UpdatePageProps {
   params: Promise<{ id: string }>;
@@ -40,6 +41,10 @@ const UpdatePage: FC<UpdatePageProps> = async ({ params }) => {
   }
   return (
     <div>
+       <PageHeaderWithoutForm
+        header="Update Client"
+        description="Update client details"
+      />
      <ClientMultiStepForm defaultFormData={defaultFormData} isUpdate={true}/>
     </div>
   );
