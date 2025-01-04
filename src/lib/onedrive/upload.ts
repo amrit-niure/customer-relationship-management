@@ -56,14 +56,8 @@ export async function uploadToOneDrive({
   
       // Get the final drive item
       const driveItem = await graphClient.api(`/drive/${folderPath === "root" ? "root" : `root:/${folderPath}`}/${fileName}`).get();
-      if(driveItem){
-        console.log('File Uploaded successfully', driveItem);
-      }
       return { success: true, data: driveItem };
     } catch (error) {
-      // console.error("Error uploading to OneDrive:", error);
-      // const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
-      // return { success: false, error: errorMessage };
       throw error;
     }
   }

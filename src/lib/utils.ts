@@ -18,3 +18,7 @@ export function sanitizeData(data: Record<string, any> | undefined): Record<stri
   ) as Record<string, string | undefined>;
 }
 
+
+export const getExtension = (fileName: string) => fileName.includes(".") ? `.${fileName.split(".").pop()}` : null;
+
+

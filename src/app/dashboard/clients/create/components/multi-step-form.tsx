@@ -51,6 +51,7 @@ export const ClientMultiStepForm: React.FC<ClientMultiStepFormProps> = ({
       ...prev,
       ...update,
     }));
+
   };
 
   const handleNext = () => {
@@ -79,6 +80,7 @@ export const ClientMultiStepForm: React.FC<ClientMultiStepFormProps> = ({
   );
 
   const onSubmit = async (formData: FormData) => {
+    console.log("This is the form data ", formData)
     const payload: IClientFull = {
       clientBasicInfo: formData.clientBasicInfo,
       clientVisaInfo: formData.clientVisaInfo,

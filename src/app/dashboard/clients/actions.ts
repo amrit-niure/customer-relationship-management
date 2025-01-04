@@ -15,6 +15,7 @@ import { updateClientUseCase } from "@/use-cases/clients/update-client.use-case"
 import { createClientFilesUseCase } from "@/use-cases/files/create-files.use-case";
 import { uploadToOneDrive } from '@/lib/onedrive/upload';
 import { uploadFileUseCase } from "@/use-cases/files/upload-file.use-case";
+import { getExtension } from "@/lib/utils";
 
 // File upload action with proper typing
 export async function uploadFileAction(
@@ -57,10 +58,28 @@ export const createClientAction = authenticatedAction
             if (!currentUser) {
                 throw new AuthenticationError();
             }
+            const payload = { ...input.clientBasicInfo, ...input.clientVisaInfo, createdBy: currentUser?.id, image: null };
 
-            // Create client
-            const payload = { ...input.clientBasicInfo, ...input.clientVisaInfo, createdBy: currentUser?.id };
             const client = await createClientUseCase(payload);
+
+            // upload profile pic to onedrive 
+            const profilePic = input.clientBasicInfo.image;
+            if (profilePic) {
+                const imageName = `profile-image${getExtension(profilePic.name)}`;
+                const uploadedFile = await uploadFileUseCase(profilePic, profilePic.name, `Apply World CRM/Clients/${input?.clientBasicInfo?.firstName} ${input?.clientBasicInfo?.lastName}`);
+
+                const filePayload = {
+                    ...uploadedFile.data,
+                    uploadedAt: new Date(uploadedFile.data.uploadedAt),
+                };
+
+                // Update client image with web URL
+                await updateClientUseCase({ image: filePayload.webUrl }, client.id);
+                // create the file record in database 
+                const payload = [filePayload];
+                await createClientFilesUseCase(payload, client.id);
+            }
+
 
             const files = input.clientDocuments?.files || [];
             if (files.length > 0) {
@@ -100,8 +119,13 @@ export const updateClientAction = authenticatedAction
         if (!currentUser) {
             throw new AuthenticationError()
         }
-        const payload = {...input.clientBasicInfo, ...input.clientVisaInfo, updatedBy: currentUser?.id };
-        const updated =  updateClientUseCase(payload, input.clientBasicInfo.id!);
+        const payload = {
+            ...input.clientBasicInfo,
+            ...input.clientVisaInfo,
+            updatedBy: currentUser?.id,
+            image: input.clientBasicInfo.image ? input.clientBasicInfo.image.toString() : null
+        };
+        const updated = updateClientUseCase(payload, input.clientBasicInfo.id!);
         revalidatePath("/dashboard/client");
         return updated;
     })

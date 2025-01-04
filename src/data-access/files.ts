@@ -3,8 +3,6 @@ import { File, files, NewFile } from "@/db/schema/files";
 import { handleDatabaseError } from "@/errors/database";
 
 export const createFileRecord = async (input: NewFile[], clientId: string): Promise < File[] > => {
-    console.log("Create File Record Input :", input)
-    console.log("Client Id:", clientId)
     try {
         const fileData = input.map(file => ({
             ...file,
