@@ -3,7 +3,8 @@ import {
   uuid,
   varchar,
   timestamp,
-  index
+  index,
+  text
 } from "drizzle-orm/pg-core";
 import {
   roleEnum,
@@ -24,6 +25,7 @@ export const users = pgTable("users", {
   middleName: varchar("middle_name", { length: 255 }),
   lastName: varchar("last_name", { length: 255 }).notNull(),
   email: varchar("email", { length: 255 }).notNull().unique(),
+  image: text('image'),
   hashedPassword: varchar("hashed_password").notNull(),
   role: roleEnum("role").default("USER").notNull(),
   title: varchar("title", { length: 255 }).notNull(),
@@ -39,7 +41,7 @@ export const users = pgTable("users", {
 }, (table) => [
   index('users_email_idx').on(table.email),
   index('users_phone_idx').on(table.phoneNumber),
-  
+
 ]);
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -63,7 +65,7 @@ export const usersRelations = relations(users, ({ many }) => ({
   sessions: many(sessions),
 }));
 
-export type User = typeof users.$inferSelect; 
-export type NewUser = typeof users.$inferInsert; 
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;
 
 

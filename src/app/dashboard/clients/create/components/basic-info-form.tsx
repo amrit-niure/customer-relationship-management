@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -19,8 +20,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { clientBasicInfoSchema, IClientBasicInfo, IClientFull } from "../../schema";
+import {
+  clientBasicInfoSchema,
+  IClientBasicInfo,
+  IClientFull,
+} from "../../schema";
 import { sanitizeData } from "@/lib/utils";
+import { useEffect, useState } from "react";
+import {
+  FileInput,
+  FileUploader,
+  FileUploaderContent,
+  FileUploaderItem,
+} from "@/components/ui/file-upload";
+import { CloudUpload, ImageDown } from "lucide-react";
+import Image from "next/image";
 
 interface ClientBasicInfoFormProps {
   formData?: IClientFull;
@@ -33,6 +47,18 @@ export default function ClientBasicInfoForm({
   updateForm,
   handleNext,
 }: ClientBasicInfoFormProps) {
+  const [files, setFiles] = useState<File[] | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+
+  const dropZoneConfig = {
+    maxFiles: 1,
+    maxSize: 1024 * 1024 * 4,
+    multiple: false,
+    accept: {
+      "image/*": [".png", ".jpg", ".jpeg", ".gif", ".svg"],
+    },
+  };
+
   const form = useForm<IClientBasicInfo>({
     resolver: zodResolver(clientBasicInfoSchema),
     defaultValues: sanitizeData(formData?.clientBasicInfo) || {
@@ -46,6 +72,18 @@ export default function ClientBasicInfoForm({
       isActive: true,
     },
   });
+  useEffect(() => {
+    if (!files || files.length === 0) {
+      setPreview(null);
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(files[0]);
+    setPreview(objectUrl);
+
+    // Free memory when component unmounts
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [files]);
 
   const onSubmit = (data: IClientBasicInfo) => {
     updateForm(data);
@@ -181,6 +219,80 @@ export default function ClientBasicInfoForm({
               </FormItem>
             )}
           />
+        </div>
+        <div className="grid grid-cols-12 gap-4">
+          <div className="md:col-span-6 col-span-12">
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Profile Picture</FormLabel>
+                  <FormControl>
+                    <div>
+                      <FormDescription>
+                        Select an image for avatar.
+                      </FormDescription>
+                      <FileUploader
+                        value={files}
+                        onValueChange={setFiles}
+                        dropzoneOptions={dropZoneConfig}
+                        className="relative bg-background rounded-lg py-4 px-1 w-fit"
+                      >
+                        {!preview && (
+                          <FileInput
+                            id="fileInput"
+                            className="outline-dashed outline-1 outline-slate-500"
+                          >
+                            <div className="flex items-center justify-center flex-col p-4 w-fit">
+                              <CloudUpload className="text-gray-500 w-6 h-6" />
+                              <p className="mb-1 text-xs text-gray-500 dark:text-gray-400">
+                                <span className="font-semibold">
+                                  Click to upload
+                                </span>
+                                &nbsp; or drag and drop
+                              </p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400">
+                                SVG, PNG, JPG or GIF
+                              </p>
+                            </div>
+                          </FileInput>
+                        )}
+                        {preview && (
+                          <div className=" flex  flex-col gap-4 relative w-32 h-32">
+                            <Image
+                              src={preview}
+                              alt="Preview"
+                              width={100}
+                              height={100}
+                              className="w-full h-full object-cover rounded-lg"
+                            />
+                          </div>
+                        )}
+                        <FileUploaderContent>
+                          {files &&
+                            files.length > 0 &&
+                            files.map((file, i) => (
+                              <FileUploaderItem
+                                key={i}
+                                index={i}
+                                className="w-32"
+                              >
+                                <ImageDown className="h-4 w-4 stroke-current" />
+                                <span className="truncate block">
+                                  {file.name}
+                                </span>
+                              </FileUploaderItem>
+                            ))}
+                        </FileUploaderContent>
+                      </FileUploader>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
         </div>
         <div className="flex items-center">
           <Button type="submit" className="ml-auto">

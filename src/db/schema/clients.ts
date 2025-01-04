@@ -22,6 +22,7 @@ import { files } from "./files";
     middleName: varchar('middle_name',{ length: 255 }),
     lastName: varchar('last_name',{ length: 255 }).notNull(),
     email: varchar('email',{ length: 255 }).notNull().unique(),
+    image: text('image'),
     phone: varchar('phone').notNull().unique(),
     address: text('address'),
     passportNumber: varchar('passport_number',{ length: 255 }).unique(),

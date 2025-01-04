@@ -19,6 +19,7 @@ export const clientBasicInfoSchema = z.object({
   id: z.string().optional(),
   firstName: z.string().min(3).max(100),
   middleName: z.string().max(100).optional(),
+  image: z.instanceof(File).optional(),
   lastName: z.string().min(3).max(100),
   email: z.string().email("Invalid email address"),
   phone: z.string().min(10, "Phone number must have at least 10 digits").max(15, "Phone number is too long"),
