@@ -66,7 +66,7 @@ export const createClientAction = authenticatedAction
             const profilePic = input.clientBasicInfo.image;
             if (profilePic) {
                 const imageName = `profile-image${getExtension(profilePic.name)}`;
-                const uploadedFile = await uploadFileUseCase(profilePic, profilePic.name, `Apply World CRM/Clients/${input?.clientBasicInfo?.firstName} ${input?.clientBasicInfo?.lastName}`);
+                const uploadedFile = await uploadFileUseCase(profilePic, imageName, `Apply World CRM/Clients/${input?.clientBasicInfo?.firstName} ${input?.clientBasicInfo?.lastName}`);
 
                 const filePayload = {
                     ...uploadedFile.data,
