@@ -45,14 +45,10 @@ export async function sendEmail({
         });
 
         if (error) {
-            console.error("Failed to send email:", error);
             throw error;
         }
-
-        console.log("Email sent successfully:", data);
         return data;
     } catch (error) {
-        console.error("Error sending email:", error);
         throw error;
     }
 }

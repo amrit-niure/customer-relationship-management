@@ -11,6 +11,7 @@ import {
   useReactTable,
   getSortedRowModel,
   getPaginationRowModel,
+  FilterFn,
 } from "@tanstack/react-table";
 import {
   Table,
@@ -21,7 +22,21 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { DataTablePagination } from "@/components/data-table/pagination";
-import { DataTableToolbar } from "@/app/dashboard/clients/components/toolbar";
+import { DataTableToolbar } from "@/app/dashboard/clients/components/table/toolbar";
+
+
+// Define the fuzzy filter function
+const fuzzyFilter: FilterFn<any> = (row, columnId, value) => {
+  // Get the cell value
+  const cellValue = row.getValue(columnId) as string
+  if (!cellValue) return false
+
+  // Convert to string if it isn't already
+  const searchValue = value.toString().toLowerCase()
+  const itemValue = cellValue.toString().toLowerCase()
+
+  return itemValue.includes(searchValue)
+}
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -36,6 +51,7 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+  const [globalFilter, setGlobalFilter] = React.useState("")
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const table = useReactTable({
@@ -50,9 +66,17 @@ export function DataTable<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
     state: {
       sorting,
+      globalFilter,
       columnFilters,
       columnVisibility,
     },
+    enableGlobalFilter: true,
+    globalFilterFn: fuzzyFilter,
+    // Define which columns to include in global search
+    filterFns: {
+      fuzzy: fuzzyFilter,
+    },
+    onGlobalFilterChange: setGlobalFilter,
   });
 
   return (

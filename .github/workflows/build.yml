@@ -33,7 +33,7 @@ jobs:
       - name: Run Database Migrations
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: npm run migrate
+        run: npx drizzle-kit push
         
       - name: Seed Database
         env:

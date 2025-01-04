@@ -1,4 +1,6 @@
-"use client";import { useState } from "react";import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+"use client";
+import { useState } from "react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
@@ -17,7 +19,8 @@ import TeamForm from "./team-form";
 import { User } from "@/db/schema/users";
 import { deleteUserAction } from "../actions";
 import { useServerAction } from "zsa-react";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
+
 
 interface TeamTableProps {
   teamMembers: User[];
@@ -26,23 +29,13 @@ interface TeamTableProps {
 export default function TeamTable({ teamMembers }: TeamTableProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<User | null>(null);
-  const { toast } = useToast();
 
   const { execute: deleteExecute } = useServerAction(deleteUserAction, {
     onError(error) {
-      toast({
-        title: "Delete Failed",
-        description:
-          error.err.message || "An unexpected error occurred during deletion",
-        variant: "destructive",
-      });
+      toast(error.err.message || "Failed to delete user");
     },
     onSuccess() {
-      toast({
-        title: "User Deleted",
-        description: "The user has been successfully deleted.",
-      });
-      // Optionally, trigger a refresh of the data here or handle optimistic updates
+      toast("The user has been deleted successfully");
     },
   });
 
@@ -50,7 +43,7 @@ export default function TeamTable({ teamMembers }: TeamTableProps) {
     try {
       await deleteExecute({ id });
     } catch (error) {
-      console.error("Failed to delete user:", error);
+    toast("Failed to delete user with error : " + error);
     }
   };
 
@@ -59,10 +52,10 @@ export default function TeamTable({ teamMembers }: TeamTableProps) {
   };
   return (
     <>
-      <Tabs defaultValue="grid" className="space-y-4">
+      <Tabs defaultValue="table" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="grid">Grid View</TabsTrigger>
           <TabsTrigger value="table">Table View</TabsTrigger>
+          <TabsTrigger value="grid">Grid View</TabsTrigger>
         </TabsList>
 
         <TabsContent value="grid" className="space-y-4">

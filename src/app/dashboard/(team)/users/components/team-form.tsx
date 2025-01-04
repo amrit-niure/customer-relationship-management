@@ -45,9 +45,13 @@ const TeamForm: FC<TeamFormProps> = ({
   memberId,
 }) => {
   const { toast } = useToast();
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars 
+  const { password, ...rest } = initialValues || {};
+  const valuesToPopulate = { ...rest, password: "" };
   const form = useForm<ISignUp>({
     resolver: zodResolver(userSchema),
-    defaultValues: initialValues || {
+    defaultValues: valuesToPopulate || {
       firstName: "",
       middleName: "",
       lastName: "",
@@ -189,7 +193,7 @@ const { execute, isPending } = useServerAction(
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input type="password" {...field} />
+                  <Input type="password" {...field}/>
                 </FormControl>
                 <FormMessage />
               </FormItem>

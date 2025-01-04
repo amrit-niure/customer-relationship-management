@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
         lt(appointments.appointmentDateTime, currentDate),
         eq(appointments.status, 'SCHEDULED')
       ));
-    console.log(expiredAppointments)
+
     // Update the status of expired appointments
     if (expiredAppointments.length > 0) {
       await database
