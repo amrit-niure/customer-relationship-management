@@ -43,6 +43,7 @@ interface Row {
   original: {
     id: string;
     firstName: string;
+    middleName: string;
     lastName: string;
     email: string;
     phone: string;
@@ -59,6 +60,7 @@ export const ClientsTableActionsCell = ({ row }: { row: Row }) => {
   };
   const queryParams = new URLSearchParams({
     firstName: row.original.firstName,
+    middleName: row.original.middleName || "",
     lastName: row.original.lastName,
     email: row.original.email,
     phone: row.original.phone,

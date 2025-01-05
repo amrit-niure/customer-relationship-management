@@ -11,12 +11,14 @@ import { useSession } from "../providers/session-provider";
 import AppointmentForm from "@/app/dashboard/appointments/components/appointment-form";
 import TeamForm from "@/app/dashboard/(team)/users/components/team-form";
 import { useSearchParams } from "next/navigation";
+import OfficeVisitForm from "@/app/dashboard/office-visits/components/office-visit-form";
+
 
 interface PageHeaderProps {
   header: string;
   description: string;
   buttonText?: string;
-  formType: "TEAM" | "APPOINTMENT";
+  formType: "TEAM" | "APPOINTMENT" | "OFFFICE_VISIT";
 }
 
 const PageHeaderWithForm: FC<PageHeaderProps> = ({
@@ -36,6 +38,8 @@ const PageHeaderWithForm: FC<PageHeaderProps> = ({
         return <TeamForm onClose={() => setIsOpen(false)} />;
       case "APPOINTMENT":
         return <AppointmentForm onClose={() => setIsOpen(false)} />;
+      case "OFFFICE_VISIT":
+        return <OfficeVisitForm onClose={() => setIsOpen(false)} />;
       default:
         return null;
     }

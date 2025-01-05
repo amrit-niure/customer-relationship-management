@@ -1,4 +1,5 @@
-"use client";import PageHeaderWithForm from "@/components/headers/page-header-with-form";
+"use client";
+import PageHeaderWithForm from "@/components/headers/page-header-with-form";
 import React from "react";
 
 const page = () => {

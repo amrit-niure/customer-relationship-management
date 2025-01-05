@@ -2,12 +2,8 @@
 import { FC } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  SmartDatetimeInput
-} from "@/components/ui/smart-datetime-input"
-import {
-  PhoneInput
-} from "@/components/ui/phone-input";
+import { SmartDatetimeInput } from "@/components/ui/smart-datetime-input";
+import { PhoneInput } from "@/components/ui/phone-input";
 import {
   Form,
   FormControl,
@@ -40,19 +36,21 @@ interface AppointmentFormProps {
 }
 
 const AppointmentForm: FC<AppointmentFormProps> = ({ onClose }) => {
-  const searchParams = useSearchParams()
- 
+  const searchParams = useSearchParams();
+
   const firstName = searchParams.get("firstName");
+  const middleName = searchParams.get("middleName");
   const lastName = searchParams.get("lastName");
   const email = searchParams.get("email");
   const phone = searchParams.get("phone");
   const address = searchParams.get("address");
-  console.log("First Name: ", firstName)
+  console.log("First Name: ", firstName);
 
   const form = useForm<IAppointment>({
     resolver: zodResolver(appointmentSchema),
     defaultValues: {
       firstName: firstName ? firstName : "",
+      middleName: middleName ? middleName : "",
       lastName: lastName ? lastName : "",
       email: email ? email : "",
       address: address ? address : "",
@@ -82,43 +80,52 @@ const AppointmentForm: FC<AppointmentFormProps> = ({ onClose }) => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 max-w-3xl mx-auto py-10"
+          className="space-y-4 max-w-3xl mx-auto py-10"
         >
-          <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-6">
-              <FormField
-                control={form.control}
-                name="firstName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>First Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Amrit" type="text" {...field} />
-                    </FormControl>
+          <FormField
+            control={form.control}
+            name="firstName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>First Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="" type="text" {...field} />
+                </FormControl>
 
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-            <div className="col-span-6">
-              <FormField
-                control={form.control}
-                name="lastName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Last Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Niure" type="text" {...field} />
-                    </FormControl>
+          <FormField
+            control={form.control}
+            name="middleName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Middle Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="" type="text" {...field} />
+                </FormControl>
 
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="lastName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Last Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="" type="text" {...field} />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <FormField
             control={form.control}
