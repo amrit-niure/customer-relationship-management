@@ -305,14 +305,14 @@ async function main() {
     const startTime = Date.now();
     console.log("Seeding Started...");
 
-    // await _seedAdmin();
-    // await _seedUsers();
-    // await _seedClients();
-    // await _seedAppointments();
-    // await _seedClientAssignments();
-    // await _seedOfficeVisits();
-    // await _seedTasks();
-    // await _seedTaskComments();
+    await _seedAdmin();
+    await _seedUsers();
+    await _seedClients();
+    await _seedAppointments();
+    await _seedClientAssignments();
+    await _seedOfficeVisits();
+    await _seedTasks();
+    await _seedTaskComments();
 
     const endTime = Date.now();
     const durationInMs = endTime - startTime;

@@ -1,45 +1,13 @@
-DO $$ 
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'appointment_status') THEN
-        CREATE TYPE "public"."appointment_status" AS ENUM('SCHEDULED', 'COMPLETED', 'CANCELLED', 'EXPIRED');
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'branch') THEN
-        CREATE TYPE "public"."branch" AS ENUM('AUSTRALIA', 'PHILIPPINES', 'DUBAI', 'NEPAL');
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'client_assignment_status') THEN
-        CREATE TYPE "public"."client_assignment_status" AS ENUM('ACTIVE', 'PENDING', 'INACTIVE');
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'office_visit_status') THEN
-        CREATE TYPE "public"."office_visit_status" AS ENUM('WAITING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED');
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_role') THEN
-        CREATE TYPE "public"."user_role" AS ENUM('ADMIN', 'MANAGER', 'AGENT', 'MIGRTATION_AGENT', 'USER');
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'task_priority') THEN
-        CREATE TYPE "public"."task_priority" AS ENUM('LOW', 'MEDIUM', 'HIGH', 'CRITICAL');
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'task_status') THEN
-        CREATE TYPE "public"."task_status" AS ENUM('PENDING', 'IN_PROGRESS', 'BLOCKED', 'COMPLETED', 'CANCELLED');
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'task_type') THEN
-        CREATE TYPE "public"."task_type" AS ENUM('CLIENT_FOLLOW_UP', 'DOCUMENT_PREPARATION', 'VISA_APPLICATION_REVIEW', 'CONSULTATION_PREP', 'INTERNAL_ADMIN', 'COMMUNICATION', 'MARKETING', 'OTHER');
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_status') THEN
-        CREATE TYPE "public"."user_status" AS ENUM('ACTIVE', 'INACTIVE', 'SUSPENDED');
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'visa_type') THEN
-        CREATE TYPE "public"."visa_type" AS ENUM('SUB_500', 'SUB_482', 'SUB_485', 'SUB_407', 'SUB_186', 'SUB_189', 'SUB_190', 'SUB_600', 'SUB_820', 'SUB_801');
-    END IF;
-END $$;
+CREATE TYPE "public"."appointment_status" AS ENUM('SCHEDULED', 'COMPLETED', 'CANCELLED', 'EXPIRED');--> statement-breakpoint
+CREATE TYPE "public"."branch" AS ENUM('AUSTRALIA', 'PHILIPPINES', 'DUBAI', 'NEPAL');--> statement-breakpoint
+CREATE TYPE "public"."client_assignment_status" AS ENUM('ACTIVE', 'PENDING', 'INACTIVE');--> statement-breakpoint
+CREATE TYPE "public"."office_visit_status" AS ENUM('WAITING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED');--> statement-breakpoint
+CREATE TYPE "public"."user_role" AS ENUM('ADMIN', 'MANAGER', 'AGENT', 'MIGRTATION_AGENT', 'USER');--> statement-breakpoint
+CREATE TYPE "public"."task_priority" AS ENUM('LOW', 'MEDIUM', 'HIGH', 'CRITICAL');--> statement-breakpoint
+CREATE TYPE "public"."task_status" AS ENUM('PENDING', 'IN_PROGRESS', 'BLOCKED', 'COMPLETED', 'CANCELLED');--> statement-breakpoint
+CREATE TYPE "public"."task_type" AS ENUM('CLIENT_FOLLOW_UP', 'DOCUMENT_PREPARATION', 'VISA_APPLICATION_REVIEW', 'CONSULTATION_PREP', 'INTERNAL_ADMIN', 'COMMUNICATION', 'MARKETING', 'OTHER');--> statement-breakpoint
+CREATE TYPE "public"."user_status" AS ENUM('ACTIVE', 'INACTIVE', 'SUSPENDED');--> statement-breakpoint
+CREATE TYPE "public"."visa_type" AS ENUM('SUB_500', 'SUB_482', 'SUB_485', 'SUB_407', 'SUB_186', 'SUB_189', 'SUB_190', 'SUB_600', 'SUB_820', 'SUB_801');--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "appointments" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"client_id" uuid NOT NULL,
@@ -71,6 +39,7 @@ CREATE TABLE IF NOT EXISTS "clients" (
 	"middle_name" varchar(255),
 	"last_name" varchar(255) NOT NULL,
 	"email" varchar(255) NOT NULL,
+	"image" text,
 	"phone" varchar NOT NULL,
 	"address" text,
 	"passport_number" varchar(255),
@@ -91,12 +60,13 @@ CREATE TABLE IF NOT EXISTS "clients" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "files" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"document_id" varchar(255),
 	"client_id" uuid,
 	"name" varchar(255),
 	"web_url" text,
 	"mime_type" text,
 	"download_url" text,
-	"size" text,
+	"size" integer,
 	"uploaded_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
@@ -155,6 +125,7 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"middle_name" varchar(255),
 	"last_name" varchar(255) NOT NULL,
 	"email" varchar(255) NOT NULL,
+	"image" text,
 	"hashed_password" varchar NOT NULL,
 	"role" "user_role" DEFAULT 'USER' NOT NULL,
 	"title" varchar(255) NOT NULL,

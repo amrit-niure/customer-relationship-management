@@ -12,6 +12,7 @@
     "migrate": "drizzle-kit migrate",
     "studio": "drizzle-kit studio",
     "ps": "drizzle-kit push && drizzle-kit studio",
+    "gms": "drizzle-kit generate && drizzle-kit migrate && drizzle-kit studio",
     "seed": "tsx src/db/seed.ts",
     "email": "email dev --dir src/components/emails"
   },

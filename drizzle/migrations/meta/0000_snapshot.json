@@ -1,5 +1,5 @@
 {
-  "id": "aebddb68-c4cb-4601-966b-1b569bb7b4d8",
+  "id": "33c7af71-21de-42d3-9e9f-e01861c933ff",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -306,6 +306,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "image": {
+          "name": "image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "phone": {
           "name": "phone",
           "type": "varchar",
@@ -504,6 +510,12 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
+        "document_id": {
+          "name": "document_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
         "client_id": {
           "name": "client_id",
           "type": "uuid",
@@ -536,7 +548,7 @@
         },
         "size": {
           "name": "size",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
@@ -1084,6 +1096,12 @@
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
+        },
+        "image": {
+          "name": "image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "hashed_password": {
           "name": "hashed_password",
