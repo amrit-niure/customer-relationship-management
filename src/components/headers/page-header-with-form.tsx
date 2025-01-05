@@ -10,6 +10,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useSession } from "../providers/session-provider";
 import AppointmentForm from "@/app/dashboard/appointments/components/appointment-form";
 import TeamForm from "@/app/dashboard/(team)/users/components/team-form";
+import { useSearchParams } from "next/navigation";
 
 interface PageHeaderProps {
   header: string;
@@ -25,7 +26,9 @@ const PageHeaderWithForm: FC<PageHeaderProps> = ({
   formType,
 }) => {
   const user  = useSession();
-  const [isOpen, setIsOpen] = useState(false);
+  const searchParams = useSearchParams()
+  const referred = searchParams.get("referred") === "true";
+  const [isOpen, setIsOpen] = useState(referred);
 
   const renderForm = () => {
     switch (formType) {

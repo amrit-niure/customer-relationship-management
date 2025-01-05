@@ -33,23 +33,32 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useSearchParams } from "next/navigation";
 
 interface AppointmentFormProps {
   onClose: () => void;
 }
 
 const AppointmentForm: FC<AppointmentFormProps> = ({ onClose }) => {
+  const searchParams = useSearchParams()
+ 
+  const firstName = searchParams.get("firstName");
+  const lastName = searchParams.get("lastName");
+  const email = searchParams.get("email");
+  const phone = searchParams.get("phone");
+  const address = searchParams.get("address");
+  console.log("First Name: ", firstName)
+
   const form = useForm<IAppointment>({
     resolver: zodResolver(appointmentSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      address: "",
-      phone: "",
+      firstName: firstName ? firstName : "",
+      lastName: lastName ? lastName : "",
+      email: email ? email : "",
+      address: address ? address : "",
+      phone: phone ? phone : "",
       status: "SCHEDULED",
       dateTime: new Date(),
-      reason: "",
     },
   });
 
