@@ -1,3 +1,4 @@
+"use server"
 import { rateLimitByKey } from "@/lib/limiter";
 import { authenticatedAction } from "@/lib/safe-action";
 import { getAllAppointmentsUseCase } from "@/use-cases/appointments/get-all-appointments.use-case";

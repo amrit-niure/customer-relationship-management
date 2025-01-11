@@ -43,6 +43,7 @@ export const columns: ColumnDef<Appointments & { client: Client }>[] = [
     ),
   },
   {
+    id: "appointmentDate",
     accessorKey: "appointmentDateTime",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date" />
@@ -57,6 +58,7 @@ export const columns: ColumnDef<Appointments & { client: Client }>[] = [
     },
   },
   {
+    id: "appointmentTime",
     accessorKey: "appointmentDateTime",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Time" />

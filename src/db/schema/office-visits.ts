@@ -40,3 +40,6 @@ export const officeVisitsRelations = relations(officeVisits, ({ one }) => ({
     references: [appointments.id]
   })
 }));
+
+export type OfficeVisits = typeof officeVisits.$inferSelect; 
+export type NewOfficeVisits = typeof officeVisits.$inferInsert; 

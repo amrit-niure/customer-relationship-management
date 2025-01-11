@@ -17,15 +17,19 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Client } from "@/db/schema/clients";
+import { User } from "@/db/schema";
+import { Appointments } from "@/db/schema/appointments";
 
 interface Row {
   original: {
     id: string;
     client: Client;
+    appointment: Appointments;
+    agent: User
   };
 }
 
-export const AppointmentsTableActionCell = ({ row }: { row: Row }) => {
+export const OfficeVisitsTableActionCell = ({ row }: { row: Row }) => {
   //   const { execute, isPending } = useDeleteClient();
 
   const handleDelete = (e: React.MouseEvent, _id: string) => {
@@ -66,13 +70,6 @@ export const AppointmentsTableActionCell = ({ row }: { row: Row }) => {
             <span>Update</span>
           </DropdownMenuItem>
         </Link>
-        <Link href={`/dashboard/office-visits?${queryParams}`} passHref>
-          <DropdownMenuItem className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
-            <MapPin className="w-4 h-4 text-gray-600" />
-            <span>Mark Office Visit</span>
-          </DropdownMenuItem>
-        </Link>
-
         <DropdownMenuSeparator className="my-1 border-gray-200" />
         <DropdownMenuItem
           className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-100 cursor-pointer"
