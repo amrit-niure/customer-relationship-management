@@ -64,9 +64,10 @@ PhoneInput.displayName = "PhoneInput";
 const InputComponent = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
   ({ className, ...props }, ref) => (
     <Input
-      className={cn("rounded-e-lg rounded-s-none", className)}
+      className={cn("rounded-e-lg rounded-s-none z-50", className)}
       {...props}
       ref={ref}
+      
     />
   ),
 );
@@ -95,7 +96,7 @@ const CountrySelect = ({
   );
 
   return (
-    <Popover>
+    <Popover modal>
       <PopoverTrigger asChild>
         <Button
           type="button"
