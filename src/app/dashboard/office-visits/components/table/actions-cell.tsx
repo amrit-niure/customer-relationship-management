@@ -24,8 +24,8 @@ interface Row {
   original: {
     id: string;
     client: Client;
-    appointment: Appointments;
-    agent: User
+    appointment: Appointments | null ;
+    agent: User | null;
   };
 }
 
@@ -63,7 +63,7 @@ export const OfficeVisitsTableActionCell = ({ row }: { row: Row }) => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="my-1 border-gray-200" />
         <Link
-          href={`/dashboard/appointments?id=${row.original.id}&${queryParams}`}
+          href={`/dashboard/office-visits?id=${row.original.id}&${queryParams}`}
         >
           <DropdownMenuItem className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
             <Edit className="w-4 h-4 text-gray-600" />
