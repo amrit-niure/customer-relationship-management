@@ -1,18 +1,19 @@
-"use client";import { FC, useState } from "react";
-import {
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+"use client";
+import { FC, useEffect, useState } from "react";
+import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { useSession } from "../providers/session-provider";
 import AppointmentForm from "@/app/dashboard/appointments/components/appointment-form";
 import TeamForm from "@/app/dashboard/(team)/users/components/team-form";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import OfficeVisitForm from "@/app/dashboard/office-visits/components/office-visit-form";
-
 
 interface PageHeaderProps {
   header: string;
@@ -27,10 +28,16 @@ const PageHeaderWithForm: FC<PageHeaderProps> = ({
   buttonText,
   formType,
 }) => {
-  const user  = useSession();
-  const searchParams = useSearchParams()
+  const user = useSession();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const referred = searchParams.get("referred") === "true";
   const [isOpen, setIsOpen] = useState(referred);
+  const pathname = usePathname();
+  console.log(pathname);
+  useEffect(() => {
+    setIsOpen(referred);
+  }, [referred, setIsOpen]);
 
   const renderForm = () => {
     switch (formType) {
@@ -70,7 +77,13 @@ const PageHeaderWithForm: FC<PageHeaderProps> = ({
               )}
             </SheetTrigger>
           )}
-          <SheetContent className="min-w-[400px] md:min-w-[600px] overflow-y-auto">
+          <SheetContent
+            className="min-w-[400px] md:min-w-[600px] overflow-y-auto"
+            onInteractOutside={(e) => {
+              e.preventDefault();
+            }}
+            onClose={() => router.push(pathname)}
+          >
             {renderForm()}
           </SheetContent>
         </Sheet>

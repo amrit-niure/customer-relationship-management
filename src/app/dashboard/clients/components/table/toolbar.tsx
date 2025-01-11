@@ -1,5 +1,3 @@
-"use client"
-
 import { Table } from "@tanstack/react-table"
 import { X } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -15,7 +13,13 @@ interface DataTableToolbarProps<TData> {
 export function DataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
+  
   const isFiltered = table.getState().columnFilters.length > 0
+  
+  // Safely check if the column exists before trying to access it
+  const currentVisaColumn = table.getAllColumns().find(
+    (column) => column.id === "currentVisa"
+  )
 
   return (
     <div className="flex items-center justify-between py-4">
@@ -26,9 +30,9 @@ export function DataTableToolbar<TData>({
           onChange={(event) => table.setGlobalFilter(event.target.value)}
           className="h-8 w-[150px] lg:w-[250px]"
         />
-        {table.getColumn("currentVisa") && (
+        {currentVisaColumn && (
           <DataTableFacetedFilter
-            column={table.getColumn("currentVisa")}
+            column={currentVisaColumn}
             title="Visa"
             options={visas}
           />
@@ -43,7 +47,7 @@ export function DataTableToolbar<TData>({
             className="h-8 px-2 lg:px-3"
           >
             Reset
-            <X />
+            <X className="ml-2 h-4 w-4" />
           </Button>
         )}
       </div>
@@ -51,3 +55,5 @@ export function DataTableToolbar<TData>({
     </div>
   )
 }
+
+export default DataTableToolbar;

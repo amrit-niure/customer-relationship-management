@@ -1,5 +1,5 @@
 
-import { Calendar } from "lucide-react";
+import { Activity } from "lucide-react";
 import { getAllUsersAction } from "./actions";
 import TeamTable from "./components/team-table";
 import DisplayCard from "@/components/display-card";
@@ -25,25 +25,25 @@ export default withServerAuth(async function TeamPage() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 my-6">
         <DisplayCard
           description="This is a description"
-          icon={Calendar}
+          icon={Activity}
           title="Team Member"
           digit={23}
         />
         <DisplayCard
           description="This is a description"
-          icon={Calendar}
+          icon={Activity}
           title="Team Member"
           digit={23}
         />
         <DisplayCard
           description="This is a description"
-          icon={Calendar}
+          icon={Activity}
           title="Team Member"
           digit={23}
         />
         <DisplayCard
           description="This is a description"
-          icon={Calendar}
+          icon={Activity}
           title="Team Member"
           digit={23}
         />

@@ -44,7 +44,6 @@ const AppointmentForm: FC<AppointmentFormProps> = ({ onClose }) => {
   const email = searchParams.get("email");
   const phone = searchParams.get("phone");
   const address = searchParams.get("address");
-  console.log("First Name: ", firstName);
 
   const form = useForm<IAppointment>({
     resolver: zodResolver(appointmentSchema),
@@ -57,6 +56,7 @@ const AppointmentForm: FC<AppointmentFormProps> = ({ onClose }) => {
       phone: phone ? phone : "",
       status: "SCHEDULED",
       dateTime: new Date(),
+      reason: "",
     },
   });
 

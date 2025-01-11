@@ -1,6 +1,7 @@
 import * as z from "zod"
 
 export const officeVisitSchema = z.object({
+  appointmentId: z.string().optional(),
   firstName: z.string().min(3).max(100),
   middleName: z.string().max(100).optional(),
   lastName: z.string().min(3).max(100),

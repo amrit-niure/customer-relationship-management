@@ -1,7 +1,7 @@
 import DisplayCard from "@/components/display-card";
 import PageHeaderWithoutForm from "@/components/headers/page-header-without-form";
 import { withServerAuth } from "@/lib/protected-server-pages";
-import { Calendar } from "lucide-react";
+import { Activity } from "lucide-react";
 import { columns } from "./components/table/columns";
 import { DataLinkTable } from "../../../components/data-table/data-link-table";
 import { getAllClientsAction } from "./actions";
@@ -20,25 +20,25 @@ export default withServerAuth(async function Clients() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 my-6">
         <DisplayCard
           description={` +2% form previous week`}
-          icon={Calendar}
+          icon={Activity}
           title="Total Clients"
           digit={23}
         />
         <DisplayCard
           description="+5% form last Month"
-          icon={Calendar}
+          icon={Activity}
           title="This Month"
           digit={23}
         />
         <DisplayCard
           description="-5% from last week"
-          icon={Calendar}
+          icon={Activity}
           title="This week"
           digit={23}
         />
         <DisplayCard
           description="-3% from yesterday"
-          icon={Calendar}
+          icon={Activity}
           title="Today"
           digit={23}
         />

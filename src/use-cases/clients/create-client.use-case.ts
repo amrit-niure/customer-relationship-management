@@ -12,5 +12,5 @@ export async function createClientUseCase(input: NewClient) {
     if (existingUser) {
         throw new Error("User already exists");
     }
-    return await createClient(input)
+    return await createClient(input);
 }

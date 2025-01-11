@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import Link from "next/link";
 import {
@@ -17,54 +18,53 @@ import {
   Trash,
 } from "lucide-react";
 import { Button } from "../../../../../components/ui/button";
+import { useRouter } from "next/navigation";
 import { useServerAction } from "zsa-react";
 import { toast } from "@/hooks/use-toast";
 import { deleteClientAction } from "@/app/dashboard/clients/actions";
+import { Client } from "@/db/schema/clients";
 
 function useDeleteClient() {
-  return useServerAction(deleteClientAction, {
-    onSuccess() {
-      toast({
-        title: "Action Successful",
-        description: "The client record is deleted successfully",
-      });
-    },
-    onError(result) {
-      toast({
-        variant: "destructive",
-        description: result.err.message,
-      });
-    },
-  });
+  //   return useServerAction(deleteClientAction, {
+  //     onSuccess() {
+  //       toast({
+  //         title: "Action Successful",
+  //         description: "The client record is deleted successfully",
+  //       });
+  //     },
+  //     onError(result) {
+  //       toast({
+  //         variant: "destructive",
+  //         description: result.err.message,
+  //       });
+  //     },
+  //   });
+  return 0;
 }
 
 //  component for the cell content
 interface Row {
   original: {
     id: string;
-    firstName: string;
-    middleName: string | null;
-    lastName: string;
-    email: string;
-    phone: string;
-    address: string | null;
+    client: Client;
   };
 }
 
-export const ClientsTableActionsCell = ({ row }: { row: Row }) => {
-  const { execute, isPending } = useDeleteClient();
+export const AppointmentsTableActionCell = ({ row }: { row: Row }) => {
+  const router = useRouter()
+  //   const { execute, isPending } = useDeleteClient();
 
   const handleDelete = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
-    execute({ id });
+    // execute({ id });
   };
   const queryParams = new URLSearchParams({
-    firstName: row.original.firstName,
-    middleName: row.original.middleName || "",
-    lastName: row.original.lastName,
-    email: row.original.email,
-    phone: row.original.phone,
-    address: row.original.address || "",
+    firstName: row.original.client.firstName,
+    middleName: row.original.client.middleName || "",
+    lastName: row.original.client.lastName,
+    email: row.original.client.email,
+    phone: row.original.client.phone,
+    address: row.original.client.address || "",
     referred: "true",
   }).toString();
 
@@ -84,27 +84,14 @@ export const ClientsTableActionsCell = ({ row }: { row: Row }) => {
           Actions
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="my-1 border-gray-200" />
-
-        <Link href={`/dashboard/clients/${row.original.id}`} passHref>
-          <DropdownMenuItem className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
-            <Eye className="w-4 h-4 text-gray-600" />
-            <span>View</span>
-          </DropdownMenuItem>
-        </Link>
-        <Link href={`/dashboard/clients/update/${row.original.id}`} passHref>
+        <Link
+          href={`/dashboard/appointments?id=${row.original.id}&${queryParams}`}
+        >
           <DropdownMenuItem className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
             <Edit className="w-4 h-4 text-gray-600" />
             <span>Update</span>
           </DropdownMenuItem>
         </Link>
-
-        <Link href={`/dashboard/appointments?${queryParams}`} passHref>
-          <DropdownMenuItem className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
-            <Calendar className="w-4 h-4 text-gray-600" />
-            <span>Book an Appointment</span>
-          </DropdownMenuItem>
-        </Link>
-
         <Link href={`/dashboard/office-visits?${queryParams}`} passHref>
           <DropdownMenuItem className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
             <MapPin className="w-4 h-4 text-gray-600" />
@@ -115,8 +102,8 @@ export const ClientsTableActionsCell = ({ row }: { row: Row }) => {
         <DropdownMenuSeparator className="my-1 border-gray-200" />
         <DropdownMenuItem
           className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-100 cursor-pointer"
-          onClick={(e) => handleDelete(e, row.original.id)}
-          disabled={isPending}
+          onClick={(e) => handleDelete(e, row.original.client.id)}
+          //   disabled={isPending}
         >
           <Trash className="w-4 h-4" />
           <span>Delete</span>

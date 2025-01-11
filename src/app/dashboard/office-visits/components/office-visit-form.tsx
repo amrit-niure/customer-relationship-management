@@ -34,23 +34,35 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { CalendarPlus } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
 interface OfficeVisitFormProps {
   onClose: () => void;
 }
 
 const OfficeVisitForm: FC<OfficeVisitFormProps> = ({ onClose }) => {
+    const searchParams = useSearchParams();
+  
+    const firstName = searchParams.get("firstName");
+    const middleName = searchParams.get("middleName");
+    const lastName = searchParams.get("lastName");
+    const email = searchParams.get("email");
+    const phone = searchParams.get("phone");
+    const address = searchParams.get("address");
+    const appointmentId = searchParams.get("appointmentId");
+
   const form = useForm<IOfficeVisit>({
     resolver: zodResolver(officeVisitSchema),
     defaultValues: {
-      firstName: "",
-      middleName: "",
-      lastName: "",
-      email: "",
-      address: "",
-      phone: "",
+      appointmentId: appointmentId ? appointmentId : "",
+      firstName: firstName ? firstName : "",
+      middleName: middleName ? middleName : "",
+      lastName: lastName ? lastName : "",
+      email: email ? email : "",
+      address: address ? address : "",
+      phone: phone ? phone : "",
       dateTime: new Date(),
-      status: "",
+      status: "SCHEDULED",
       purpose: "",
     },
   });

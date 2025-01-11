@@ -38,3 +38,6 @@ export const appointmentsRelations = relations(appointments, ({ one, many }) => 
   officeVisits: many(officeVisits), // One appointment can have many office visits
   tasks: many(tasks) // Tasks associated with this appointment
 }));
+
+export type Appointments = typeof appointments.$inferSelect; 
+export type NewAppointments = typeof appointments.$inferInsert; 
