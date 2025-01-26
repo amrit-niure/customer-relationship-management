@@ -9,7 +9,6 @@ import { columns } from "./components/table/columns";
 export default withServerAuth(async function OfficeVisits() {
   const [officeVisits] = await getAllOfficeVisitsAction();
   const data = officeVisits ? officeVisits : [];
-  console.log("Office Visits", data);
   return (
     <div>
       <PageHeaderWithForm

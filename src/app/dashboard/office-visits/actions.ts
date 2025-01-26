@@ -6,7 +6,7 @@ import { getAllOfficeVisitsUseCase } from "@/use-cases/office-visits/get-all-off
 export const getAllOfficeVisitsAction = authenticatedAction.createServerAction().handler(async () => {
     await rateLimitByKey({
         key: "getAllOfficeVisits",
-        limit: 3,
+        
         window: 10000
     });
     return await getAllOfficeVisitsUseCase();

@@ -13,8 +13,11 @@ export async function getUser(userId: string) {
 }
 
 export async function getAllUsers() {
-    const users = await database.query.users.findMany();
-    return users;
+    const usersList = await database.query.users.findMany();
+    return usersList.map(user => {
+        const { hashedPassword, ...userWithoutPassword } = user;
+        return userWithoutPassword;
+    });
 }
 
 export async function getUserByEmail(email: string) {

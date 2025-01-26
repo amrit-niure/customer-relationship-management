@@ -50,7 +50,7 @@ export const createClientAction = authenticatedAction
         try {
             await rateLimitByKey({
                 key: input.clientBasicInfo.email,
-                limit: 3,
+                
                 window: 10000
             });
 
@@ -112,7 +112,7 @@ export const updateClientAction = authenticatedAction
     .handler(async ({ input }) => {
         await rateLimitByKey({
             key: "update",
-            limit: 3,
+            
             window: 10000
         });
         const currentUser = await getCurrentUser();
@@ -133,7 +133,7 @@ export const updateClientAction = authenticatedAction
 export const getAllClientsAction = authenticatedAction.createServerAction().handler(async () => {
     await rateLimitByKey({
         key: "getAllClients",
-        limit: 3,
+        
         window: 10000
     });
     return await getAllClientsUseCase();
@@ -149,7 +149,7 @@ export const getClientAction = authenticatedAction
     .handler(async ({ input }) => {
         await rateLimitByKey({
             key: "getClient",
-            limit: 3,
+            
             window: 10000
         });
         return await getClientUseCase(input.id);
@@ -164,7 +164,7 @@ export const deleteClientAction = authenticatedAction
     .handler(async ({ input }) => {
         await rateLimitByKey({
             key: "getClient",
-            limit: 3,
+            
             window: 10000
         });
         revalidatePath("/dashboard/clients");

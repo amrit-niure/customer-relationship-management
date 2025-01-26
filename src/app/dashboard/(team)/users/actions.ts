@@ -9,10 +9,11 @@ import { deleteUserUseCase } from "@/use-cases/users/delete-user.use-case";
 import { ValidationError } from "@/errors/database";
 import { userSchema } from "./components/validation";
 import { updateUserUseCase } from "@/use-cases/users/update-user.use-case";
+
 export const getAllUsersAction = authenticatedAction
     .createServerAction()
     .handler(async () => {
-        await rateLimitByKey({ key: "getAllUsers", limit: 3, window: 10000 });
+        await rateLimitByKey({ key: "getAllUsers",  window: 10000 });
         return await getAllUsersUseCase();
     });
 
@@ -26,7 +27,7 @@ export const deleteUserAction = authenticatedAction.createServerAction()
         try {
             await rateLimitByKey({
                 key: `deleteUser-${input.id}`,
-                limit: 3,
+                
                 window: 10000
             });
             const result = await deleteUserUseCase(input.id);
@@ -54,7 +55,7 @@ export const updateuserAction = authenticatedAction
         try {
             await rateLimitByKey({
                 key: input.email,
-                limit: 3,
+                
                 window: 10000
             });
             await updateUserUseCase({

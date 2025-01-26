@@ -78,4 +78,11 @@ export async function updateClient(input: Partial<NewClient>, id: string): Promi
         throw handleDatabaseError(err, "Client update", input);
     }
 }
-
+export async function findClientByEmailOrPhone(email: string, phone: string) {
+    const existingClient = await database.query.clients.findFirst({
+      where: (clients, { or, eq }) =>
+        or(eq(clients.email, email), eq(clients.phone, phone)),
+    });
+  
+    return existingClient;
+  }

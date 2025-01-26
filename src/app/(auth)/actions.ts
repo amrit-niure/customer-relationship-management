@@ -20,8 +20,7 @@ export const signInAction = unauthenticatedAction
     .handler(async ({ input }) => {
         try {
             await rateLimitByKey({
-                key: input.email,
-                limit: 3,
+                key: input.email, 
                 window: 10000
             });
 
@@ -55,7 +54,7 @@ export async function signOutAction() {
 //         try {
 //             await rateLimitByKey({
 //                 key: input.email,
-//                 limit: 3,
+//                 
 //                 window: 10000
 //             });
 
@@ -84,7 +83,7 @@ export const signUpAction = unauthenticatedAction
         try {
             await rateLimitByKey({
                 key: input.email,
-                limit: 3,
+                
                 window: 10000
             });
 

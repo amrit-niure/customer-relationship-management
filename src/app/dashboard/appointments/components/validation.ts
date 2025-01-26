@@ -5,7 +5,7 @@ export const appointmentSchema = z.object({
     firstName: z.string().min(2).max(100),
     middleName: z.string().max(100).optional(),
     lastName: z.string().min(2).max(100),
-    email: z.string().optional(),
+    email: z.string(),
     address: z.string().min(0).max(100).optional(),
     phone: z.string(),
     status: z
@@ -13,6 +13,7 @@ export const appointmentSchema = z.object({
         errorMap: () => ({ message: "Invalid Branch. " }),
     })
     .default("SCHEDULED"),
+    agentId: z.string().optional(),
     dateTime: z.coerce.date(),
     reason: z.string().optional()
     })

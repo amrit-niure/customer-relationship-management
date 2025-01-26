@@ -30,24 +30,41 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useSearchParams } from "next/navigation";
+import { appointmentStatusEnum } from "@/db/schema/enums";
+import AgentSelect from "./agents";
+import { toast } from "sonner";
+import { useServerAction } from "zsa-react";
+import { createAppointmentAction } from "../actions";
 
 interface AppointmentFormProps {
+  initialValues?: IAppointment | null;
+  mode?: "create" | "edit";
+  appointmentId?: string;
   onClose: () => void;
 }
 
-const AppointmentForm: FC<AppointmentFormProps> = ({ onClose }) => {
+const AppointmentForm: FC<AppointmentFormProps> = ({
+  onClose,
+}) => {
   const searchParams = useSearchParams();
+  // get users form database using server actionis
 
+  const appointmentId = searchParams.get("id");
   const firstName = searchParams.get("firstName");
   const middleName = searchParams.get("middleName");
   const lastName = searchParams.get("lastName");
   const email = searchParams.get("email");
   const phone = searchParams.get("phone");
   const address = searchParams.get("address");
+  const agentId = searchParams.get("agentId");
+  const referred = searchParams.get("referred");
+  const mode = referred === "true" ? "edit" : "create";
+
 
   const form = useForm<IAppointment>({
     resolver: zodResolver(appointmentSchema),
     defaultValues: {
+      agentId: agentId ? agentId : "",
       firstName: firstName ? firstName : "",
       middleName: middleName ? middleName : "",
       lastName: lastName ? lastName : "",
@@ -60,11 +77,32 @@ const AppointmentForm: FC<AppointmentFormProps> = ({ onClose }) => {
     },
   });
 
-  function onSubmit(values: IAppointment) {
-    console.log(values);
-    form.reset();
-    onClose();
-  }
+  const { execute, isPending } = useServerAction(createAppointmentAction, {
+    onSuccess() {
+      toast("Appointment scheduled successfully.");
+      form.reset();
+      onClose();
+    },
+    onError(result) {
+      if (result.err) {
+        toast(result.err.message);
+      } else {
+        toast("An unexpected error occurred. Please try again later.");
+      }
+    },
+  });
+
+  const onSubmit = async (values: IAppointment) => {
+    if (mode === "edit") {
+      const updateData = {
+        ...values,
+        id: appointmentId,
+      };
+      await execute(updateData);
+    } else {
+      await execute(values);
+    }
+  };
 
   return (
     <>
@@ -106,7 +144,6 @@ const AppointmentForm: FC<AppointmentFormProps> = ({ onClose }) => {
                 <FormControl>
                   <Input placeholder="" type="text" {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             )}
@@ -179,6 +216,27 @@ const AppointmentForm: FC<AppointmentFormProps> = ({ onClose }) => {
                   />
                 </FormControl>
                 <FormMessage />
+                <FormField
+                  control={form.control}
+                  name="agentId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Assign Agent</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select an agent" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <AgentSelect />
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </FormItem>
             )}
           />
@@ -199,12 +257,13 @@ const AppointmentForm: FC<AppointmentFormProps> = ({ onClose }) => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="m@example.com">m@example.com</SelectItem>
-                    <SelectItem value="m@google.com">m@google.com</SelectItem>
-                    <SelectItem value="m@support.com">m@support.com</SelectItem>
+                    {appointmentStatusEnum.enumValues.map((value) => (
+                      <SelectItem value={value} key={value}>
+                        {value}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
-
                 <FormMessage />
               </FormItem>
             )}
@@ -246,7 +305,7 @@ const AppointmentForm: FC<AppointmentFormProps> = ({ onClose }) => {
               </FormItem>
             )}
           />
-          <Button type="submit">Schedule Appointment</Button>
+          <Button type="submit" disabled={isPending}>Schedule Appointment</Button>
         </form>
       </Form>
     </>
